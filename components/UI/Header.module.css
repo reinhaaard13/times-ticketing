@@ -1,7 +1,17 @@
 .header {
-  @apply w-full h-14 bg-slate-100 flex items-center transition-all duration-100;
+	@apply w-full h-16 bg-gradient-to-tl from-[#43cea2] to-[#185a9d] text-white flex items-center transition-all duration-100 border border-red-600;
 }
 
 .scrolled {
-  @apply bg-slate-100/50 backdrop-blur-sm sticky top-0;
+	@apply bg-gradient-to-r from-[#43cea2]/30 to-[#185a9d]/30 text-white backdrop-blur-sm sticky top-0 border-b;
+}
+
+.profile {
+	@apply flex items-center bg-white/70 px-3 py-1 font-semibold rounded-md mr-2 cursor-pointer hover:shadow-lg transition-shadow duration-200 text-slate-600;
+	.avatar {
+		@apply w-8 h-8 md:w-10 md:h-10 rounded-full overflow-clip;
+	}
+	p {
+		@apply mr-4 text-sm;
+	}
 }

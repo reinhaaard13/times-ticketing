@@ -51,7 +51,7 @@ const DEF_SUBJECT = {
 
 const SubjectList = (props) => {
 	return (
-		<div className="">
+		<div className="w-full">
 			<table className={styles.subject_table}>
 				<thead>
 					<tr>

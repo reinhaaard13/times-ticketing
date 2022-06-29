@@ -4,11 +4,11 @@ import { FaPencilAlt } from "react-icons/fa";
 import Image from "next/image";
 
 import image from "../../public/logo.png";
-import styles from "./SideBar.module.css";
+import styles from "./SideBarLayout.module.css";
 
 const SideBarLayout = (props) => {
 	return (
-		<div className="flex">
+		<div className="flex overflow-hidden">
 			<aside className={styles.sidebar}>
 				<ul>
 					<li>

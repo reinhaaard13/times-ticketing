@@ -1,7 +1,7 @@
 .subject_table {
-	@apply table-auto w-full border-collapse;
+	@apply table-auto w-full min-w-max border-collapse border border-slate-300;
 	th {
-		@apply bg-slate-300 border p-1;
+		@apply bg-slate-300 p-1;
 	}
 	td {
 		@apply border p-1;
@@ -12,9 +12,9 @@
 }
 
 .actions {
-	@apply flex justify-around;
+	@apply flex;
 	& button {
-		@apply mx-2 w-full py-0.5 rounded-full text-white flex justify-center items-center gap-1;
+		@apply mx-2 w-full py-0.5 px-1 text-sm rounded-full text-white flex justify-center items-center gap-1;
 		&:nth-child(1) {
 			@apply bg-blue-500;
 		}
