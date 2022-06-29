@@ -1,0 +1,7 @@
+.header {
+  @apply w-full h-14 bg-slate-100 flex items-center transition-all duration-100;
+}
+
+.scrolled {
+  @apply bg-slate-100/50 backdrop-blur-sm sticky top-0;
+}

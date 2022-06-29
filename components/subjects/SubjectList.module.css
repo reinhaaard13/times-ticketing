@@ -1,0 +1,44 @@
+.subject_table {
+	@apply table-auto w-full border-collapse;
+	th {
+		@apply bg-slate-300 border p-1;
+	}
+	td {
+		@apply border p-1;
+	}
+	tr:nth-child(odd) {
+		@apply bg-slate-100;
+	}
+}
+
+.actions {
+	@apply flex justify-around;
+	& button {
+		@apply mx-2 w-full py-0.5 rounded-full text-white flex justify-center items-center gap-1;
+		&:nth-child(1) {
+			@apply bg-blue-500;
+		}
+		&:nth-child(2) {
+			@apply bg-red-500;
+		}
+		&:hover {
+			@apply bg-opacity-80;
+		}
+	}
+}
+
+.badge {
+	@apply px-1 pb-[2px] rounded-md text-sm font-medium text-white;
+	&.badge_low {
+		@apply bg-green-500;
+	}
+	&.badge_medium {
+		@apply bg-amber-500;
+	}
+	&.badge_high {
+		@apply bg-red-500;
+	}
+	&.badge_critical {
+		@apply bg-black;
+	}
+}
