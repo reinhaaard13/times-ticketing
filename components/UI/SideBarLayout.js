@@ -1,7 +1,9 @@
 import React from "react";
 import { AiFillHome } from "react-icons/ai";
 import { FaPencilAlt } from "react-icons/fa";
+import { MdSubject } from "react-icons/md";
 import Image from "next/image";
+import Link from 'next/link'
 
 import image from "../../public/logo.png";
 import styles from "./SideBarLayout.module.css";
@@ -34,6 +36,14 @@ const SideBarLayout = (props) => {
 							<FaPencilAlt />
 							<span>Add Ticket</span>
 						</a>
+					</li>
+					<li>
+						<Link href="/subjects">
+							<a>
+								<MdSubject />
+								<span>Subject Cases</span>
+							</a>
+						</Link>
 					</li>
 				</ul>
 			</aside>
