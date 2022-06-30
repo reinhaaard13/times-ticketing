@@ -1,9 +1,9 @@
 .header {
-	@apply w-full h-16 bg-gradient-to-tl from-[#43cea2] to-[#185a9d] text-white flex items-center transition-all duration-100 border border-red-600;
+	@apply w-full h-16 bg-gradient-to-tl from-[#485563] to-[#29323c] text-white flex items-center transition-all duration-100;
 }
 
 .scrolled {
-	@apply bg-gradient-to-r from-[#43cea2]/30 to-[#185a9d]/30 text-white backdrop-blur-sm sticky top-0 border-b;
+	@apply bg-gradient-to-r from-[#485563]/30 to-[#29323c]/30 text-white backdrop-blur-sm sticky top-0 border-b;
 }
 
 .profile {

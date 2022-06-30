@@ -1,13 +1,16 @@
 .subject_table {
-	@apply table-auto w-full min-w-max border-collapse border border-slate-300;
+	@apply table-auto w-full text-sm;
 	th {
-		@apply bg-slate-300 p-1;
+		@apply bg-slate-300 p-2;
+	}
+	thead {
+		@apply border-b-2 border-slate-400;
 	}
 	td {
-		@apply border p-1;
+		@apply p-2 whitespace-nowrap;
 	}
 	tr:nth-child(odd) {
-		@apply bg-slate-100;
+		@apply bg-slate-200;
 	}
 }
 
@@ -24,21 +27,5 @@
 		&:hover {
 			@apply bg-opacity-80;
 		}
-	}
-}
-
-.badge {
-	@apply px-1 pb-[2px] rounded-md text-sm font-medium text-white;
-	&.badge_low {
-		@apply bg-green-500;
-	}
-	&.badge_medium {
-		@apply bg-amber-500;
-	}
-	&.badge_high {
-		@apply bg-red-500;
-	}
-	&.badge_critical {
-		@apply bg-black;
 	}
 }

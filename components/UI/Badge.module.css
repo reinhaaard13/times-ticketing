@@ -1,0 +1,24 @@
+.badge {
+	@apply px-1 rounded-md text-sm uppercase tracking-wider font-semibold;
+	&.badge_low {
+		@apply bg-green-500/30 text-green-600;
+		&.checked {
+			@apply text-green-400;
+		}
+	}
+	&.badge_medium {
+		@apply bg-amber-500/30 text-amber-600;
+		&.checked {
+			@apply text-amber-400;
+		}
+	}
+	&.badge_high {
+		@apply bg-red-500/30 text-red-600;
+		&.checked {
+			@apply text-red-600;
+		}
+	}
+	&.badge_critical {
+		@apply bg-black/30 text-black;
+	}
+}

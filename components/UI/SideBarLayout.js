@@ -8,7 +8,7 @@ import styles from "./SideBarLayout.module.css";
 
 const SideBarLayout = (props) => {
 	return (
-		<div className="flex overflow-hidden">
+		<div className="flex w-screen">
 			<aside className={styles.sidebar}>
 				<ul>
 					<li>
@@ -37,7 +37,7 @@ const SideBarLayout = (props) => {
 					</li>
 				</ul>
 			</aside>
-			<div className="w-full">{props.children}</div>
+			<div className="flex-1 overflow-hidden">{props.children}</div>
 		</div>
 	);
 };

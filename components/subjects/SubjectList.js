@@ -1,7 +1,9 @@
 import React from "react";
+import axios from 'axios'
 import { BiPencil } from "react-icons/bi";
 import { FaRegTrashAlt } from "react-icons/fa";
 
+import Badge from "../UI/Badge";
 import styles from "./SubjectList.module.css";
 
 // Severity
@@ -42,44 +44,27 @@ const CASE_SUBJECT = [
 	},
 ];
 
-const DEF_SUBJECT = {
-	1: "Low",
-	2: "Medium",
-	3: "High",
-	4: "Critical",
-};
-
 const SubjectList = (props) => {
+	console.log(props.subjects);
+
 	return (
-		<div className="w-full">
+		<div className="w-full overflow-x-auto rounded-lg shadow">
 			<table className={styles.subject_table}>
 				<thead>
 					<tr>
-						<th>ID</th>
+						<th className="w-24">No.</th>
 						<th>Subject Case Description</th>
-						<th>Severity</th>
-						<th>Actions</th>
+						<th className="w-24">Severity</th>
+						<th className="w-52">Actions</th>
 					</tr>
 				</thead>
 				<tbody>
-					{CASE_SUBJECT.map((subject) => (
-						<tr key={subject.id}>
-							<td className="uppercase">{subject.id}</td>
-							<td>{subject.name}</td>
+					{props.subjects.map((subject, idx) => (
+						<tr key={idx}>
+							<td className="uppercase">{idx+1}</td>
+							<td>{subject.subject}</td>
 							<td>
-								<span
-									className={`${styles.badge} ${
-										subject.severity === 1
-											? styles.badge_low
-											: subject.severity === 2
-											? styles.badge_medium
-											: subject.severity === 3
-											? styles.badge_high
-											: subject.severity === 4 && styles.badge_critical
-									}`}
-								>
-									{`${DEF_SUBJECT[subject.severity]} - ${subject.severity}`}
-								</span>
+								<Badge severity={subject.severity} />
 							</td>
 							<td className={styles.actions}>
 								<button>
@@ -102,5 +87,7 @@ const SubjectList = (props) => {
 		</div>
 	);
 };
+
+
 
 export default SubjectList;
