@@ -1,22 +1,22 @@
 export const SUBJECT_SEVERITY = [
   {
     level: 1,
-    label: "low",
+    label: "LOW",
     handle_in: 10,
   },
   {
     level: 2,
-    label: "medium",
+    label: "MEDIUM",
     handle_in: 5,
   },
   {
     level: 3,
-    label: "high",
+    label: "HIGH",
     handle_in: 3,
   },
   {
     level: 4,
-    label: "critical",
+    label: "CRITICAL",
     handle_in: 1
   }
 ];

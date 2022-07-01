@@ -1,10 +1,8 @@
-import dbConnect from "../../../lib/dbConnect";
+import sequelize from "../../../lib/dbConnect";
 
 import CaseSubject from "../../../models/CaseSubject";
 
 export default async function handler(req, res) {
-  const sequelize = await dbConnect();
-
   switch (req.method) {
     case "POST":
       const { subject, severity } = req.body;

@@ -5,13 +5,13 @@ import { SUBJECT_SEVERITY } from "../../constants/severity";
 
 const Badge = (props) => {
 	const severity =
-		props.severity === 'low'
+		props.severity === 'LOW'
 			? styles.badge_low
-			: props.severity === 'medium'
+			: props.severity === 'MEDIUM'
 			? styles.badge_medium
-			: props.severity === 'high'
+			: props.severity === 'HIGH'
 			? styles.badge_high
-			: props.severity === 'critical' && styles.badge_critical;
+			: props.severity === 'CRIICAL' && styles.badge_critical;
 
 	return (
 		<span className={`${styles.badge} ${severity} ${props.checked && styles.checked}`}>

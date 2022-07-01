@@ -1,14 +1,16 @@
 import React from "react";
 import { BiPencil } from "react-icons/bi";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { useRouter } from "next/router";
 
 import Badge from "../UI/Badge";
 import styles from "./SubjectList.module.css";
 
 const SubjectList = (props) => {
-	const editHandler = (e) => {
-		e.preventDefault();
-		props.editHandler(props.subject);
+	const router = useRouter();
+
+	const editHandler = (id) => {
+		router.push(`/subjects/edit/${id}`);
 	}
 
 	return (
@@ -37,7 +39,7 @@ const SubjectList = (props) => {
 									</span>
 									Edit
 								</button>
-								<button>
+								<button onClick={props.onDelete.bind(this, subject.id)}>
 									<span>
 										<FaRegTrashAlt />
 									</span>

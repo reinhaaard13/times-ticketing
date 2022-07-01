@@ -1,10 +1,8 @@
-import dbConnect from "../../../lib/dbConnect";
+const sequelize = require("../../../lib/dbConnect");
 
-import CaseSubject from "../../../models/CaseSubject";
+const CaseSubject = require("../../../models/CaseSubject");
 
 export default async function handler(req, res) {
-	const sequelize = await dbConnect();
-
 	switch (req.method) {
 		case "GET":
 			try {

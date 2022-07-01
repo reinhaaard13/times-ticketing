@@ -1,25 +1,46 @@
-import { Sequelize, DataTypes } from "sequelize";
+// import { Sequelize, DataTypes } from "sequelize";
 
-const CaseSubject = async (sequelize) => {
+// const CaseSubject = async (sequelize) => {
 
-  const CaseSubject = sequelize.define("CaseSubject", {
-    id: {
-      type: DataTypes.INTEGER(4).ZEROFILL,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    subject: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    severity: {
-      type: DataTypes.STRING,
-      allowNull: false
-    }
-  })
-  await CaseSubject.sync({ alter: true });
+//   const CaseSubject = sequelize.define("CaseSubject", {
+//     id: {
+//       type: DataTypes.INTEGER(4).ZEROFILL,
+//       primaryKey: true,
+//       autoIncrement: true,
+//     },
+//     subject: {
+//       type: DataTypes.STRING,
+//       allowNull: false
+//     },
+//     severity: {
+//       type: DataTypes.STRING,
+//       allowNull: false
+//     }
+//   })
+//   await CaseSubject.sync({ alter: true });
 
-  return CaseSubject;
-} 
+//   return CaseSubject;
+// }
 
-module.exports = CaseSubject;
+// module.exports = CaseSubject;
+
+const { DataTypes } = require("sequelize");
+
+module.exports = async (sequelize) =>
+	await sequelize
+		.define("CaseSubject", {
+			id: {
+				type: DataTypes.INTEGER(4).ZEROFILL,
+				primaryKey: true,
+				autoIncrement: true,
+			},
+			subject: {
+				type: DataTypes.STRING,
+				allowNull: false,
+			},
+			severity: {
+				type: DataTypes.STRING,
+				allowNull: false,
+			},
+		})
+		.sync({ alter: true });

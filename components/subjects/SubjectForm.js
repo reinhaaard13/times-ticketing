@@ -10,8 +10,8 @@ const SubjectForm = (props) => {
 
 	const formik = useFormik({
 		initialValues: {
-			subject: "",
-			severity: null,
+			subject: props.existingData?.subject || "",
+			severity: props.existingData?.severity || null,
 		},
 		validate: (values) => {
 			const errors = {};
@@ -26,10 +26,18 @@ const SubjectForm = (props) => {
 		},
 		onSubmit: async (values) => {
 			formik.setSubmitting(true)
-			const response = await axios.post("/api/subjects/add", {
-				subject: values.subject,
-				severity: values.severity,
-			});
+			let response;
+			if (props.existingData) {
+				response = await axios.patch(`/api/subjects/${props.existingData.id}`, {
+					subject: values.subject,
+					severity: values.severity,
+				});
+			} else {
+				response = await axios.post("/api/subjects/add", {
+					subject: values.subject,
+					severity: values.severity,
+				});
+			}
 			console.log(response.data);
 			if (response.status === 200) {
 				router.push("/subjects");
@@ -83,7 +91,7 @@ const SubjectForm = (props) => {
 					disabled={!formik.isValid || formik.isSubmitting}
 					className="px-4 py-2 font-semibold text-sm uppercase mt-4 hover:shadow-md hover:bg-lime-600 outline-lime-600 text-white w-fit self-center bg-lime-500 rounded-full disabled:bg-opacity-25 transition-all duration-300"
 				>
-					Create New Subject Case
+					{props.existingData ? "Apply Changes" : "Create New Subject Case"}	
 				</button>
 			</form>
 		</div>

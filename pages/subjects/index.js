@@ -1,15 +1,56 @@
-import React from "react";
-import axios from 'axios'
+import React, { useState } from "react";
+import axios from "axios";
 import Link from "next/link";
 import { HiPlus } from "react-icons/hi";
 
+import Prompt from "../../components/UI/Prompt";
 import Header from "../../components/UI/Header";
 import SideBarLayout from "../../components/UI/SideBarLayout";
 import SubjectList from "../../components/subjects/SubjectList";
 
 const SubjectListPage = (props) => {
+	const [isOpenModal, setIsOpenModal] = useState(false);
+	const [selected, setSelected] = useState(null);
+	const [subjects, setSubjects] = useState(props.subjects);
+
+	const openModal = () => {
+		setIsOpenModal(true);
+	};
+
+	const closeModal = () => {
+		setIsOpenModal(false);
+		setSelected(null)
+	};
+
+	const confirmDeleteHandler = async () => {
+		const response = await axios.delete(`/api/subjects/${selected}`);
+		console.log(response);
+		setIsOpenModal(false);
+		if (response.status !== 200) {
+			alert("Failed to delete subject");
+		} else {
+			setSubjects(subjects.filter((subject) => subject.id !== selected));
+		}
+		setSelected(null);
+	};
+
+	const deleteSubjectHandler = (id) => {
+		setIsOpenModal(true);
+		setSelected(id);
+	};
+
 	return (
 		<SideBarLayout>
+			<Prompt
+				show={isOpenModal}
+				onClose={closeModal}
+				onConfirm={confirmDeleteHandler}
+				title="Are you sure want to delete this subject case?"
+				description="This action cannot be undone."
+				primaryAction="Delete"
+				secondaryAction="Cancel"
+			/>
+
 			<Header />
 			<div className="container px-4 text-slate-800">
 				<div className="flex flex-col md:flex-row justify-between items-center mt-8 mb-8">
@@ -23,7 +64,10 @@ const SubjectListPage = (props) => {
 						</button>
 					</Link>
 				</div>
-				<SubjectList subjects={props.subjects} />
+				<SubjectList
+					subjects={subjects}
+					onDelete={deleteSubjectHandler}
+				/>
 			</div>
 		</SideBarLayout>
 	);
@@ -32,7 +76,7 @@ const SubjectListPage = (props) => {
 export async function getStaticProps() {
 	const response = await axios.get("http://localhost:3000/api/subjects");
 
-	const {subjects} = response.data;
+	const { subjects } = response.data;
 
 	return {
 		props: {
