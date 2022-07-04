@@ -5,7 +5,13 @@ const Role = require("../../../models/Role");
 export default async function handler(req, res) {
   try {
     const role = await Role(sequelize);
-    const result = await role.findAll()
+    const result = await role.findAll({
+      include: [
+        {
+          model: sequelize.models.Privilege,
+        }
+      ]
+    })
     return res.json(result)
   } catch (e) {
     console.log("error", e)

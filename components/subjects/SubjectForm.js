@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useFormik } from "formik";
-import axios from 'axios';
+import axios from "axios";
 import { useRouter } from "next/router";
 
+import Input from "../UI/Input";
 import SeverityRadio from "./SeverityRadio";
 
 const SubjectForm = (props) => {
@@ -25,7 +26,7 @@ const SubjectForm = (props) => {
 			return errors;
 		},
 		onSubmit: async (values) => {
-			formik.setSubmitting(true)
+			formik.setSubmitting(true);
 			let response;
 			if (props.existingData) {
 				response = await axios.patch(`/api/subjects/${props.existingData.id}`, {
@@ -42,7 +43,7 @@ const SubjectForm = (props) => {
 			if (response.status === 200) {
 				router.push("/subjects");
 			}
-			formik.setSubmitting(false)
+			formik.setSubmitting(false);
 		},
 	});
 
@@ -55,26 +56,15 @@ const SubjectForm = (props) => {
 	return (
 		<div className="w-full sm:w-3/4 md:w-1/2">
 			<form onSubmit={formik.handleSubmit} className="flex flex-col">
-				<label
-					htmlFor="desc"
-					className="uppercase font-semibold text-slate-500 mb-2 text-sm"
-				>
-					Subject Description
-				</label>
-				<div className="flex flex-col mb-4">
-					<input
-						type="text"
-						id="desc"
-						name="subject"
-						value={formik.values.subject}
-						onChange={formik.handleChange}
-						onBlur={formik.handleBlur}
-						className="bg-slate-300 text-slate-800 p-3 rounded-md focus:outline-slate-500"
-					/>
-					{formik.errors.subject && (
-						<p className="text-red-500 text-sm ">{formik.errors.subject}</p>
-					)}
-				</div>
+				<Input
+					label="Subject Description"
+					id="desc"
+					name="subject"
+					value={formik.values.subject}
+					onChange={formik.handleChange}
+					onBlur={formik.handleBlur}
+					error={formik.errors.subject}
+				/>
 
 				<label
 					htmlFor=""
@@ -91,7 +81,7 @@ const SubjectForm = (props) => {
 					disabled={!formik.isValid || formik.isSubmitting}
 					className="px-4 py-2 font-semibold text-sm uppercase mt-4 hover:shadow-md hover:bg-lime-600 outline-lime-600 text-white w-fit self-center bg-lime-500 rounded-full disabled:bg-opacity-25 transition-all duration-300"
 				>
-					{props.existingData ? "Apply Changes" : "Create New Subject Case"}	
+					{props.existingData ? "Apply Changes" : "Create New Subject Case"}
 				</button>
 			</form>
 		</div>

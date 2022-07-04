@@ -39,7 +39,7 @@ module.exports = async (sequelize) => {
     indexes: [{
       // name: 'role_level',
       fields: ['role_level']
-    }]
+    }],
   })
   await Role.sync({ alter: true });
 
