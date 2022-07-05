@@ -1,8 +1,8 @@
 import React from "react";
 
-const Input = ({label, name, type, id, value, onChange, onBlur, error}) => {
+const Input = ({label, name, type, id, value, onChange, onBlur, error, className}) => {
 	return (
-		<React.Fragment>
+		<div className={className}>
 			<label
 				htmlFor={id}
 				className="uppercase font-semibold text-slate-500 mb-2 text-sm"
@@ -23,7 +23,7 @@ const Input = ({label, name, type, id, value, onChange, onBlur, error}) => {
 					<p className="text-red-500 text-sm ">{error}</p>
 				)}
 			</div>
-		</React.Fragment>
+		</div>
 	);
 };
 

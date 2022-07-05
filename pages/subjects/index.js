@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
 import Link from "next/link";
 import { HiPlus } from "react-icons/hi";
@@ -11,7 +11,9 @@ import SubjectList from "../../components/subjects/SubjectList";
 const SubjectListPage = (props) => {
 	const [isOpenModal, setIsOpenModal] = useState(false);
 	const [selected, setSelected] = useState(null);
-	const [subjects, setSubjects] = useState(props.subjects);
+	const [subjects, setSubjects] = useState(props?.subjects || null);
+
+	const cancelRef = useRef();
 
 	const openModal = () => {
 		setIsOpenModal(true);
@@ -49,6 +51,7 @@ const SubjectListPage = (props) => {
 				description="This action cannot be undone."
 				primaryAction="Delete"
 				secondaryAction="Cancel"
+				cancelRef={cancelRef}
 			/>
 
 			<Header />
@@ -76,7 +79,7 @@ const SubjectListPage = (props) => {
 export async function getStaticProps() {
 	const response = await axios.get("http://localhost:3000/api/subjects");
 
-	const { subjects } = response.data;
+	const { subjects } = await response.data;
 
 	return {
 		props: {

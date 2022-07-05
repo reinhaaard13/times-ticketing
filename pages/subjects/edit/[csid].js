@@ -8,7 +8,7 @@ import SideBarLayout from "../../../components/UI/SideBarLayout";
 import SubjectForm from "../../../components/subjects/SubjectForm";
 
 const EditSubjectPage = (props) => {
-	const router = useRouter();
+	// const router = useRouter();
 
 	return (
 		<SideBarLayout>
