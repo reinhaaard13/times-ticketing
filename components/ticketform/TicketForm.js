@@ -13,47 +13,70 @@ import {
 	Select,
 	Textarea,
 	Button,
-	Divider
+	Divider,
 } from "@chakra-ui/react";
 
 import FileUpload from "../form/FileUpload";
 import axios from "axios";
 
-const DUMMY_PROJECTS = [
-	{ id: 1, name: "Project 1" },
-	{ id: 2, name: "Project 2" },
-	{ id: 3, name: "Project 3" },
+const DUMMY_PRODUCTS = [
+	{ id: 2, name: "Product 2" },
+	{ id: 3, name: "Product 3" },
+	{ id: 1, name: "Product 1" },
 ];
 
-const DUMMY_SUBPROJECTS = [
-	{ id: 1, name: "Subproject 1", projectId: 1 },
-	{ id: 2, name: "Subproject 2", projectId: 1 },
-	{ id: 3, name: "Subproject 3", projectId: 2 },
-	{ id: 4, name: "Subproject 4", projectId: 2 },
-	{ id: 5, name: "Subproject 5", projectId: 3 },
-	{ id: 6, name: "Subproject 6", projectId: 3 },
+const DUMMY_SUBPRODUCTS = [
+	{ id: 1, name: "Subproduct 1", productId: 1 },
+	{ id: 2, name: "Subproduct 2", productId: 1 },
+	{ id: 3, name: "Subproduct 3", productId: 2 },
+	{ id: 4, name: "Subproduct 4", productId: 2 },
+	{ id: 5, name: "Subproduct 5", productId: 3 },
+	{ id: 6, name: "Subproduct 6", productId: 3 },
 ];
 
 const DUMMY_DEPARTMENTS = ["IT", "BA", "MKT", "OPR"];
-
-const DUMMY_CASESUBJECT = [
-	{
-		id: 1,
-		subject: "Settlement Failed Debit",
-		severity: "MEDIUM",
-	},
-	{
-		id: 2,
-		subject: "Settlement Failed Flazz",
-		severity: "HIGH",
-	},
-];
 
 const validateForm = (values) => {
 	const errors = {};
 
 	if (!values.location) {
 		errors.location = "Location is required";
+	}
+
+	if (!values.cust_name) {
+		errors.cust_name = "Customer name is required";
+	}
+
+	if (!values.cust_no) {
+		errors.cust_no = "Customer number is required";
+	}
+
+	if (!values.cust_email) {
+		errors.cust_email = "Customer email is required";
+	}
+
+	if (!values.product) {
+		errors.product = "Product is required";
+	}
+
+	if (!values.subproduct) {
+		errors.subproduct = "Subproduct is required";
+	}
+
+	if (!values.assigned_to) {
+		errors.assigned_to = "Choose who you assign this ticket to";
+	}
+
+	if (!values.department) {
+		errors.department = "Choose a department you assign this ticket to";
+	}
+
+	if (!values.casesubject) {
+		errors.casesubject = "Pick a subject for this ticket";
+	}
+
+	if (!values.description) {
+		errors.description = "Describe the issue";
 	}
 
 	// console.log(errors);
@@ -68,8 +91,8 @@ const TicketForm = (props) => {
 			cust_name: "",
 			cust_no: "",
 			cust_email: "",
-			project: "",
-			subproject: "",
+			product: "",
+			subproduct: "",
 			assigned_to: "",
 			department: "",
 			casesubject: "",
@@ -79,13 +102,14 @@ const TicketForm = (props) => {
 		// validateOnChange: false,
 		validate: validateForm,
 		onSubmit: async (values) => {
+			formik.setSubmitting(true);
 			const formData = new FormData();
 			formData.append("location", values.location);
 			formData.append("cust_name", values.cust_name);
 			formData.append("cust_no", values.cust_no);
 			formData.append("cust_email", values.cust_email);
-			formData.append("project", values.project);
-			formData.append("subproject", values.subproject);
+			formData.append("product", values.product);
+			formData.append("subproduct", values.subproduct);
 			formData.append("assigned_to", values.assigned_to);
 			formData.append("department", values.department);
 			formData.append("casesubject", values.casesubject);
@@ -94,23 +118,22 @@ const TicketForm = (props) => {
 			formData.append("created_by", "admin");
 
 			try {
-				const response = await axios.post('/api/tickets', formData);
+				const response = await axios.post("/api/tickets", formData);
 				console.log(response);
 			} catch (e) {
 				console.log(e);
 			}
+			formik.setSubmitting(false);
 		},
 	});
 
 	const pickImageHandler = (e) => {
 		console.log(e.target.files);
-		if (e.target.files.length < 1) {
-			formik.setErrors({ attachment: "Please select an image" });
-			return;
-		}
 		const file = e.target.files[0];
-		if (file.size > 10000000) {
+		if (file?.size > 10000000) {
 			formik.setErrors({ attachment: "Attachment size is too large" });
+		} else if(!file) {
+			formik.setFieldValue("attachment", null)
 		} else {
 			formik.setFieldValue("attachment", file);
 		}
@@ -123,7 +146,7 @@ const TicketForm = (props) => {
 					maxW={"lg"}
 					padding={2}
 					isRequired
-					isInvalid={formik.errors.location}
+					isInvalid={formik.errors.location && formik.touched.location}
 				>
 					<FormLabel htmlFor="location">Event Location</FormLabel>
 					<Input
@@ -141,7 +164,7 @@ const TicketForm = (props) => {
 					<FormControl
 						padding={2}
 						isRequired
-						isInvalid={formik.errors.cust_name}
+						isInvalid={formik.errors.cust_name && formik.touched.cust_name}
 					>
 						<FormLabel htmlFor="cust_name">Customer Name</FormLabel>
 						<Input
@@ -155,7 +178,7 @@ const TicketForm = (props) => {
 						<FormErrorMessage>{formik.errors.cust_name}</FormErrorMessage>
 					</FormControl>
 
-					<FormControl padding={2} isRequired isInvalid={formik.errors.cust_no}>
+					<FormControl padding={2} isRequired isInvalid={formik.errors.cust_no && formik.touched.cust_no}>
 						<FormLabel htmlFor="cust_no">Customer Phone</FormLabel>
 						<Input
 							id="cust_no"
@@ -171,7 +194,7 @@ const TicketForm = (props) => {
 					<FormControl
 						padding={2}
 						isRequired
-						isInvalid={formik.errors.cust_email}
+						isInvalid={formik.errors.cust_email && formik.touched.cust_email}
 					>
 						<FormLabel htmlFor="cust_email">Customer Email</FormLabel>
 						<Input
@@ -190,7 +213,7 @@ const TicketForm = (props) => {
 					<FormControl
 						padding={2}
 						isRequired
-						isInvalid={formik.errors.assigned_to}
+						isInvalid={formik.errors.assigned_to && formik.touched.assigned_to}
 					>
 						<FormLabel htmlFor="assigned_to">Assign To</FormLabel>
 						<Select
@@ -214,7 +237,7 @@ const TicketForm = (props) => {
 					<FormControl
 						padding={2}
 						isRequired
-						isInvalid={formik.errors.department}
+						isInvalid={formik.errors.department && formik.touched.department}
 					>
 						<FormLabel htmlFor="department">
 							Assign To Unit Department
@@ -239,54 +262,54 @@ const TicketForm = (props) => {
 				</Flex>
 
 				<Flex flexDir={["column", "row"]}>
-					<FormControl padding={2} isRequired isInvalid={formik.errors.project}>
-						<FormLabel htmlFor="project">Choose Project</FormLabel>
+					<FormControl padding={2} isRequired isInvalid={formik.errors.product && formik.touched.product}>
+						<FormLabel htmlFor="product">Choose Product</FormLabel>
 						<Select
-							id="project"
-							name="project"
-							placeholder="Select Project"
+							id="product"
+							name="product"
+							placeholder="Select Product"
 							onChange={formik.handleChange}
 							onBlur={formik.handleBlur}
-							value={formik.values.project}
+							value={formik.values.product}
 						>
-							{/* <option value="" disabled selected>Select Project</option> */}
-							{DUMMY_PROJECTS.map((project, idx) => (
-								<option key={idx} value={project.id}>
-									{project.name}
+							{/* <option value="" disabled selected>Select product</option> */}
+							{DUMMY_PRODUCTS.map((product, idx) => (
+								<option key={idx} value={product.id}>
+									{product.name}
 								</option>
 							))}
 						</Select>
-						<FormErrorMessage>{formik.errors.project}</FormErrorMessage>
+						<FormErrorMessage>{formik.errors.product}</FormErrorMessage>
 					</FormControl>
 
 					<FormControl
 						padding={2}
 						isRequired
-						isInvalid={formik.errors.subproject}
+						isInvalid={formik.errors.subproduct && formik.touched.subproduct}
 					>
-						<FormLabel htmlFor="subproject">Choose Sub Project</FormLabel>
+						<FormLabel htmlFor="subproduct">Choose Sub Product</FormLabel>
 						<Select
-							id="subproject"
-							name="subproject"
-							placeholder="Select Sub Project"
+							id="subproduct"
+							name="subproduct"
+							placeholder="Select Sub Product"
 							onChange={formik.handleChange}
 							onBlur={formik.handleBlur}
-							value={formik.values.subproject}
+							value={formik.values.subproduct}
 						>
-							{/* <option value="" disabled selected>Select Sub Project</option> */}
-							{DUMMY_SUBPROJECTS.map((project, idx) => (
-								<option key={idx} value={project.id}>
-									{project.name}
+							{/* <option value="" disabled selected>Select Sub product</option> */}
+							{DUMMY_SUBPRODUCTS.map((product, idx) => (
+								<option key={idx} value={product.id}>
+									{product.name}
 								</option>
 							))}
 						</Select>
-						<FormErrorMessage>{formik.errors.subproject}</FormErrorMessage>
+						<FormErrorMessage>{formik.errors.subproduct}</FormErrorMessage>
 					</FormControl>
 
 					<FormControl
 						padding={2}
 						isRequired
-						isInvalid={formik.errors.casesubject}
+						isInvalid={formik.errors.casesubject && formik.touched.casesubject}
 					>
 						<FormLabel htmlFor="casesubject">Choose Case Subject</FormLabel>
 						<Select
@@ -311,7 +334,7 @@ const TicketForm = (props) => {
 				<FormControl
 					padding={2}
 					isRequired
-					isInvalid={formik.errors.description}
+					isInvalid={formik.errors.description && formik.touched.description}
 				>
 					<FormLabel htmlFor="description">Description</FormLabel>
 					<Textarea
@@ -337,8 +360,16 @@ const TicketForm = (props) => {
 			</Flex>
 
 			<Divider margin={2} />
-			
-			<Button margin={2} colorScheme='teal' type="submit">Create Ticket</Button>
+
+			<Button
+				isLoading={formik.isSubmitting}
+				loadingText="Creating Ticket"
+				margin={2}
+				colorScheme="teal"
+				type="submit"
+			>
+				Create Ticket
+			</Button>
 		</form>
 	);
 };

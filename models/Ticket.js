@@ -51,7 +51,7 @@ module.exports = async (sequelize) => {
     },
     attachment: {
       type: DataTypes.STRING,
-      allowNull: false,
+      // allowNull: false,
     },
     created_by: {
       type: DataTypes.STRING,
