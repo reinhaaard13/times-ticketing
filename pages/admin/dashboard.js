@@ -1,13 +1,20 @@
 import React from "react";
 
+import { Box, Heading } from "@chakra-ui/react";
+
 import SideBarLayout from "../../components/UI/SideBarLayout";
-import Header from "../../components/UI/Header";
+import DashboardWidgets from "../../components/dashboard/DashboardWidgets";
 
 const DashboardPage = (props) => {
 	return (
 		<SideBarLayout>
 			{/* <Header /> */}
-			<h1>Dashboard</h1>
+			<Box className="container" p={2}>
+				<Heading size={"lg"} className="text-lime-500" fontWeight={"semibold"}>
+					Dashboard
+				</Heading>
+				<DashboardWidgets />
+			</Box>
 		</SideBarLayout>
 	);
 };
