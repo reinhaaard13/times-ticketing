@@ -8,9 +8,9 @@ import NewSubProductForm from '../../../components/product/NewSubProductForm';
 const NewSubProductPage = (props) => {
   return (
     <SideBarLayout>
-      <Header />
+      {/* <Header /> */}
       <div className="px-4 w-full flex flex-col items-center">
-        <h1 className="my-4 font-bold text-xl">Create new sub product</h1>
+        <h1 className="my-4 font-semibold text-xl text-lime-500">Create new sub product</h1>
         <NewSubProductForm products={props.products} />
       </div>
     </SideBarLayout>

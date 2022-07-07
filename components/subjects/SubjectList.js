@@ -1,6 +1,8 @@
 import React from "react";
+import Link from "next/link";
 import { BiPencil } from "react-icons/bi";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { FiPlus } from "react-icons/fi";
 import { useRouter } from "next/router";
 
 import {
@@ -24,12 +26,18 @@ const SubjectList = (props) => {
 	const router = useRouter();
 
 	const editHandler = (id) => {
-		router.push(`/subjects/edit/${id}`);
+		router.push(`/subject/edit/${id}`);
 	};
 
 	const content = (
-		<TableContainer className="border border-slate-500/20 rounded-xl w-full">
-			<Table variant="simple" size="sm">
+		<TableContainer shadow={"lg"} className="border border-slate-500/20 rounded-xl w-full">
+			<Table		
+				variant="simple"
+				bg={"whiteAlpha.900"}
+				backdropFilter={"auto"}
+				backdropBlur={"md"}
+				size="sm"
+			>
 				<Thead className="bg-slate-500/20">
 					<Tr>
 						<Th width="2">No.</Th>
@@ -68,49 +76,22 @@ const SubjectList = (props) => {
 							</Td>
 						</Tr>
 					))}
+					<Tr>
+						<Td></Td>
+						<Td>
+							<Link href="/subject/new">
+								<Button leftIcon={<FiPlus />} size={"sm"}>
+									Create New Subject Case
+								</Button>
+							</Link>
+						</Td>
+					</Tr>
 				</Tbody>
 			</Table>
 		</TableContainer>
 	);
 
 	return content;
-	// <div className="w-full overflow-x-auto rounded-lg shadow">
-	// 	<table className={styles.subject_table}>
-	// 		<thead>
-	// 			<tr>
-	// 				<th className="w-24">No.</th>
-	// 				<th>Subject Case Description</th>
-	// 				<th className="w-24">Severity</th>
-	// 				<th className="w-52">Actions</th>
-	// 			</tr>
-	// 		</thead>
-	// 		<tbody>
-	// 			{props.subjects.map((subject, idx) => (
-	// 				<tr key={idx}>
-	// 					<td className="uppercase">{idx + 1}</td>
-	// 					<td>{subject.subject}</td>
-	// 					<td>
-	// 						<Badge severity={subject.severity} />
-	// 					</td>
-	// 					<td className={styles.actions}>
-	// 						<button onClick={editHandler.bind(this, subject.id)}>
-	// 							<span>
-	// 								<BiPencil />
-	// 							</span>
-	// 							Edit
-	// 						</button>
-	// 						<button onClick={props.onDelete.bind(this, subject.id)}>
-	// 							<span>
-	// 								<FaRegTrashAlt />
-	// 							</span>
-	// 							Delete
-	// 						</button>
-	// 					</td>
-	// 				</tr>
-	// 			))}
-	// 		</tbody>
-	// 	</table>
-	// </div>
 };
 
 export default SubjectList;

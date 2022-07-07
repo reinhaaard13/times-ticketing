@@ -4,7 +4,12 @@ import multer from "multer";
 const { v1: uuid } = require("uuid");
 const sequelize = require("../../../lib/dbConnect");
 
+const Product = require("../../../models/Product");
+const Subproduct = require("../../../models/Subproduct");
+const CaseSubject = require("../../../models/CaseSubject");
 const Ticket = require("../../../models/Ticket");
+
+import { padStart } from "../../../helper/padStart";
 
 const upload = multer({
 	storage: multer.diskStorage({
@@ -31,14 +36,13 @@ const newticket = nextConnect({
 newticket.use(upload.single("attachment"));
 
 newticket.post(async (req, res) => {
-
 	const {
 		location,
 		cust_name,
 		cust_no,
 		cust_email,
-		project,
-		subproject,
+		product,
+		subproduct,
 		assigned_to,
 		department,
 		casesubject,
@@ -47,13 +51,27 @@ newticket.post(async (req, res) => {
 
 	try {
 		const ticket = await Ticket(sequelize);
+		const lastId = await ticket.max("id");
+		const newId = lastId + 1;
+
+		const _product = await Product(sequelize)
+		const { product_name } = await _product.findOne({
+			where: {
+				product_id: product,
+			},
+		});
+
+		const generatedId =
+			product_name.substring(0, 3).toUpperCase() + padStart(newId, 4);
+
 		const newTicket = await ticket.create({
+			ticket_id: generatedId,
 			location,
 			cust_name,
 			cust_no,
 			cust_email,
-			project,
-			subproject,
+			product,
+			subproduct,
 			assigned_to,
 			department,
 			casesubject,
@@ -66,8 +84,52 @@ newticket.post(async (req, res) => {
 		console.log(error);
 		return res.status(400).json({ error: error.message });
 	}
+});
 
-	res.send("OK");
+newticket.get(async (req, res) => {
+	const limit = +req.query.limit || 10;
+	const offset = +req.query.offset || 0;
+
+	try {
+		const ticket = await Ticket(sequelize);
+		const product = await Product(sequelize);
+		const casesubject = await CaseSubject(sequelize);
+		ticket.hasOne(product, {
+			foreignKey: "product_id",
+			sourceKey: "product",
+		});
+		ticket.hasOne(casesubject, {
+			foreignKey: "id",
+			sourceKey: "casesubject",
+		});
+		const { count, rows: tickets } = await ticket.findAndCountAll({
+			include: [
+				{ model: product, attributes: ["product_name"] },
+				{ model: casesubject, attributes: ["subject", "severity"] },
+			],
+			limit,
+			offset,
+		});
+		const nextlink =
+			offset + limit < count
+				? `/api/tickets?limit=${limit}&offset=${offset + limit}`
+				: null;
+		const prevlink =
+			offset > 0
+				? `/api/tickets?limit=${limit}&offset=${offset - limit}`
+				: null;
+		return res.status(200).json({
+			tickets,
+			total: tickets.length,
+			limit,
+			offset,
+			count,
+			next: nextlink,
+			previous: prevlink,
+		});
+	} catch (error) {
+		return res.status(400).json({ error: error.message });
+	}
 });
 
 export default newticket;

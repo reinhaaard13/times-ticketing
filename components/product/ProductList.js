@@ -18,8 +18,17 @@ import {
 
 const ProductList = (props) => {
 	return (
-		<TableContainer className="border border-slate-500/20 rounded-xl w-full">
-			<Table variant="simple" size="sm">
+		<TableContainer
+			shadow={"lg"}
+			className="border border-slate-500/20 rounded-xl w-full"
+		>
+			<Table
+				bg={"whiteAlpha.900"}
+				backdropFilter={"auto"}
+				backdropBlur={"md"}
+				variant="simple"
+				size="sm"
+			>
 				<Thead className="bg-slate-500/20">
 					<Tr>
 						<Th width="2">No.</Th>
@@ -50,12 +59,16 @@ const ProductList = (props) => {
 						<Td></Td>
 						<Td>
 							<Link href={"/product/new"}>
-								<Button size={"sm"} leftIcon={<FiPlus />}>Add New Product</Button>
+								<Button size={"sm"} leftIcon={<FiPlus />}>
+									Add New Product
+								</Button>
 							</Link>
 						</Td>
 						<Td>
 							<Link href={"/product/sub/new"}>
-								<Button size={"sm"} leftIcon={<FiPlus />}>Add New Sub Product</Button>
+								<Button size={"sm"} leftIcon={<FiPlus />}>
+									Add New Sub Product
+								</Button>
 							</Link>
 						</Td>
 					</Tr>

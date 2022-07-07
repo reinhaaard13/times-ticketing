@@ -7,9 +7,9 @@ import NewProductForm from '../../components/product/NewProductForm';
 const NewProductPage = () => {
   return (
     <SideBarLayout>
-      <Header />
+      {/* <Header /> */}
       <div className="px-4 w-full flex flex-col items-center">
-        <h1 className="my-4 font-bold text-xl">Create new product</h1>
+        <h1 className="my-4 font-semibold text-xl text-lime-500">Create new product</h1>
         <NewProductForm />
       </div>
     </SideBarLayout>

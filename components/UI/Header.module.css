@@ -2,10 +2,6 @@
 	@apply w-full h-16 bg-gradient-to-tl from-[#485563] to-[#29323c] text-white flex items-center transition-all duration-100;
 }
 
-.scrolled {
-	@apply bg-gradient-to-r from-[#485563]/30 to-[#29323c]/30 text-white backdrop-blur-sm sticky top-0 border-b;
-}
-
 .profile {
 	@apply flex items-center bg-white/70 px-3 py-1 font-semibold rounded-md mr-2 cursor-pointer hover:shadow-lg transition-shadow duration-200 text-slate-600;
 	.avatar {

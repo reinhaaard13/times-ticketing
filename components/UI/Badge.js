@@ -11,7 +11,7 @@ const Badge = (props) => {
 			? styles.badge_medium
 			: props.severity === 'HIGH'
 			? styles.badge_high
-			: props.severity === 'CRIICAL' && styles.badge_critical;
+			: props.severity === 'CRITICAL' && styles.badge_critical;
 
 	return (
 		<span className={`${styles.badge} ${severity} ${props.checked && styles.checked}`}>

@@ -3,6 +3,8 @@ import { useFormik } from "formik";
 import axios from "axios";
 import { useRouter } from "next/router";
 
+import { Box } from "@chakra-ui/react";
+
 import Input from "../UI/Input";
 import SeverityRadio from "./SeverityRadio";
 
@@ -41,7 +43,7 @@ const SubjectForm = (props) => {
 			}
 			console.log(response.data);
 			if (response.status === 200) {
-				router.push("/subjects");
+				router.push("/subject");
 			}
 			formik.setSubmitting(false);
 		},
@@ -54,7 +56,16 @@ const SubjectForm = (props) => {
 	};
 
 	return (
-		<div className="w-full sm:w-3/4 md:w-1/2">
+		<Box
+			w={"full"}
+			maxW={"lg"}
+			p={4}
+			rounded={"xl"}
+			shadow={"lg"}
+			bg={"whiteAlpha.900"}
+			backdropFilter={"auto"}
+			backdropBlur={"md"}
+		>
 			<form onSubmit={formik.handleSubmit} className="flex flex-col">
 				<Input
 					label="Subject Description"
@@ -84,7 +95,7 @@ const SubjectForm = (props) => {
 					{props.existingData ? "Apply Changes" : "Create New Subject Case"}
 				</button>
 			</form>
-		</div>
+		</Box>
 	);
 };
 

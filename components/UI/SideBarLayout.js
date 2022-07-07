@@ -3,8 +3,11 @@ import { AiFillHome, AiOutlineAppstore } from "react-icons/ai";
 import { FaPencilAlt } from "react-icons/fa";
 import { MdSubject } from "react-icons/md";
 import Image from "next/image";
-import Link from 'next/link';
+import Link from "next/link";
 import { useRouter } from "next/router";
+
+import { Box, Flex, Tooltip } from "@chakra-ui/react";
+import Header from "./Header";
 
 import image from "../../public/logo.png";
 import styles from "./SideBarLayout.module.css";
@@ -15,7 +18,7 @@ const SideBarLayout = (props) => {
 	const path = router.pathname;
 
 	return (
-		<div className="flex w-screen">
+		<div className="flex w-full">
 			<aside className={styles.sidebar}>
 				<ul>
 					<li>
@@ -32,37 +35,52 @@ const SideBarLayout = (props) => {
 					</li>
 					<li>
 						<a href="#">
-							<AiFillHome />
-							<span>Home</span>
+							<Tooltip label="Home" placement="right">
+								<span>
+									<AiFillHome />
+								</span>
+							</Tooltip>
 						</a>
 					</li>
 					<li>
 						<Link href="/ticket/new">
-						<a className={`${path === '/ticket/new' && 'bg-slate-500'}`}>
-							<FaPencilAlt />
-							<span>Add Ticket</span>
-						</a>
-						</Link>
-					</li>
-					<li>
-						<Link href="/subjects">
-							<a className={`${path === '/subjects' && 'bg-slate-500'}`}>
-								<MdSubject />
-								<span>Subject Cases</span>
+							<a className={`${path === "/ticket/new" && "bg-slate-500"}`}>
+								<Tooltip label="Add Ticket" placement="right">
+									<span>
+										<FaPencilAlt />
+									</span>
+								</Tooltip>
 							</a>
 						</Link>
 					</li>
 					<li>
-						<Link href="/product">
-							<a className={`${path === '/product' && 'bg-slate-500'}`}>
-								<AiOutlineAppstore />
-								<span>Products</span>
+						<Link href="/subject">
+							<a className={`${path === "/subject" && "bg-slate-500"}`}>
+								<Tooltip label="Subject Cases" placement="right">
+									<span>
+										<MdSubject />
+									</span>
+								</Tooltip>
+							</a>
+						</Link>
+					</li>
+					<li>
+						<Link href="/product" passHref>
+							<a className={`${path === "/product" && "bg-slate-500"}`}>
+								<Tooltip label="Products" placement="right">
+									<span>
+										<AiOutlineAppstore />
+									</span>
+								</Tooltip>
 							</a>
 						</Link>
 					</li>
 				</ul>
 			</aside>
-			<div className="flex-1 overflow-hidden bg-slate-100">{props.children}</div>
+			<div className="flex-1 bg-slate-100 overflow-x-scroll">
+				<Header />
+				<div className="relative w-full z-10">{props.children}</div>
+			</div>
 		</div>
 	);
 };

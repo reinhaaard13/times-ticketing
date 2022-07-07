@@ -3,11 +3,14 @@ const { DataTypes } =  require("sequelize");
 module.exports = async (sequelize) => {
 
   const Ticket = sequelize.define("Ticket", {
-    ticket_id: {
+    id: {
       type: DataTypes.INTEGER(4).ZEROFILL,
       autoIncrement: true,
       primaryKey: true,
-      // defaultValue: 1
+    },
+    ticket_id: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     location: {
       type: DataTypes.STRING,
@@ -25,11 +28,11 @@ module.exports = async (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    project: {
+    product: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    subproject: {
+    subproduct: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -63,11 +66,18 @@ module.exports = async (sequelize) => {
     },
     status: {
       type: DataTypes.STRING,
+      enum: ["OPEN", "PROGRESS", "CLOSED"],
       defaultValue: 'OPEN'
     }
   }, {
     createdAt: 'created_date',
     updatedAt: 'modified_date',
+    indexes: [
+      {
+        unique: true,
+        fields: ['ticket_id']
+      }
+    ]
   })
   await Ticket.sync({ alter:true });
 

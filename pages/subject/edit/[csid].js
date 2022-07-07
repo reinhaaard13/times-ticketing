@@ -12,9 +12,9 @@ const EditSubjectPage = (props) => {
 
 	return (
 		<SideBarLayout>
-			<Header />
+			{/* <Header /> */}
       <div className="container px-4 flex flex-col justify-center items-center">
-        <p className="font-semibold mt-8 mb-4 text-lg text-slate-800">Edit Existing Subject Case</p>
+        <p className="font-semibold mt-8 mb-4 text-xl text-lime-500">Edit Existing Subject Case</p>
         <SubjectForm existingData={props.caseSubject} />
       </div>
 		</SideBarLayout>

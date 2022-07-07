@@ -2,25 +2,28 @@ import React from "react";
 import axios from "axios";
 
 import SideBarLayout from "../../components/UI/SideBarLayout";
-import TicketForm from "../../components/ticketform/TicketForm";
+import TicketForm from "../../components/ticket/TicketForm";
 import Header from "../../components/UI/Header";
 
 const NewTicketPage = (props) => {
 	return (
 		<SideBarLayout>
-			<Header />
+			{/* <Header /> */}
 			<div className="px-4 w-full flex flex-col items-center">
-				<h1 className="my-4 font-bold text-xl">Create new ticket</h1>
-				<TicketForm subjects={props.subjects} />
+				<h1 className="my-4 font-semibold text-lime-500 text-2xl">Create new ticket</h1>
+				<TicketForm subjects={props.subjects} products={props.products} />
 			</div>
 		</SideBarLayout>
 	);
 };
 
 export async function getStaticProps() {
-	const response = await axios.get("http://localhost:3000/api/subjects");
-	const { subjects } = response.data;
+	const subjectResponse = await axios.get("http://localhost:3000/api/subjects");
+	const { subjects } = subjectResponse.data;
 
+	const productsResponse = await axios.get("http://localhost:3000/api/products")
+	const products = productsResponse.data
+	
 	return {
 		props: {
 			subjects: subjects.map((subject) => {
@@ -30,6 +33,7 @@ export async function getStaticProps() {
 					severity: subject.severity,
 				};
 			}),
+			products
 		},
     revalidate: 1
 	};
