@@ -1,30 +1,40 @@
 import React from "react";
 
-const Input = ({label, name, type, id, value, onChange, onBlur, error, className}) => {
+import {
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  FormHelperText,
+	Input
+} from '@chakra-ui/react'
+
+const InputField = ({label, name, type, id, value, onChange, onBlur, error, className, touched}) => {
 	return (
-		<div className={className}>
-			<label
+		<FormControl className={className} isInvalid={error && touched}>
+			<FormLabel
 				htmlFor={id}
-				className="uppercase font-semibold text-slate-500 mb-2 text-sm"
+				fontWeight={'semibold'}
+				fontSize={'sm'}
+				mb={2}
+				textTransform={'uppercase'}
+				textColor={'gray.600'}
 			>
 				{label}
-			</label>
+			</FormLabel>
 			<div className="flex flex-col mb-4">
-				<input
+				<Input
 					type= {type ? type : "text"}
 					id={id}
 					name={name}
 					value={value}
 					onChange={onChange}
 					onBlur={onBlur}
-					className="bg-slate-300 text-slate-800 p-3 rounded-md focus:outline-slate-500"
 				/>
-				{error && (
-					<p className="text-red-500 text-sm ">{error}</p>
-				)}
+				<FormErrorMessage className="text-red-500 text-sm ">{error}</FormErrorMessage>
+
 			</div>
-		</div>
+		</FormControl>
 	);
 };
 
-export default Input;
+export default InputField;

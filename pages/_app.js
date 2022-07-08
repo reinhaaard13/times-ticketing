@@ -17,7 +17,12 @@ const colors = {
 	},
 };
 
-const theme = extendTheme({ colors });
+const fonts = {
+	body: "Inter, system-ui, sans-serif",
+	heading: "Inter, system-ui, sans-serif",
+}
+
+const theme = extendTheme({ colors, fonts });
 
 function MyApp({ Component, pageProps }) {
 	return (

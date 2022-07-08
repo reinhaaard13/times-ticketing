@@ -34,13 +34,15 @@ const SideBarLayout = (props) => {
 						</a>
 					</li>
 					<li>
-						<a href="#">
-							<Tooltip label="Home" placement="right">
-								<span>
-									<AiFillHome />
-								</span>
-							</Tooltip>
-						</a>
+						<Link href="/admin/dashboard">
+							<a>
+								<Tooltip label="Home" placement="right">
+									<span>
+										<AiFillHome />
+									</span>
+								</Tooltip>
+							</a>
+						</Link>
 					</li>
 					<li>
 						<Link href="/ticket/new">
@@ -77,7 +79,7 @@ const SideBarLayout = (props) => {
 					</li>
 				</ul>
 			</aside>
-			<div className="flex-1 bg-slate-100 overflow-x-scroll">
+			<div className="flex-1 bg-slate-100">
 				<Header />
 				<div className="relative w-full z-10">{props.children}</div>
 			</div>

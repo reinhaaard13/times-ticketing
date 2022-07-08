@@ -50,7 +50,7 @@ const SubjectList = (props) => {
 					{props.subjects.map((subject, idx) => (
 						<Tr key={idx}>
 							<Td className="uppercase">{idx + 1}</Td>
-							<Td fontSize="medium">{subject.subject}</Td>
+							<Td>{subject.subject}</Td>
 							<Td>
 								<Badge severity={subject.severity} />
 							</Td>

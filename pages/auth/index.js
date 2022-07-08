@@ -1,22 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
-import { useFormik } from "formik";
 
-import Input from "../../components/UI/Input";
+import LoginForm from "../../components/auth/LoginForm";
+import SignupForm from "../../components/auth/SignupForm";
 
 const AuthPage = () => {
-	const formik = useFormik({
-		initialValues: {
-			user: "",
-			password: "",
-		},
-		onSubmit: (values) => {
-			console.log(values);
-		},
-	});
+	const [isLoginMode, setIsLoginMode] = useState(true)
+
+	const toggleMode = () => {
+		setIsLoginMode(!isLoginMode)
+	}
 
 	return (
-		<div className="flex md:flex-row flex-col h-screen p-2 w-full md:justify-evenly items-center bg-gradient-to-tl from-[#485563] to-[#29323c]">
+		<div className="flex md:flex-row flex-col min-h-full h-screen p-2 w-full md:justify-evenly items-center bg-gradient-to-tl from-[#485563] to-[#29323c]">
 			{/* Logo */}
 			<div className="flex flex-col justify-center items-center my-4">
 				<div className="relative">
@@ -26,35 +22,7 @@ const AuthPage = () => {
 					TIMES <span className="font-normal">Ticketing</span>
 				</h1>
 			</div>
-			<div className="flex flex-col w-full max-w-md bg-white p-8 rounded-xl shadow-lg">
-				<h1 className="text-2xl font-bold mb-4">Login</h1>
-				<form className="flex flex-col" onSubmit={formik.handleSubmit} >
-					<Input
-						label="Enter Your Username / Email"
-						id="user"
-						name="user"
-						value={formik.values.user}
-						onChange={formik.handleChange}
-						onBlur={formik.handleBlur}
-						error={formik.errors.user}
-					/>
-
-					<Input
-						label="Enter Your Password"
-						id="password"
-						name="password"
-						type="password"
-						value={formik.values.password}
-						onChange={formik.handleChange}
-						onBlur={formik.handleBlur}
-						error={formik.errors.password}
-					/>
-
-					<button type="submit" className="px-5 py-2 rounded-full font-medium text-sm self-center tracking-wider uppercase bg-slate-600 text-white w-fit">
-						Login
-					</button>
-				</form>
-			</div>
+			{isLoginMode ? (<LoginForm onChangeMode={toggleMode} />) : (<SignupForm onChangeMode={toggleMode} />)}
 		</div>
 	);
 };

@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 
 import styles from "./Header.module.css";
 
+import HeaderBGSvg from "./HeaderBGSvg"
+
 const Header = () => {
 	return (
 		<div className={`${styles.header} relative`}>
@@ -17,7 +19,9 @@ const Header = () => {
 					</div>
 				</div>
 			</div>
-			<div className="w-full h-60 self-start z-0 absolute bg-gradient-to-tl from-[#485563] to-[#29323c]"></div>
+			<div className="w-full h-60 self-start z-0 absolute">
+				<HeaderBGSvg />
+			</div>
 		</div>
 	);
 };

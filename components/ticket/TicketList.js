@@ -3,6 +3,7 @@ import Link from "next/link";
 import moment from "moment";
 import { FiPlus } from "react-icons/fi";
 import Image from "next/image";
+import NProgress from "nprogress";
 import axios from "axios";
 
 import {
@@ -38,15 +39,19 @@ const TicketList = (props) => {
 	const [selectedTicket, setSelectedTicket] = useState(null);
 
 	const fetchNextPage = async () => {
+		NProgress.start()
 		const response = await axios.get(`http://localhost:3000${tickets.next}`);
 		setTickets(response.data);
+		NProgress.done();
 	};
 
 	const fetchPreviousPage = async () => {
+		NProgress.start()
 		const response = await axios.get(
 			`http://localhost:3000${tickets.previous}`
 		);
 		setTickets(response.data);
+		NProgress.done()
 	};
 
 	const openLightbox = (index) => {

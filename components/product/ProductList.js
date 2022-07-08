@@ -40,7 +40,7 @@ const ProductList = (props) => {
 					{props.products.map((product, idx) => (
 						<Tr key={idx}>
 							<Td className="uppercase">{idx + 1}</Td>
-							<Td fontSize="medium">
+							<Td>
 								{product.product_name}
 								<span className="block text-xs text-slate-800/80">
 									{product.product_desc}
