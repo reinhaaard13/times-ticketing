@@ -15,7 +15,7 @@ const Header = () => {
 				<div className={styles.profile}>
 					<p>Reinhard Kevin</p>
 					<div className={styles.avatar}>
-						<img src="https://picsum.photos/200" alt="" />
+						<img src="https://via.placeholder.com/150" alt="" />
 					</div>
 				</div>
 			</div>

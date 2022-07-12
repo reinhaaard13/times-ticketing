@@ -123,8 +123,7 @@ const TicketList = (props) => {
 									<Td>{idx + 1}</Td>
 									<Td>
 										<Link
-											href="/ticket/[ticket_id]"
-											as={`/ticket/${ticket.ticket_id}`}
+											href={`/ticket/${ticket.ticket_id}`}
 										>
 											<a>{ticket.ticket_id}</a>
 										</Link>

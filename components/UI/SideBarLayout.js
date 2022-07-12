@@ -35,7 +35,7 @@ const SideBarLayout = (props) => {
 					</li>
 					<li>
 						<Link href="/admin/dashboard">
-							<a>
+							<a className={`${path === "/admin/dashboard" && "bg-slate-500"}`}>
 								<Tooltip label="Home" placement="right">
 									<span>
 										<AiFillHome />
@@ -79,7 +79,7 @@ const SideBarLayout = (props) => {
 					</li>
 				</ul>
 			</aside>
-			<div className="flex-1 bg-slate-100">
+			<div className="flex-1 bg-slate-100 overflow-x-scroll">
 				<Header />
 				<div className="relative w-full z-10">{props.children}</div>
 			</div>

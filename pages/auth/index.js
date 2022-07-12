@@ -5,11 +5,11 @@ import LoginForm from "../../components/auth/LoginForm";
 import SignupForm from "../../components/auth/SignupForm";
 
 const AuthPage = () => {
-	const [isLoginMode, setIsLoginMode] = useState(true)
+	const [isLoginMode, setIsLoginMode] = useState(true);
 
 	const toggleMode = () => {
-		setIsLoginMode(!isLoginMode)
-	}
+		setIsLoginMode(!isLoginMode);
+	};
 
 	return (
 		<div className="flex md:flex-row flex-col min-h-full h-screen p-2 w-full md:justify-evenly items-center bg-gradient-to-tl from-[#485563] to-[#29323c]">
@@ -22,7 +22,11 @@ const AuthPage = () => {
 					TIMES <span className="font-normal">Ticketing</span>
 				</h1>
 			</div>
-			{isLoginMode ? (<LoginForm onChangeMode={toggleMode} />) : (<SignupForm onChangeMode={toggleMode} />)}
+			{isLoginMode ? (
+				<LoginForm onChangeMode={toggleMode} />
+			) : (
+				<SignupForm onChangeMode={toggleMode} />
+			)}
 		</div>
 	);
 };

@@ -49,7 +49,7 @@ const NewSubProductForm = (props) => {
 			formik.setSubmitting(true);
 			console.log(values);
 			const response = await axios.post(
-				"http://localhost:3000/api/subproducts",
+				"/api/subproducts",
 				values
 			);
 			console.log(response);

@@ -7,30 +7,27 @@ import { Link as ChakraLink, Button } from "@chakra-ui/react";
 import Input from "../UI/Input";
 
 const LoginSchema = Yup.object().shape({
-  name: Yup.string()
-  .required("Required"),
-  user: Yup.string()
-  .required("Required")
-  .min(8, "Must be at least 8 characters"),
-  password: Yup.string()
-  .required("Required")
-  .min(8, "Must be at least 8 characters"),
-  email: Yup.string()
-  .email("Invalid email address")
-  .required("Required"),
-  phone: Yup.string()
-  .matches(/^(^\+62|62|^08)(\d{3,4}-?){2}\d{3,4}$/g, "Invalid phone number")
-  .required("Required")
-})
+	name: Yup.string().required("Required"),
+	user: Yup.string()
+		.required("Required")
+		.min(8, "Must be at least 8 characters"),
+	password: Yup.string()
+		.required("Required")
+		.min(8, "Must be at least 8 characters"),
+	email: Yup.string().email("Invalid email address").required("Required"),
+	phone: Yup.string()
+		.matches(/^(^\+62|62|^08)(\d{3,4}-?){2}\d{3,4}$/g, "Invalid phone number")
+		.required("Required"),
+});
 
 const LoginForm = (props) => {
 	const formik = useFormik({
 		initialValues: {
-      name: "",
+			name: "",
 			user: "",
 			password: "",
-      email: "",
-      phone: "",
+			email: "",
+			phone: "",
 		},
 		validationSchema: LoginSchema,
 		onSubmit: (values) => {
@@ -40,9 +37,9 @@ const LoginForm = (props) => {
 
 	return (
 		<div className="flex flex-col w-full max-w-md bg-white p-8 rounded-xl shadow-lg">
-			<h1 className="text-2xl font-bold mb-4">Login</h1>
+			<h1 className="text-2xl font-bold mb-4">Signup</h1>
 			<form className="flex flex-col" onSubmit={formik.handleSubmit}>
-        <Input
+				<Input
 					label="Enter Full Name"
 					id="name"
 					name="name"
@@ -76,7 +73,7 @@ const LoginForm = (props) => {
 					touched={formik.touched.password}
 				/>
 
-        <Input
+				<Input
 					label="Enter Your Email"
 					id="email"
 					name="email"
@@ -87,7 +84,7 @@ const LoginForm = (props) => {
 					touched={formik.touched.email}
 				/>
 
-        <Input
+				<Input
 					label="Enter Your Phone Number"
 					id="phone"
 					name="phone"
@@ -110,7 +107,7 @@ const LoginForm = (props) => {
 					textTransform={"uppercase"}
 					colorScheme={"facebook"}
 				>
-					Login
+					Signup
 				</Button>
 			</form>
 			<ChakraLink
@@ -118,7 +115,7 @@ const LoginForm = (props) => {
 				textColor={"GrayText"}
 				alignSelf={"center"}
 				marginTop={2}
-        onClick={props.onChangeMode}
+				onClick={props.onChangeMode}
 			>
 				Already Have an Account? Login
 			</ChakraLink>

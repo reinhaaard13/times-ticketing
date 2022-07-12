@@ -1,5 +1,5 @@
 .header {
-	@apply w-full h-16 bg-gradient-to-tl from-[#485563] to-[#29323c] text-white flex items-center transition-all duration-100;
+	@apply w-full h-16 text-white flex items-center transition-all duration-100;
 }
 
 .profile {
