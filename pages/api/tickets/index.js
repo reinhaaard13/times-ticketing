@@ -3,6 +3,7 @@ import multer from "multer";
 
 const { v1: uuid } = require("uuid");
 const sequelize = require("../../../lib/dbConnect");
+const jwt_verify = require('../../../middleware/jwt-verify')
 
 const Product = require("../../../models/Product");
 const Subproduct = require("../../../models/Subproduct");
@@ -50,6 +51,12 @@ newticket.post(async (req, res) => {
 	} = req.body;
 
 	try {
+		jwt_verify(req, res);
+	} catch (error) {
+		return res.status(401).json({ error: error.message });
+	}
+
+	try {
 		const ticket = await Ticket(sequelize);
 		const lastId = await ticket.max("id");
 		const newId = lastId + 1;
@@ -89,6 +96,12 @@ newticket.post(async (req, res) => {
 newticket.get(async (req, res) => {
 	const limit = +req.query.limit || 10;
 	const offset = +req.query.offset || 0;
+
+	try {
+		jwt_verify(req, res);
+	} catch (error) {
+		return res.status(401).json({ error: error.message });
+	}
 
 	try {
 		const ticket = await Ticket(sequelize);

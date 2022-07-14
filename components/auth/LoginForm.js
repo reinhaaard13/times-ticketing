@@ -2,9 +2,7 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-import Link from "next/link";
-
-import { Link as ChakraLink, Button } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 
 import Input from "../UI/Input";
 
@@ -71,15 +69,6 @@ const LoginForm = (props) => {
 					Login
 				</Button>
 			</form>
-			<ChakraLink
-				fontSize={"sm"}
-				textColor={"GrayText"}
-				alignSelf={"center"}
-				marginTop={2}
-				onClick={props.onChangeMode}
-			>
-				Create new account
-			</ChakraLink>
 		</div>
 	);
 };

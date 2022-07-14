@@ -2,8 +2,10 @@ const sequelize = require("../../../../lib/dbConnect");
 
 const Ticket = require("../../../../models/Ticket");
 
+
 export default async function handler(req, res) {
 	const ticket_id = req.query.ticket_id;
+
 
 	switch (req.method) {
 		case "PATCH":

@@ -1,18 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 
 import LoginForm from "../../components/auth/LoginForm";
-import SignupForm from "../../components/auth/SignupForm";
 
 const AuthPage = () => {
-	const [isLoginMode, setIsLoginMode] = useState(true);
-
-	const toggleMode = () => {
-		setIsLoginMode(!isLoginMode);
-	};
-
+	// const [isLoginMode, setIsLoginMode] = use
 	return (
-		<div className="flex md:flex-row flex-col min-h-full h-screen p-2 w-full md:justify-evenly items-center bg-gradient-to-tl from-[#485563] to-[#29323c]">
+		<div className="flex md:flex-row flex-col h-full min-h-screen p-2 w-full md:justify-evenly items-center bg-gradient-to-tl from-[#485563] to-[#29323c]">
 			{/* Logo */}
 			<div className="flex flex-col justify-center items-center my-4">
 				<div className="relative">
@@ -22,11 +16,7 @@ const AuthPage = () => {
 					TIMES <span className="font-normal">Ticketing</span>
 				</h1>
 			</div>
-			{isLoginMode ? (
-				<LoginForm onChangeMode={toggleMode} />
-			) : (
-				<SignupForm onChangeMode={toggleMode} />
-			)}
+				<LoginForm />
 		</div>
 	);
 };

@@ -4,9 +4,17 @@ const Ticket = require("../../../../models/Ticket");
 const CaseSubject = require("../../../../models/CaseSubject");
 const Product = require("../../../../models/Product");
 const SubProduct = require("../../../../models/SubProduct");
+const jwt_verify = require("../../../../middleware/jwt-verify");
+
 
 export default async function handler(req, res) {
 	const ticket_id = req.query.ticket_id;
+	
+	// try {
+	// 	jwt_verify(req, res);
+	// } catch (error) {
+	// 	return res.status(401).json({ error: error.message });
+	// }
 
 	switch (req.method) {
 		case "GET":
