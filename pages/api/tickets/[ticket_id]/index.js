@@ -3,7 +3,7 @@ const sequelize = require("../../../../lib/dbConnect");
 const Ticket = require("../../../../models/Ticket");
 const CaseSubject = require("../../../../models/CaseSubject");
 const Product = require("../../../../models/Product");
-const SubProduct = require("../../../../models/SubProduct");
+const Subproduct = require("../../../../models/Subproduct");
 const jwt_verify = require("../../../../middleware/jwt-verify");
 
 
@@ -22,7 +22,7 @@ export default async function handler(req, res) {
 				const ticket = await Ticket(sequelize);
 				const caseSubject = await CaseSubject(sequelize);
 				const product = await Product(sequelize);
-				const subProduct = await SubProduct(sequelize);
+				const subproduct = await Subproduct(sequelize);
 				ticket.hasOne(caseSubject, {
 					foreignKey: "id",
 					sourceKey: "casesubject",
@@ -31,7 +31,7 @@ export default async function handler(req, res) {
 					foreignKey: "product_id",
 					sourceKey: "product",
 				});
-				ticket.hasOne(subProduct, {
+				ticket.hasOne(subproduct, {
 					foreignKey: "subproduct_id",
 					sourceKey: "subproduct",
 				});
@@ -41,7 +41,7 @@ export default async function handler(req, res) {
 					include: [
 						{ model: caseSubject, attributes: ["subject", "severity"] },
 						{ model: product, attributes: ["product_name"] },
-						{ model: subProduct, attributes: ["subproduct_name"] },
+						{ model: subproduct, attributes: ["subproduct_name"] },
 					],
 				});
 				return res.status(200).json({ ticket: matchedTicket });

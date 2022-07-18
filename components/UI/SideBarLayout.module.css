@@ -1,7 +1,7 @@
 .sidebar {
   @apply bg-slate-600 sticky top-0 left-0 h-screen flex justify-center;
   ul {
-    @apply text-white;
+    @apply text-white flex flex-col;
     li {
       a {
         @apply p-1 m-1 hover:bg-slate-700 h-10 w-10 md:h-14 md:w-14 rounded flex flex-col justify-center items-center text-2xl;

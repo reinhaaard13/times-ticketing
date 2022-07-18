@@ -1,6 +1,8 @@
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import axios from 'axios';
+import { useAuth } from "../../contexts/auth-context";
 
 import { Button } from "@chakra-ui/react";
 
@@ -16,14 +18,29 @@ const SignupSchema = Yup.object().shape({
 });
 
 const LoginForm = (props) => {
+	const { login } = useAuth();
+
 	const formik = useFormik({
 		initialValues: {
 			user: "",
 			password: "",
 		},
 		validationSchema: SignupSchema,
-		onSubmit: (values) => {
-			console.log(values);
+		onSubmit: async (values) => {
+			formik.setSubmitting(true);
+			try {
+				const response = await axios.post('http://localhost:3000/api/users/login', values)
+				const {user, token, role, privileges} = response.data
+				login(user, token, role, privileges)
+			} catch (error) {
+				if (error.response.data.message.endsWith("password")) {
+					formik.setFieldError("password", error.response.data.message)
+				} else {
+					formik.setFieldError("user", error.response.data.message)
+				}
+			} finally {
+				formik.setSubmitting(false);
+			}
 		},
 	});
 
@@ -65,6 +82,7 @@ const LoginForm = (props) => {
 					letterSpacing={"wider"}
 					textTransform={"uppercase"}
 					colorScheme={"facebook"}
+					isLoading={formik.isSubmitting}
 				>
 					Login
 				</Button>

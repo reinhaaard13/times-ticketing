@@ -19,12 +19,14 @@ const AuthContextProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
 	const [token, setToken] = useState(null);
 	const [role, setRole] = useState(null);
+	const [privileges, setPrivileges] = useState([]);
 	const [tokenExpiration, setTokenExpiration] = useState(null);
 
-	const login = useCallback((user, token, role, expiration) => {
+	const login = useCallback((user, token, role, privileges, expiration) => {
 		setUser(user);
 		setToken(token);
 		setRole(role);
+		setPrivileges(privileges);
 
 		const tokenExp =
 			expiration || new Date(new Date().getTime() + 1000 * 60 * 60);
@@ -36,15 +38,18 @@ const AuthContextProvider = ({ children }) => {
 				user,
 				token,
 				role,
+				privileges,
 				expiration: tokenExp.toISOString(),
 			})
 		);
 	}, []);
 
 	const logout = useCallback(() => {
+
 		setUser(null);
 		setToken(null);
 		setRole(null);
+		setPrivileges([]);
 		setTokenExpiration(null);
 
 		localStorage.removeItem("userData");
@@ -58,6 +63,7 @@ const AuthContextProvider = ({ children }) => {
 				storedData.user,
 				storedData.token,
 				storedData.role,
+				storedData.privileges,
 				new Date(storedData.expiration)
 			);
 		}
@@ -65,7 +71,7 @@ const AuthContextProvider = ({ children }) => {
 
 	return (
 		<AuthContext.Provider
-			value={{ user, login, logout, role, token, isLoggedIn: !!token }}
+			value={{ user, login, logout, role, privileges, token, isLoggedIn: !!token }}
 		>
 			{children}
 		</AuthContext.Provider>

@@ -1,12 +1,9 @@
 .header {
-	@apply w-full h-16 text-white flex items-center transition-all duration-100;
+	@apply w-full h-[18] text-white flex items-center transition-all duration-100;
 }
 
 .profile {
 	@apply flex items-center bg-white/70 px-3 py-1 font-semibold rounded-md mr-2 cursor-pointer hover:shadow-lg transition-shadow duration-200 text-slate-600;
-	.avatar {
-		@apply w-8 h-8 md:w-10 md:h-10 rounded-full overflow-clip;
-	}
 	p {
 		@apply mr-4 text-sm;
 	}

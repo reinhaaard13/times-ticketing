@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import Link from "next/link";
 import moment from "moment";
 import { FiPlus } from "react-icons/fi";
+import { MdRemoveRedEye } from "react-icons/md";
+import { BiUserCheck } from "react-icons/bi";
 import Image from "next/image";
 import NProgress from "nprogress";
 import axios from "axios";
+import { useAuth } from "../../contexts/auth-context";
 
 import {
 	TableContainer,
@@ -33,25 +36,35 @@ const TicketList = (props) => {
 	const [lightbox, setLightbox] = useState(false);
 	const [selectedImage, setSelectedImage] = useState(null);
 	const [tickets, setTickets] = useState(props.tickets);
+	const { token, privileges } = useAuth();
 
 	// for ticket description modal
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [selectedTicket, setSelectedTicket] = useState(null);
 
 	const fetchNextPage = async () => {
-		NProgress.start()
-		const response = await axios.get(`http://localhost:3000${tickets.next}`);
+		NProgress.start();
+		const response = await axios.get(`http://localhost:3000${tickets.next}`, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		});
 		setTickets(response.data);
 		NProgress.done();
 	};
 
 	const fetchPreviousPage = async () => {
-		NProgress.start()
+		NProgress.start();
 		const response = await axios.get(
-			`http://localhost:3000${tickets.previous}`
+			`http://localhost:3000${tickets.previous}`,
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			}
 		);
 		setTickets(response.data);
-		NProgress.done()
+		NProgress.done();
 	};
 
 	const openLightbox = (index) => {
@@ -82,7 +95,7 @@ const TicketList = (props) => {
 			/>
 			<TableContainer
 				whiteSpace={"pre-wrap"}
-				shadow={'lg'}
+				shadow={"lg"}
 				className="border border-slate-500/20 rounded-xl w-full"
 			>
 				<Table
@@ -119,13 +132,14 @@ const TicketList = (props) => {
 							const sla = deadline.diff(moment(), "d");
 
 							return (
-								<Tr key={ticket.ticket_id}>
+								<Tr
+									key={ticket.ticket_id}
+									_hover={{ backgroundColor: "#efefef" }}
+								>
 									<Td>{idx + 1}</Td>
 									<Td>
-										<Link
-											href={`/ticket/${ticket.ticket_id}`}
-										>
-											<a>{ticket.ticket_id}</a>
+										<Link href={`/ticket/${ticket.ticket_id}`}>
+											<a className="underline">{ticket.ticket_id}</a>
 										</Link>
 									</Td>
 									<Td>{ticket.Product.product_name}</Td>
@@ -188,16 +202,32 @@ const TicketList = (props) => {
 										)}
 									</Td>
 									<Td>
-										<Button
-											size="sm"
-											colorScheme="green"
-											onClick={() => {
-												onOpen();
-												setSelectedTicket(ticket);
-											}}
-										>
-											<FiPlus />
-										</Button>
+										{privileges.includes("TICKET_ACTION") &&
+											ticket.status === "OPEN" && (
+												<Button
+													size="sm"
+													colorScheme="green"
+													onClick={() => {
+														onOpen();
+														setSelectedTicket(ticket);
+													}}
+													leftIcon={<BiUserCheck />}
+												>
+													Answer
+												</Button>
+											)}
+										{privileges.includes("TICKET_ACTION") &&
+											ticket.status === "PROGRESS" && (
+												<Link href={`/ticket/${ticket.ticket_id}`}>
+													<Button
+														size="sm"
+														colorScheme="blue"
+														leftIcon={<MdRemoveRedEye />}
+													>
+														View
+													</Button>
+												</Link>
+											)}
 									</Td>
 								</Tr>
 							);

@@ -64,6 +64,9 @@ module.exports = async (sequelize) => {
       type: DataTypes.STRING,
       default: null,
     },
+    pic_id: {
+      type: DataTypes.INTEGER(4).ZEROFILL,
+    },
     status: {
       type: DataTypes.STRING,
       enum: ["OPEN", "PROGRESS", "CLOSED"],

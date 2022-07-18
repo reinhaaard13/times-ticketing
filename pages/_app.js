@@ -4,6 +4,8 @@ import NProgress from "nprogress";
 import "../styles/nprogress.css";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 
+import RouteGuard from "../components/routeguard/RouteGuard";
+
 // import useAuth from "../hooks/auth-hook";
 import { AuthContextProvider } from "../contexts/auth-context";
 import { useRouter } from "next/router";
@@ -33,7 +35,9 @@ function MyApp({ Component, pageProps }) {
 	return (
 		<AuthContextProvider>
 			<ChakraProvider resetCSS theme={theme}>
-				<Component {...pageProps} />
+				<RouteGuard>
+					<Component {...pageProps} />
+				</RouteGuard>
 			</ChakraProvider>
 		</AuthContextProvider>
 	);

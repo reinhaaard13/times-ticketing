@@ -1,9 +1,10 @@
 const sequelize = require('../../../lib/dbConnect');
+const bcrypt = require('bcrypt');
 
 const User = require('../../../models/User');
 
 export default async function handler(req, res) {
-  const { name, email, password, username, phone } = req.body;
+  const { name, email, password, username, phone, role } = req.body;
 
   let hashedPassword
   try {
@@ -20,13 +21,13 @@ export default async function handler(req, res) {
       password: hashedPassword,
       username,
       phone,
-      role: "Administrator",
-      token: "",
-      
+      role,
+      created_by: 'Admin',
+      modified_by: 'Admin'
     })
+    return res.status(201).json(newUser);
   } catch (error) {
-    
+    return res.status(500).json({ error: error.message });
   }
-
 
 }

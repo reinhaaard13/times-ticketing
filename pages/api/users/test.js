@@ -1,9 +1,8 @@
-import dbConnect from "../../../lib/dbConnect";
+import sequelize from "../../../lib/dbConnect";
 
 import User  from "../../../models/User";
 
 export default async function handler(req, res) {
-  const sequelize = await dbConnect();
 
   try {
     const user = await User(sequelize);

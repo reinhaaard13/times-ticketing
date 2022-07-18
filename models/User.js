@@ -10,7 +10,8 @@ const User = async (sequelize) => {
     },
     username: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      unique: true,
     },
     password: {
       type: DataTypes.STRING,
@@ -19,6 +20,7 @@ const User = async (sequelize) => {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
       validate: {
         isEmail: true
       }
@@ -37,40 +39,40 @@ const User = async (sequelize) => {
     },
     token: {
       type: DataTypes.STRING(500),
-      allowNull: false,
+      allowNull: true,
     },
     refreshToken: {
       type: DataTypes.STRING(500),
-      allowNull: false,
+      allowNull: true,
     },
     fcm_token: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     is_login: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
+      allowNull: true,
     },
     last_login: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: true,
       default: sequelize.literal('CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()'),
     },
     status: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     authenticate: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
+      allowNull: true,
     },
     picture: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     theme: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     created_by: {
       type: DataTypes.STRING,
@@ -89,7 +91,7 @@ const User = async (sequelize) => {
       }
     ]
   })
-  await User.sync();
+  await User.sync({ alter: true });
 
   return User;
 } 
