@@ -18,7 +18,7 @@ const NewSubProductPage = (props) => {
 }
 
 export async function getStaticProps() {
-  const response = await axios.get('http://localhost:3000/api/products');
+  const response = await axios.get('/api/products');
   const products = response.data
   
   return {

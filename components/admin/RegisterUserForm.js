@@ -45,7 +45,7 @@ const RegisterUserForm = (props) => {
 			formik.setSubmitting(true);
 			try {
 				const response = await axios.post(
-					"http://localhost:3000/api/users/register",
+					"/api/users/register",
 					values
 				)
 				formik.resetForm();

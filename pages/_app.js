@@ -3,6 +3,7 @@ import "../styles/globals.css";
 import NProgress from "nprogress";
 import "../styles/nprogress.css";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import Axios from "axios";
 
 import RouteGuard from "../components/routeguard/RouteGuard";
 
@@ -11,6 +12,7 @@ import { AuthContextProvider } from "../contexts/auth-context";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
+Axios.defaults.baseURL = process.env.TIMES_API_ENDPOINT
 Router.events.on("routeChangeStart", () => NProgress.start());
 Router.events.on("routeChangeComplete", () => NProgress.done());
 Router.events.on("routeChangeError", () => NProgress.done());

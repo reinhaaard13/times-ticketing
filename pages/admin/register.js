@@ -27,7 +27,7 @@ const RegisterUserPage = (props) => {
 };
 
 export async function getServerSideProps() {
-	const response = await axios.get("http://localhost:3000/api/roles");
+	const response = await axios.get("/api/roles");
 
 	return {
 		props: { roles: response.data },

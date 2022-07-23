@@ -8,6 +8,7 @@ import Image from "next/image";
 import NProgress from "nprogress";
 import axios from "axios";
 import { useAuth } from "../../contexts/auth-context";
+import useSWR from "swr";
 
 import {
 	TableContainer,
@@ -37,18 +38,31 @@ const TicketList = (props) => {
 	const [selectedImage, setSelectedImage] = useState(null);
 	const [tickets, setTickets] = useState(props.tickets);
 	const { token, privileges } = useAuth();
+	const [page, setPage] = useState(1);
 
 	// for ticket description modal
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [selectedTicket, setSelectedTicket] = useState(null);
 
+	const { data } = useSWR(`/api/tickets?page=${page}`, (url) => {
+		NProgress.start();
+		return axios.get(url, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		}).then((res) => {
+			NProgress.done()
+		});
+	})
+
 	const fetchNextPage = async () => {
 		NProgress.start();
-		const response = await axios.get(`http://localhost:3000${tickets.next}`, {
+		const response = await axios.get(`${tickets.next}`, {
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},
 		});
+		console.log(response.data);
 		setTickets(response.data);
 		NProgress.done();
 	};
@@ -56,7 +70,7 @@ const TicketList = (props) => {
 	const fetchPreviousPage = async () => {
 		NProgress.start();
 		const response = await axios.get(
-			`http://localhost:3000${tickets.previous}`,
+			`${tickets.previous}`,
 			{
 				headers: {
 					Authorization: `Bearer ${token}`,
@@ -188,10 +202,9 @@ const TicketList = (props) => {
 									</Td>
 									<Td>
 										{ticket.attachment && (
+											// http://localhost:5000/uploads/attachments/77567600-09e1-11ed-b5ad-a5925e956a1c.png
 											<Image
-												src={`/${ticket.attachment
-													.split("public\\")[1]
-													.replace("\\", "/")}`}
+												src={`${'http://localhost:5000/'}${ticket.attachment}`}
 												alt={"attachment"}
 												width={60}
 												height={60}

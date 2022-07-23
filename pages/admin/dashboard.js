@@ -45,7 +45,7 @@ const DashboardPage = (props) => {
 export async function getServerSideProps() {
 	let tickets, err;
 	try {
-		const response = await axios.get("http://localhost:3000/api/tickets", {
+		const response = await axios.get("/api/tickets", {
 			headers: {
 				Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IlJlaW5oYXJkIEtldmluIiwiZW1haWwiOiJyZWluaGFyZGtldmluLnJrQGdtYWlsLmNvbSJ9.EU26Z3dltXlwHxjJWi1IGfMilwLwURwtG23qdGc5-u0`,
 			},

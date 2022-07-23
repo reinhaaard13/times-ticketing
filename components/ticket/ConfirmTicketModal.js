@@ -35,7 +35,7 @@ const ConfirmTicketModal = (props) => {
 	const confirmHandler = async () => {
 		try {
 			const response = await axios.patch(
-				`http://localhost:3000/api/tickets/${props.ticket.ticket_id}/confirm`,
+				`/api/tickets/${props.ticket.ticket_id}/confirm`,
 				{ status: "PROGRESS" }
 			);
 			console.log(response.data);

@@ -95,7 +95,7 @@ newticket.post(async (req, res) => {
 
 newticket.get(async (req, res) => {
 	const limit = +req.query.limit || 10;
-	const offset = +req.query.offset || 0;
+	const page = +req.query.page || 1;
 
 	try {
 		jwt_verify(req, res);
@@ -121,21 +121,21 @@ newticket.get(async (req, res) => {
 				{ model: casesubject, attributes: ["subject", "severity"] },
 			],
 			limit,
-			offset,
+			offset: (page - 1) * limit,
 		});
 		const nextlink =
-			offset + limit < count
-				? `/api/tickets?limit=${limit}&offset=${offset + limit}`
+			page * limit < count
+				? `/api/tickets?limit=${limit}&page=${page+1}`
 				: null;
 		const prevlink =
-			offset > 0
-				? `/api/tickets?limit=${limit}&offset=${offset - limit}`
+			page > 1
+				? `/api/tickets?limit=${limit}&page=${page - 1}`
 				: null;
 		return res.status(200).json({
 			tickets,
 			total: tickets.length,
 			limit,
-			offset,
+			page,
 			count,
 			next: nextlink,
 			previous: prevlink,

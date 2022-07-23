@@ -20,7 +20,7 @@ const TicketDetailPage = (props) => {
 export async function getServerSideProps(context) {
 	const { tid } = context.query;
 
-	const response = await axios.get(`http://localhost:3000/api/tickets/${tid}`);
+	const response = await axios.get(`/api/tickets/${tid}`);
 	const { ticket } = response.data;
 
 	return {

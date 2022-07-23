@@ -28,7 +28,7 @@ const ProductListPage = (props) => {
 };
 
 export async function getStaticProps() {
-	const products = await axios.get("http://localhost:3000/api/products");
+	const products = await axios.get("/api/products");
 	return {
 		props: {
 			products: products.data,

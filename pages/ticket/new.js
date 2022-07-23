@@ -18,10 +18,10 @@ const NewTicketPage = (props) => {
 };
 
 export async function getStaticProps() {
-	const subjectResponse = await axios.get("http://localhost:3000/api/subjects");
+	const subjectResponse = await axios.get("/api/subjects");
 	const { subjects } = subjectResponse.data;
 
-	const productsResponse = await axios.get("http://localhost:3000/api/products")
+	const productsResponse = await axios.get("/api/products")
 	const products = productsResponse.data
 	
 	return {

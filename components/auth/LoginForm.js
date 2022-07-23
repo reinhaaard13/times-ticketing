@@ -29,7 +29,7 @@ const LoginForm = (props) => {
 		onSubmit: async (values) => {
 			formik.setSubmitting(true);
 			try {
-				const response = await axios.post('http://localhost:3000/api/users/login', values)
+				const response = await axios.post('/api/users/login', values)
 				const {user, token, role, privileges} = response.data
 				login(user, token, role, privileges)
 			} catch (error) {
