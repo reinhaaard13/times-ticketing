@@ -47,7 +47,7 @@ const ProductList = (props) => {
 								</span>
 							</Td>
 							<Td>
-								{product.subproducts.map((subproduct, idx) => (
+								{product.Subproducts.map((subproduct, idx) => (
 									<Badge key={idx} marginRight={1} colorScheme="green">
 										{subproduct.subproduct_name}
 									</Badge>

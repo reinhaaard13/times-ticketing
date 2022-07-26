@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["localhost"],
+    domains: ["localhost", "rei-aws.s3.ap-southeast-1.amazonaws.com"],
   }
 }
 

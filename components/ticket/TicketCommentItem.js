@@ -1,24 +1,23 @@
 import React from "react";
+import moment from "moment";
 
 import { Flex, Avatar, Text } from "@chakra-ui/react";
 
-const TicketCommentItem = (props) => {
+const TicketCommentItem = ({comment}) => {
 	return (
 		<Flex gap={4} mb={6}>
-			<Avatar bg={"red.500"} name={"Reinhard Kevin"} />
+			<Avatar bg={"red.500"} name={comment.User.name} />
 			<Flex direction={"column"}>
 				<Flex alignItems={"baseline"} gap={2}>
 					<Text fontSize={"md"} fontWeight={"semibold"}>
-						Reinhard Kevin
+						{comment.User.name}
 					</Text>
 					<Text fontSize={"sm"} textColor={"GrayText"}>
-						2 hours ago
+						{moment(comment.created_date).fromNow()}
 					</Text>
 				</Flex>
 				<Text fontSize={"sm"}>
-					Lorem ipsum dolor sit amet consectetur, adipisicing elit. Praesentium
-					pariatur ducimus distinctio natus totam? Aperiam sapiente sit hic odit
-					minima.
+					{comment.comment_body}
 				</Text>
 			</Flex>
 		</Flex>

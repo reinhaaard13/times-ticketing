@@ -19,7 +19,7 @@ const NewTicketPage = (props) => {
 
 export async function getStaticProps() {
 	const subjectResponse = await axios.get("/api/subjects");
-	const { subjects } = subjectResponse.data;
+	const subjects = subjectResponse.data;
 
 	const productsResponse = await axios.get("/api/products")
 	const products = productsResponse.data

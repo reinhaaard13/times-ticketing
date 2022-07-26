@@ -1,14 +1,24 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { MdSubject, MdDateRange, MdLocationPin } from "react-icons/md";
 import { Flex, Heading, Text, Divider } from "@chakra-ui/react";
+import useSWR from "swr";
+import axios from "axios";
 
 import moment from "moment";
 
 import TicketCommentList from "./TicketCommentList";
 import CommentForm from "./CommentForm";
+import CommentSkeleton from "../UI/skeletons/CommentSkeleton";
 import TicketDescription from "./TicketDescription";
 
+const fetcher = async (url) => {
+	const response = await axios.get(url);
+	return response.data;
+}
+
 const TicketDetail = (props) => {
+	const { data } = useSWR(`/api/tickets/${props.ticket.ticket_id}/comments`, fetcher);
+	
 	return (
 		<Flex
 			w={"full"}
@@ -74,10 +84,10 @@ const TicketDetail = (props) => {
 				<Text fontSize={"initial"} mb={"6"}>
 					{props.ticket.description}
 				</Text>
-
-				<TicketCommentList ticket={props.ticket} />
-
-				<CommentForm />
+				
+				<TicketCommentList comments={data?.comments} />
+				
+				<CommentForm ticketId={props.ticket.ticket_id} data={data} />
 			</Flex>
 			<TicketDescription ticket={props.ticket} />
 		</Flex>

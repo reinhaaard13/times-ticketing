@@ -83,7 +83,7 @@ const SubjectListPage = (props) => {
 export async function getStaticProps() {
 	const response = await axios.get("/api/subjects");
 
-	const { subjects } = await response.data;
+	const subjects = await response.data;
 
 	return {
 		props: {

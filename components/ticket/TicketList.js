@@ -22,6 +22,7 @@ import {
 	IconButton,
 	Badge,
 	Text,
+	Divider,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
@@ -46,14 +47,16 @@ const TicketList = (props) => {
 
 	const { data } = useSWR(`/api/tickets?page=${page}`, (url) => {
 		NProgress.start();
-		return axios.get(url, {
-			headers: {
-				Authorization: `Bearer ${token}`,
-			},
-		}).then((res) => {
-			NProgress.done()
-		});
-	})
+		return axios
+			.get(url, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			})
+			.then((res) => {
+				NProgress.done();
+			});
+	});
 
 	const fetchNextPage = async () => {
 		NProgress.start();
@@ -69,14 +72,11 @@ const TicketList = (props) => {
 
 	const fetchPreviousPage = async () => {
 		NProgress.start();
-		const response = await axios.get(
-			`${tickets.previous}`,
-			{
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			}
-		);
+		const response = await axios.get(`${tickets.previous}`, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		});
 		setTickets(response.data);
 		NProgress.done();
 	};
@@ -131,7 +131,7 @@ const TicketList = (props) => {
 							<Th>Severity</Th>
 							<Th>SLA</Th>
 							<Th width={1}>Attachment</Th>
-							<Th>Action</Th>
+							{privileges.includes("TICKET_ACTION") && <Th>Action</Th>}
 						</Tr>
 					</Thead>
 					<Tbody>
@@ -150,7 +150,7 @@ const TicketList = (props) => {
 									key={ticket.ticket_id}
 									_hover={{ backgroundColor: "#efefef" }}
 								>
-									<Td>{idx + 1}</Td>
+									<Td>{(tickets.page - 1) * tickets.limit + (idx + 1)}</Td>
 									<Td>
 										<Link href={`/ticket/${ticket.ticket_id}`}>
 											<a className="underline">{ticket.ticket_id}</a>
@@ -204,7 +204,8 @@ const TicketList = (props) => {
 										{ticket.attachment && (
 											// http://localhost:5000/uploads/attachments/77567600-09e1-11ed-b5ad-a5925e956a1c.png
 											<Image
-												src={`${'http://localhost:5000/'}${ticket.attachment}`}
+												// src={`${'https://rei-aws.s3.ap-southeast-1.amazonaws.com/times/'}${ticket.attachment}`}
+												src={`${process.env.NEXT_PUBLIC_STORAGE_URI}/${ticket.attachment}`}
 												alt={"attachment"}
 												width={60}
 												height={60}
@@ -214,9 +215,9 @@ const TicketList = (props) => {
 											/>
 										)}
 									</Td>
-									<Td>
-										{privileges.includes("TICKET_ACTION") &&
-											ticket.status === "OPEN" && (
+									{privileges.includes("TICKET_ACTION") && (
+										<Td>
+											{ticket.status === "OPEN" && (
 												<Button
 													size="sm"
 													colorScheme="green"
@@ -229,8 +230,7 @@ const TicketList = (props) => {
 													Answer
 												</Button>
 											)}
-										{privileges.includes("TICKET_ACTION") &&
-											ticket.status === "PROGRESS" && (
+											{ticket.status === "PROGRESS" && (
 												<Link href={`/ticket/${ticket.ticket_id}`}>
 													<Button
 														size="sm"
@@ -241,7 +241,8 @@ const TicketList = (props) => {
 													</Button>
 												</Link>
 											)}
-									</Td>
+										</Td>
+									)}
 								</Tr>
 							);
 						})}
@@ -265,6 +266,10 @@ const TicketList = (props) => {
 								/>
 								<Text display={"inline"} fontWeight={"medium"}>
 									Showing {tickets.total} of {tickets.count}
+								</Text>
+								<Divider orientation="vertical" display={"inline"} mx={2} />
+								<Text display={"inline"} fontWeight={"normal"}>
+									Page {tickets.page}
 								</Text>
 							</Td>
 						</Tr>

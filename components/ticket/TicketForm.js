@@ -351,7 +351,7 @@ const TicketForm = (props) => {
 										(product) =>
 											product.product_id === parseInt(formik.values.product)
 									)
-									?.subproducts.map((subproduct, idx) => (
+									?.Subproducts.map((subproduct, idx) => (
 										<option key={idx} value={subproduct.subproduct_id}>
 											{subproduct.subproduct_name}
 										</option>
