@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
+import { useAuth } from "../../contexts/auth-context";
 
 import {
 	Box,
@@ -80,6 +81,7 @@ const TicketForm = (props) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [ticket, setTicket] = useState({});
 	const router = useRouter();
+	const { token } = useAuth()
 
 	const formik = useFormik({
 		initialValues: {
@@ -116,7 +118,11 @@ const TicketForm = (props) => {
 			console.log(formData);
 
 			try {
-				const response = await axios.post("/api/tickets", formData);
+				const response = await axios.post("/api/tickets", formData, {
+					headers: {
+						Authorization: `Bearer ${token}`
+					}
+				});
 				console.log(response);
 				formik.resetForm();
 				setTicket(response.data.newTicket);

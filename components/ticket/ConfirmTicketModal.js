@@ -1,6 +1,8 @@
 import React from "react";
 import moment from "moment";
 import axios from "axios";
+import { useAuth } from "../../contexts/auth-context";
+import { useSWRConfig } from "swr";
 
 import {
 	Modal,
@@ -32,14 +34,22 @@ import { FaTicketAlt } from "react-icons/fa";
 import SeverityBadge from "../UI/Badge";
 
 const ConfirmTicketModal = (props) => {
+	const { token } = useAuth();
+	const { mutate } = useSWRConfig();
+
 	const confirmHandler = async () => {
 		try {
 			const response = await axios.patch(
-				`/api/tickets/${props.ticket.ticket_id}/confirm`,
-				{ status: "PROGRESS" }
+				`/api/tickets/${props.ticket.ticket_id}/status`,
+				{ status: "PROGRESS" },
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
 			);
 			console.log(response.data);
-			props.onConfirm();
+			mutate(["/api/tickets", props.page]);
 			props.onClose();
 		} catch (error) {
 			console.log(error);

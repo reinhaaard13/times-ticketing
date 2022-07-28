@@ -26,11 +26,16 @@ const TicketCommentList = (props) => {
 				<CommentSkeleton />
 			)}
 
-			{props.comments?.length === 0 && (
-				<Text fontSize={"sm"} alignSelf={"center"} mb={8}>
-					No comments yet
-				</Text>
-			)}
+			{props.comments?.length === 0 &&
+				(props.status === "OPEN" ? (
+					<Text fontSize={"sm"} alignSelf={"center"} mb={8}>
+						Ticket has not been taken.
+					</Text>
+				) : (
+					<Text fontSize={"sm"} alignSelf={"center"} mb={8}>
+						No comments yet
+					</Text>
+				))}
 		</Flex>
 	);
 };

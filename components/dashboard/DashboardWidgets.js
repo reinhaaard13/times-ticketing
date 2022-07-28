@@ -15,25 +15,25 @@ const DashboardWidgets = (props) => {
 			<DashboardWidgetItem
 				accentColor={"teal"}
 				title={"Tickets Taken"}
-				amount={3}
+				amount={props.progress}
 				icon={<RiUserReceivedFill />}
 			/>
 			<DashboardWidgetItem
 				accentColor={"orange.500"}
 				title={"Tickets Open"}
-				amount={3}
+				amount={props.open}
 				icon={<RiUserReceivedFill />}
 			/>
 			<DashboardWidgetItem
 				accentColor={"green.500"}
 				title={"Total Tickets"}
-				amount={17}
+				amount={props.total}
 				icon={<RiUserReceivedFill />}
 			/>
 			<DashboardWidgetItem
 				accentColor={"red.500"}
 				title={"Tickets Closed"}
-				amount={5}
+				amount={props.closed}
 				icon={<RiUserReceivedFill />}
 			/>
 		</Grid>

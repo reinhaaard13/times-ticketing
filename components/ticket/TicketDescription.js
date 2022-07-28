@@ -1,6 +1,8 @@
 import React from "react";
 import moment from 'moment';
 
+import { useAuth } from "../../contexts/auth-context";
+
 import { Flex, Text, List, ListItem, ListIcon, Button } from "@chakra-ui/react";
 
 import {
@@ -21,6 +23,8 @@ import { FaTicketAlt } from "react-icons/fa";
 import Badge from '../UI/Badge'
 
 const TicketDescription = (props) => {
+	const { user } = useAuth();
+
 	return (
 		<Flex
 			w={['full','full',"sm"]}
@@ -82,17 +86,19 @@ const TicketDescription = (props) => {
 				</ListItem>
 				<ListItem>
 					<ListIcon as={MdSubject} color={"teal"} />
-					Subject: <span className="font-medium">Settlement Failed</span>
+					Subject: <span className="font-medium">{props.ticket.CaseSubject.subject}</span>
 				</ListItem>
 			</List>
-			<Button
-				colorScheme={"red"}
-				size={"sm"}
-				w={"fit-content"}
-				alignSelf={"end"}
-			>
-				Close Ticket
-			</Button>
+			{props.ticket.created_by === user?.id && (
+				<Button
+					colorScheme={"red"}
+					size={"sm"}
+					w={"fit-content"}
+					alignSelf={"end"}
+				>
+					Close Ticket
+				</Button>
+			)}
 		</Flex>
 	);
 };

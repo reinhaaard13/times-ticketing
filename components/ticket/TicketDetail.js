@@ -3,6 +3,7 @@ import { MdSubject, MdDateRange, MdLocationPin } from "react-icons/md";
 import { Flex, Heading, Text, Divider } from "@chakra-ui/react";
 import useSWR from "swr";
 import axios from "axios";
+import { useAuth } from "../../contexts/auth-context";
 
 import moment from "moment";
 
@@ -14,11 +15,15 @@ import TicketDescription from "./TicketDescription";
 const fetcher = async (url) => {
 	const response = await axios.get(url);
 	return response.data;
-}
+};
 
 const TicketDetail = (props) => {
-	const { data } = useSWR(`/api/tickets/${props.ticket.ticket_id}/comments`, fetcher);
-	
+	const { user } = useAuth();
+	const { data } = useSWR(
+		`/api/tickets/${props.ticket.ticket_id}/comments`,
+		fetcher
+	);
+
 	return (
 		<Flex
 			w={"full"}
@@ -31,6 +36,7 @@ const TicketDetail = (props) => {
 			<Flex
 				w={"full"}
 				maxW={"container.md"}
+				h={"fit-content"}
 				bg={"whiteAlpha.900"}
 				backdropFilter={"auto"}
 				backdropBlur={"md"}
@@ -84,10 +90,18 @@ const TicketDetail = (props) => {
 				<Text fontSize={"initial"} mb={"6"}>
 					{props.ticket.description}
 				</Text>
-				
-				<TicketCommentList comments={data?.comments} />
-				
-				<CommentForm ticketId={props.ticket.ticket_id} data={data} />
+
+				<TicketCommentList
+					comments={data?.comments}
+					status={props.ticket.status}
+				/>
+
+				{user?.id === props.ticket.pic_id ||
+				user?.id === props.ticket.created_by
+					? props.ticket.status === "PROGRESS" && (
+							<CommentForm ticketId={props.ticket.ticket_id} data={data} />
+					  )
+					: null}
 			</Flex>
 			<TicketDescription ticket={props.ticket} />
 		</Flex>

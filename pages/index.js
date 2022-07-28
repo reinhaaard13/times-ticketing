@@ -9,6 +9,7 @@ import SideBarLayout from "../components/UI/SideBarLayout";
 import DashboardWidgets from "../components/dashboard/DashboardWidgets";
 
 const DashboardPage = (props) => {
+
 	return (
 		<SideBarLayout>
 			{props.tickets ? (
@@ -21,7 +22,7 @@ const DashboardPage = (props) => {
 					>
 						Dashboard
 					</Heading>
-					<DashboardWidgets />
+					<DashboardWidgets {...props.tickets.stats} />
 					<Heading
 						size={"md"}
 						marginTop={4}

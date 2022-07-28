@@ -37,7 +37,7 @@ import { SUBJECT_SEVERITY } from "../../constants/severity";
 const TicketList = (props) => {
 	const [lightbox, setLightbox] = useState(false);
 	const [selectedImage, setSelectedImage] = useState(null);
-	const [tickets, setTickets] = useState(props.tickets);
+	// const [tickets, setTickets] = useState(props.tickets);
 	const { token, privileges } = useAuth();
 	const [page, setPage] = useState(1);
 
@@ -45,40 +45,41 @@ const TicketList = (props) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [selectedTicket, setSelectedTicket] = useState(null);
 
-	const { data } = useSWR(`/api/tickets?page=${page}`, (url) => {
+	const { data } = useSWR([`/api/tickets`, page], async (url, page) => {
 		NProgress.start();
-		return axios
-			.get(url, {
+		const res = await axios
+			.get(`${url}?page=${page}`, {
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
-			})
-			.then((res) => {
-				NProgress.done();
 			});
+		NProgress.done();
+		return res.data;
 	});
 
 	const fetchNextPage = async () => {
-		NProgress.start();
-		const response = await axios.get(`${tickets.next}`, {
-			headers: {
-				Authorization: `Bearer ${token}`,
-			},
-		});
-		console.log(response.data);
-		setTickets(response.data);
-		NProgress.done();
+		// NProgress.start();
+		// const response = await axios.get(`${tickets.next}`, {
+		// 	headers: {
+		// 		Authorization: `Bearer ${token}`,
+		// 	},
+		// });
+		// console.log(response.data);
+		// setTickets(response.data);
+		setPage(prevPage => prevPage + 1);
+		// NProgress.done();
 	};
 
 	const fetchPreviousPage = async () => {
-		NProgress.start();
-		const response = await axios.get(`${tickets.previous}`, {
-			headers: {
-				Authorization: `Bearer ${token}`,
-			},
-		});
-		setTickets(response.data);
-		NProgress.done();
+		// NProgress.start();
+		// const response = await axios.get(`${tickets.previous}`, {
+		// 	headers: {
+		// 		Authorization: `Bearer ${token}`,
+		// 	},
+		// });
+		// setTickets(response.data);
+		setPage((prevPage) => prevPage - 1);
+		// NProgress.done();
 	};
 
 	const openLightbox = (index) => {
@@ -106,6 +107,7 @@ const TicketList = (props) => {
 				onClose={onClose}
 				onConfirm={confirmHandler}
 				ticket={selectedTicket}
+				page={page}
 			/>
 			<TableContainer
 				whiteSpace={"pre-wrap"}
@@ -135,7 +137,14 @@ const TicketList = (props) => {
 						</Tr>
 					</Thead>
 					<Tbody>
-						{tickets.tickets.map((ticket, idx) => {
+						{!data && (
+							<Tr>
+								<Td colSpan={11} textAlign={'center'} p={4}>
+								Loading...
+								</Td>
+							</Tr>
+						)}
+						{data?.tickets.map((ticket, idx) => {
 							const deadline = moment(ticket.created_date).add(
 								SUBJECT_SEVERITY.find(
 									(subject) => subject.label === ticket.CaseSubject.severity
@@ -150,7 +159,7 @@ const TicketList = (props) => {
 									key={ticket.ticket_id}
 									_hover={{ backgroundColor: "#efefef" }}
 								>
-									<Td>{(tickets.page - 1) * tickets.limit + (idx + 1)}</Td>
+									<Td>{(data.page - 1) * data.limit + (idx + 1)}</Td>
 									<Td>
 										<Link href={`/ticket/${ticket.ticket_id}`}>
 											<a className="underline">{ticket.ticket_id}</a>
@@ -253,7 +262,7 @@ const TicketList = (props) => {
 									variant={"outline"}
 									size={"sm"}
 									ml={4}
-									disabled={!tickets.previous}
+									disabled={!data?.previous}
 									onClick={fetchPreviousPage}
 								/>
 								<IconButton
@@ -261,15 +270,15 @@ const TicketList = (props) => {
 									variant={"outline"}
 									size={"sm"}
 									ml={1}
-									disabled={!tickets.next}
+									disabled={!data?.next}
 									onClick={fetchNextPage}
 								/>
 								<Text display={"inline"} fontWeight={"medium"}>
-									Showing {tickets.total} of {tickets.count}
+									Showing {data?.total} of {data?.stats.total}
 								</Text>
 								<Divider orientation="vertical" display={"inline"} mx={2} />
 								<Text display={"inline"} fontWeight={"normal"}>
-									Page {tickets.page}
+									Page {data?.page}
 								</Text>
 							</Td>
 						</Tr>
