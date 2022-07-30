@@ -33,6 +33,7 @@ const LoginForm = (props) => {
 				const {user, token, role, privileges} = response.data
 				login(user, token, role, privileges)
 			} catch (error) {
+				console.log(error);
 				if (error.response.data.message.endsWith("password")) {
 					formik.setFieldError("password", error.response.data.message)
 				} else {

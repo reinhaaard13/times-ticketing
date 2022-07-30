@@ -23,8 +23,6 @@ const RouteGuard = (props) => {
     }
 
 		if (isLoggedIn && PUBLIC_PATH.includes(router.pathname)) {
-			console.log(lastPath);
-			console.log(PUBLIC_PATH.includes(lastPath));
 			router.push(lastPath ? lastPath : "/");
 			// router.push("/");
 		}

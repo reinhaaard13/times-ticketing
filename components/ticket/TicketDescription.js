@@ -43,7 +43,7 @@ const TicketDescription = (props) => {
 				fontWeight={"semibold"}
 				className={"text-lime-500"}
 			>
-				Ticket Details
+				Ticket Description
 			</Text>
 			<List spacing={2} fontSize={"sm"} mb={4}>
 				<ListItem>
@@ -89,7 +89,7 @@ const TicketDescription = (props) => {
 					Subject: <span className="font-medium">{props.ticket.CaseSubject.subject}</span>
 				</ListItem>
 			</List>
-			{props.ticket.created_by === user?.id && (
+			{props.ticket.created_by === user?.id && props.ticket.status === "PROGRESS" && (
 				<Button
 					colorScheme={"red"}
 					size={"sm"}

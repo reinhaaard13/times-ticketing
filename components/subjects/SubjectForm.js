@@ -36,7 +36,7 @@ const SubjectForm = (props) => {
 					severity: values.severity,
 				});
 			} else {
-				response = await axios.post("/api/subjects/add", {
+				response = await axios.post("/api/subjects/create", {
 					subject: values.subject,
 					severity: values.severity,
 				});

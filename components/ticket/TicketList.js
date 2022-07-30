@@ -47,12 +47,11 @@ const TicketList = (props) => {
 
 	const { data } = useSWR([`/api/tickets`, page], async (url, page) => {
 		NProgress.start();
-		const res = await axios
-			.get(`${url}?page=${page}`, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			});
+		const res = await axios.get(`${url}?page=${page}`, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		});
 		NProgress.done();
 		return res.data;
 	});
@@ -66,7 +65,7 @@ const TicketList = (props) => {
 		// });
 		// console.log(response.data);
 		// setTickets(response.data);
-		setPage(prevPage => prevPage + 1);
+		setPage((prevPage) => prevPage + 1);
 		// NProgress.done();
 	};
 
@@ -139,8 +138,15 @@ const TicketList = (props) => {
 					<Tbody>
 						{!data && (
 							<Tr>
-								<Td colSpan={11} textAlign={'center'} p={4}>
-								Loading...
+								<Td colSpan={11} textAlign={"center"} p={4}>
+									Loading...
+								</Td>
+							</Tr>
+						)}
+						{data?.tickets.length === 0 && (
+							<Tr>
+								<Td colSpan={11} textAlign={"center"} p={4}>
+									No ticket(s) found
 								</Td>
 							</Tr>
 						)}
