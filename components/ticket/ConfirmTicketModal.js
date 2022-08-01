@@ -50,6 +50,7 @@ const ConfirmTicketModal = (props) => {
 			);
 			console.log(response.data);
 			mutate(["/api/tickets", props.page]);
+			props.onConfirm()
 			props.onClose();
 		} catch (error) {
 			console.log(error);
@@ -122,7 +123,7 @@ const ConfirmTicketModal = (props) => {
 						Cancel
 					</Button>
 					<Button colorScheme="blue" onClick={confirmHandler}>
-						Answer This Ticket
+						Take This Ticket
 					</Button>
 				</ModalFooter>
 			</ModalContent>

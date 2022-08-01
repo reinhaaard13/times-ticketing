@@ -23,6 +23,9 @@ import {
 	Badge,
 	Text,
 	Divider,
+	Skeleton,
+	ButtonGroup,
+	useToast,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
@@ -37,7 +40,6 @@ import { SUBJECT_SEVERITY } from "../../constants/severity";
 const TicketList = (props) => {
 	const [lightbox, setLightbox] = useState(false);
 	const [selectedImage, setSelectedImage] = useState(null);
-	// const [tickets, setTickets] = useState(props.tickets);
 	const { token, privileges } = useAuth();
 	const [page, setPage] = useState(1);
 
@@ -45,7 +47,9 @@ const TicketList = (props) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [selectedTicket, setSelectedTicket] = useState(null);
 
-	const { data } = useSWR([`/api/tickets`, page], async (url, page) => {
+	const toast = useToast();
+
+	const { data } = useSWR(`/api/tickets`, async (url) => {
 		NProgress.start();
 		const res = await axios.get(`${url}?page=${page}`, {
 			headers: {
@@ -57,28 +61,11 @@ const TicketList = (props) => {
 	});
 
 	const fetchNextPage = async () => {
-		// NProgress.start();
-		// const response = await axios.get(`${tickets.next}`, {
-		// 	headers: {
-		// 		Authorization: `Bearer ${token}`,
-		// 	},
-		// });
-		// console.log(response.data);
-		// setTickets(response.data);
 		setPage((prevPage) => prevPage + 1);
-		// NProgress.done();
 	};
 
 	const fetchPreviousPage = async () => {
-		// NProgress.start();
-		// const response = await axios.get(`${tickets.previous}`, {
-		// 	headers: {
-		// 		Authorization: `Bearer ${token}`,
-		// 	},
-		// });
-		// setTickets(response.data);
 		setPage((prevPage) => prevPage - 1);
-		// NProgress.done();
 	};
 
 	const openLightbox = (index) => {
@@ -87,14 +74,13 @@ const TicketList = (props) => {
 	};
 
 	const confirmHandler = () => {
-		setTickets((prevState) => {
-			const newTickets = prevState.tickets.map((ticket) => {
-				if (ticket.ticket_id === selectedTicket.ticket_id) {
-					ticket.status = "PROGRESS";
-				}
-				return ticket;
-			});
-			return { ...prevState, tickets: newTickets };
+		toast({
+			title: "You have taken this ticket",
+			description: `The ticket with ID ${selectedTicket.ticket_id} has been taken by you`,
+			position: "top",
+			status: "warning",
+			isClosable: true,
+			variant: "left-accent",
 		});
 	};
 
@@ -137,11 +123,23 @@ const TicketList = (props) => {
 					</Thead>
 					<Tbody>
 						{!data && (
-							<Tr>
-								<Td colSpan={11} textAlign={"center"} p={4}>
-									Loading...
-								</Td>
-							</Tr>
+							<>
+								<Tr>
+									<Td colSpan={11} textAlign={"center"} p={4}>
+										<Skeleton height={5} />
+									</Td>
+								</Tr>
+								<Tr>
+									<Td colSpan={11} textAlign={"center"} p={4}>
+										<Skeleton height={5} />
+									</Td>
+								</Tr>
+								<Tr>
+									<Td colSpan={11} textAlign={"center"} p={4}>
+										<Skeleton height={5} />
+									</Td>
+								</Tr>
+							</>
 						)}
 						{data?.tickets.length === 0 && (
 							<Tr>
@@ -151,15 +149,6 @@ const TicketList = (props) => {
 							</Tr>
 						)}
 						{data?.tickets.map((ticket, idx) => {
-							const deadline = moment(ticket.created_date).add(
-								SUBJECT_SEVERITY.find(
-									(subject) => subject.label === ticket.CaseSubject.severity
-								).handle_in,
-								"days"
-							);
-
-							const sla = deadline.diff(moment(), "d");
-
 							return (
 								<Tr
 									key={ticket.ticket_id}
@@ -175,7 +164,11 @@ const TicketList = (props) => {
 									<Td>
 										<Badge
 											colorScheme={
-												ticket.status === "OPEN" ? "yellow" : "green"
+												ticket.status === "OPEN"
+													? "yellow"
+													: ticket.status === "PROGRESS"
+													? "green"
+													: "gray"
 											}
 										>
 											{ticket.status}
@@ -190,29 +183,31 @@ const TicketList = (props) => {
 										<SeverityBadge severity={ticket.CaseSubject.severity} />
 									</Td>
 									<Td>
-										{ticket.status !== "CLOSED" && (
+										{ticket.status !== "CLOSED" ? (
 											<Badge
 												color={
-													sla > 1
+													ticket.sla > 1
 														? "green.800"
-														: sla >= 0
+														: ticket.sla >= 0
 														? "yellow.800"
 														: "black"
 												}
 												bgColor={
-													sla > 1
+													ticket.sla > 1
 														? "green.200"
-														: sla >= 0
+														: ticket.sla >= 0
 														? "yellow.200"
 														: "blackAlpha.200"
 												} // variant={'solid'}
 											>
-												{sla > 1
-													? `Due in ${sla} days`
-													: sla >= 0
+												{ticket.sla >= 1
+													? `Due in ${ticket.sla} days`
+													: ticket.sla >= 0
 													? `Due today`
-													: `Overdue for ${sla} days`}
+													: `Overdue for ${ticket.sla} days`}
 											</Badge>
+										) : (
+											<Badge>Closed</Badge>
 										)}
 									</Td>
 									<Td>
@@ -232,30 +227,37 @@ const TicketList = (props) => {
 									</Td>
 									{privileges.includes("TICKET_ACTION") && (
 										<Td>
-											{ticket.status === "OPEN" && (
-												<Button
-													size="sm"
-													colorScheme="green"
-													onClick={() => {
-														onOpen();
-														setSelectedTicket(ticket);
-													}}
-													leftIcon={<BiUserCheck />}
-												>
-													Answer
-												</Button>
-											)}
-											{ticket.status === "PROGRESS" && (
+											<ButtonGroup
+												isAttached
+												display={"flex"}
+												justifyContent={"center"}
+												alignItems={"center"}
+											>
 												<Link href={`/ticket/${ticket.ticket_id}`}>
 													<Button
 														size="sm"
 														colorScheme="blue"
 														leftIcon={<MdRemoveRedEye />}
+														w={"full"}
 													>
 														View
 													</Button>
 												</Link>
-											)}
+												{ticket.status === "OPEN" && (
+													<Button
+														size="sm"
+														colorScheme="green"
+														onClick={() => {
+															onOpen();
+															setSelectedTicket(ticket);
+														}}
+														leftIcon={<BiUserCheck />}
+														w={"full"}
+													>
+														Take
+													</Button>
+												)}
+											</ButtonGroup>
 										</Td>
 									)}
 								</Tr>

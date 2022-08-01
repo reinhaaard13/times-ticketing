@@ -1,4 +1,5 @@
 import React from "react";
+import useSWR from "swr";
 
 import { Grid, Text, Box, Flex, Spacer } from "@chakra-ui/react";
 import { RiUserReceivedFill } from "react-icons/ri";
@@ -6,6 +7,8 @@ import { RiUserReceivedFill } from "react-icons/ri";
 import DashboardWidgetItem from "./DashboardWidgetItem";
 
 const DashboardWidgets = (props) => {
+	const { data } = useSWR(`/api/tickets`);
+
 	return (
 		<Grid
 			gap={2}
@@ -14,26 +17,26 @@ const DashboardWidgets = (props) => {
 		>
 			<DashboardWidgetItem
 				accentColor={"teal"}
-				title={"Tickets Taken"}
-				amount={props.progress}
+				title={"Tickets In Progress"}
+				amount={data?.stats.progress}
 				icon={<RiUserReceivedFill />}
 			/>
 			<DashboardWidgetItem
 				accentColor={"orange.500"}
 				title={"Tickets Open"}
-				amount={props.open}
+				amount={data?.stats.open}
 				icon={<RiUserReceivedFill />}
 			/>
 			<DashboardWidgetItem
 				accentColor={"green.500"}
 				title={"Total Tickets"}
-				amount={props.total}
+				amount={data?.stats.total}
 				icon={<RiUserReceivedFill />}
 			/>
 			<DashboardWidgetItem
 				accentColor={"red.500"}
 				title={"Tickets Closed"}
-				amount={props.closed}
+				amount={data?.stats.closed}
 				icon={<RiUserReceivedFill />}
 			/>
 		</Grid>

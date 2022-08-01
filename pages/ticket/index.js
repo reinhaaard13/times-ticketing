@@ -21,21 +21,10 @@ const TicketsPage = (props) => {
 				>
 					Tickets
 				</Text>
-				<TicketList {...props} />
+				<TicketList />
 			</div>
 		</SideBarLayout>
 	);
 };
-
-export async function getServerSideProps() {
-	const response = await axios.get("/api/tickets");
-	const tickets = response.data;
-
-	return {
-		props: {
-			tickets
-		},
-	};
-}
 
 export default TicketsPage;

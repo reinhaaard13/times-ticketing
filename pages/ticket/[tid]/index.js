@@ -1,34 +1,30 @@
 import React from "react";
-
-import { Text } from "@chakra-ui/react";
+import useSWR from "swr";
+import axios from "axios";
+import { useRouter } from "next/router";
 
 import TicketDetail from "../../../components/ticket/TicketDetail";
 import SideBarLayout from "../../../components/UI/SideBarLayout";
-import Header from "../../../components/UI/Header";
-import axios from "axios";
+
+const fetcher = async (url) => {
+	const response = await axios.get(url);
+	return response.data;
+}
 
 const TicketDetailPage = (props) => {
+	const { query } = useRouter();
+
+	const { data } = useSWR(
+		`/api/tickets/${query.tid}`,
+		fetcher
+	)
 	return (
 		<SideBarLayout>
 			<div className="flex flex-col container px-2 mt-4">
-        <TicketDetail ticket={props.ticket} />
+				<TicketDetail ticket={data?.ticket} />
 			</div>
 		</SideBarLayout>
 	);
 };
-
-export async function getServerSideProps(context) {
-	const { tid } = context.query;
-
-	const response = await axios.get(`/api/tickets/${tid}`);
-	const { ticket } = response.data;
-
-	return {
-		props: {
-			ticket
-		},
-	};
-}
-
 
 export default TicketDetailPage;

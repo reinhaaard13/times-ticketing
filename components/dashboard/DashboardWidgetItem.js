@@ -1,6 +1,6 @@
 import React, {useRef} from "react";
 import { motion } from "framer-motion";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text, Skeleton } from "@chakra-ui/react";
 
 const DashboardWidgetItem = ({ title, amount, icon, accentColor }) => {
 	const constraintRef = useRef()
@@ -36,14 +36,18 @@ const DashboardWidgetItem = ({ title, amount, icon, accentColor }) => {
 						{icon}
 					</Box>
 				</Flex>
-				<Text
-					textTransform={"uppercase"}
-					fontSize={"2xl"}
-					fontWeight={"semibold"}
-					letterSpacing={"wide"}
-				>
-					{amount}
-				</Text>
+				{amount !== undefined ? (
+					<Text
+						textTransform={"uppercase"}
+						fontSize={"2xl"}
+						fontWeight={"semibold"}
+						letterSpacing={"wide"}
+					>
+						{amount}
+					</Text>
+				) : (
+					<Skeleton height={8} width={20} />
+				)}
 			</Box>
 		</motion.div>
 	);

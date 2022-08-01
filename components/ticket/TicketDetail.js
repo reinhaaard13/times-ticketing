@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { MdSubject, MdDateRange, MdLocationPin } from "react-icons/md";
-import { Flex, Heading, Text, Divider } from "@chakra-ui/react";
+import {
+	Flex,
+	Heading,
+	Text,
+	Divider,
+	Skeleton,
+	SkeletonText,
+	Spacer,
+} from "@chakra-ui/react";
 import useSWR from "swr";
 import axios from "axios";
 import { useAuth } from "../../contexts/auth-context";
@@ -11,6 +19,7 @@ import TicketCommentList from "./TicketCommentList";
 import CommentForm from "./CommentForm";
 import CommentSkeleton from "../UI/skeletons/CommentSkeleton";
 import TicketDescription from "./TicketDescription";
+import ClosedTicketSolution from "./ClosedTicketSolution";
 
 const fetcher = async (url) => {
 	const response = await axios.get(url);
@@ -20,7 +29,7 @@ const fetcher = async (url) => {
 const TicketDetail = (props) => {
 	const { user } = useAuth();
 	const { data } = useSWR(
-		`/api/tickets/${props.ticket.ticket_id}/comments`,
+		`/api/tickets/${props.ticket?.ticket_id}/comments`,
 		fetcher
 	);
 
@@ -56,30 +65,50 @@ const TicketDetail = (props) => {
 						>
 							Subject
 						</Text>
-						<Text
-							fontSize={"md"}
-							className={"text-lime-500"}
-							fontWeight={"semibold"}
-						>
-							{props.ticket.CaseSubject.subject}
-						</Text>
+						{props.ticket ? (
+							<Text
+								fontSize={"md"}
+								className={"text-lime-500"}
+								fontWeight={"semibold"}
+							>
+								{props.ticket.CaseSubject.subject}
+							</Text>
+						) : (
+							<Skeleton height={5} width={"xs"} />
+						)}
 					</Flex>
 				</Flex>
 				<Flex textColor={"GrayText"}>
-					<Flex>
+					<Flex alignItems={"center"}>
 						<MdDateRange />
-						<Text marginLeft={2} fontSize={"xs"}>
-							issued {moment(props.ticket.created_date).fromNow()}.
-						</Text>
+						{props.ticket ? (
+							<Text marginLeft={2} fontSize={"xs"}>
+								issued {moment(props.ticket.created_date).fromNow()}.
+							</Text>
+						) : (
+							<Skeleton ml={2} height={3} width={32} />
+						)}
 					</Flex>
-					<Flex ml={4}>
+					<Flex ml={4} alignItems={"center"}>
 						<MdLocationPin />
-						<Text marginLeft={2} fontSize={"xs"}>
-							Event Location: {props.ticket.location}
-						</Text>
+						{props.ticket ? (
+							<Text marginLeft={2} fontSize={"xs"}>
+								Event Location: {props.ticket.location}
+							</Text>
+						) : (
+							<Skeleton ml={2} height={3} width={32} />
+						)}
 					</Flex>
 				</Flex>
 				<Divider my={4} />
+
+				{props.ticket?.status === "CLOSED" && (
+					<ClosedTicketSolution
+						solution={props.ticket.solution}
+						pic={props.ticket.User.name}
+					/>
+				)}
+
 				<Text
 					fontSize={"md"}
 					fontWeight={"semibold"}
@@ -87,17 +116,21 @@ const TicketDetail = (props) => {
 				>
 					Description
 				</Text>
-				<Text fontSize={"initial"} mb={"6"}>
-					{props.ticket.description}
-				</Text>
+				{props.ticket ? (
+					<Text fontSize={"initial"} mb={"6"}>
+						{props.ticket.description}
+					</Text>
+				) : (
+					<SkeletonText mt={2} noOfLines={4} mb={"6"} spacing={3} />
+				)}
 
 				<TicketCommentList
 					comments={data?.comments}
-					status={props.ticket.status}
+					status={props.ticket?.status}
 				/>
 
-				{user?.id === props.ticket.pic_id ||
-				user?.id === props.ticket.created_by
+				{user?.id === props.ticket?.pic_id ||
+				user?.id === props.ticket?.created_by
 					? props.ticket.status === "PROGRESS" && (
 							<CommentForm ticketId={props.ticket.ticket_id} data={data} />
 					  )
