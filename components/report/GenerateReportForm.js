@@ -1,32 +1,64 @@
-import React from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
+import { DateRangePicker } from "react-date-range";
+import moment from "moment";
 
-import {
-  Text,
-  Flex,
-  Box,
-  Button
-} from "@chakra-ui/react"
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
+
+import { Text, Flex, Box, Button } from "@chakra-ui/react";
 
 const GenerateReportForm = () => {
-  return (
-    <Flex
-			w={"full"}
-			maxW={"lg"}
+	const [state, setState] = useState([
+		{
+			startDate: new Date(),
+			endDate: new Date(),
+			key: "selection",
+		},
+	]);
+
+	const generateHandler = () => {
+		const start = moment(state[0].startDate).toISOString();
+		const end = moment(state[0].endDate).toISOString();
+
+		window.open(
+			`${process.env.NEXT_PUBLIC_STORAGE_URI}/api/tickets/report?start=${start}&end=${end}`,
+			"_blank"
+		);
+	};
+
+	return (
+		<Flex
+			w={"fit-content"}
 			p={"4"}
 			bg={"white"}
 			rounded={"2xl"}
 			shadow={"lg"}
-      justifyContent={"center"}
-      alignItems={"center"}
-      flexDirection={"column"}
+			justifyContent={"center"}
+			// alignItems={"center"}
+			flexDirection={"column"}
 		>
-      <Text mb={2}>Generate Report</Text>
-      <a href={`${process.env.NEXT_PUBLIC_STORAGE_URI}/api/tickets/report?start=${encodeURIComponent(new Date(new Date().getTime() - 24 * 60 * 60 * 1000).toISOString())}&end=${encodeURIComponent(new Date().toISOString())}`} target="_blank" rel="noreferrer">
-        <Button colorScheme={'teal'}>Generate Report</Button>
-      </a>
-    </Flex>
-  );
-}
- 
+			<Text mb={2} fontSize={"xl"} fontWeight={"semibold"}>
+				Generate Report
+			</Text>
+			<Text alignSelf={"center"} mb={2}>
+				Pick start and end date for the report to be issued:
+			</Text>
+			<DateRangePicker
+				onChange={(item) => setState([item.selection])}
+				ranges={state}
+				months={1}
+				showSelectionPreview={true}
+				className="border shadow-lg rounded-lg overflow-clip mb-4"
+				weekStartsOn={1}
+				rangeColors={["#319795"]}
+			/>
+
+			<Button colorScheme={"teal"} onClick={generateHandler}>
+				Generate Report
+			</Button>
+		</Flex>
+	);
+};
+
 export default GenerateReportForm;

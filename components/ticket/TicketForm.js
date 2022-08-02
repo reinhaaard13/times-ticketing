@@ -115,7 +115,6 @@ const TicketForm = (props) => {
 			formData.append("description", values.description);
 			formData.append("attachment", values.attachment);
 			formData.append("created_by", "admin");
-			console.log(formData);
 
 			try {
 				const response = await axios.post("/api/tickets", formData, {
@@ -123,12 +122,10 @@ const TicketForm = (props) => {
 						Authorization: `Bearer ${token}`
 					}
 				});
-				console.log(response);
 				formik.resetForm();
 				setTicket(response.data.newTicket);
 				onOpen();
 			} catch (e) {
-				console.log(e);
 			}
 			formik.setSubmitting(false);
 		},
@@ -166,7 +163,7 @@ const TicketForm = (props) => {
 						<Button
 							colorScheme={"teal"}
 							onClick={() => {
-								router.push("/ticket");
+								router.push("/");
 							}}
 						>
 							Back to home

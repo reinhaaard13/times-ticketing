@@ -105,7 +105,7 @@ const TicketDetail = (props) => {
 				{props.ticket?.status === "CLOSED" && (
 					<ClosedTicketSolution
 						solution={props.ticket.solution}
-						pic={props.ticket.User.name}
+						pic={props.ticket.pic.name}
 					/>
 				)}
 

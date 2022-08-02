@@ -3,6 +3,7 @@ import { AiFillHome, AiOutlineAppstore } from "react-icons/ai";
 import { FaPencilAlt } from "react-icons/fa";
 import { MdSubject, MdOutlineLogout } from "react-icons/md";
 import { FiUserPlus } from "react-icons/fi";
+import { HiOutlineDocumentReport } from "react-icons/hi";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -96,6 +97,21 @@ const SideBarLayout = (props) => {
 										<Tooltip label="Register User" placement="right">
 											<span>
 												<FiUserPlus />
+											</span>
+										</Tooltip>
+									</a>
+								</Link>
+							</li>
+							<li>
+								<Link href="/admin/report" passHref>
+									<a
+										className={`${
+											path === "/admin/report" && "bg-slate-500"
+										}`}
+									>
+										<Tooltip label="Issue A Report" placement="right">
+											<span>
+												<HiOutlineDocumentReport />
 											</span>
 										</Tooltip>
 									</a>

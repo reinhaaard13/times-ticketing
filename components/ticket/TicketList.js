@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import moment from "moment";
-import { FiPlus } from "react-icons/fi";
 import { MdRemoveRedEye } from "react-icons/md";
 import { BiUserCheck } from "react-icons/bi";
 import Image from "next/image";
-import NProgress from "nprogress";
-import axios from "axios";
+
 import { useAuth } from "../../contexts/auth-context";
-import useSWR from "swr";
+import { useSWRConfig } from "swr";
 
 import {
 	TableContainer,
@@ -35,38 +33,16 @@ import FsLightBox from "fslightbox-react";
 import SeverityBadge from "../../components/UI/Badge";
 import ConfirmTicketModal from "./ConfirmTicketModal";
 
-import { SUBJECT_SEVERITY } from "../../constants/severity";
-
-const TicketList = (props) => {
+const TicketList = ({ data, next, previous }) => {
 	const [lightbox, setLightbox] = useState(false);
 	const [selectedImage, setSelectedImage] = useState(null);
-	const { token, privileges } = useAuth();
-	const [page, setPage] = useState(1);
+	const { user, privileges } = useAuth();
 
 	// for ticket description modal
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [selectedTicket, setSelectedTicket] = useState(null);
 
 	const toast = useToast();
-
-	const { data } = useSWR(`/api/tickets`, async (url) => {
-		NProgress.start();
-		const res = await axios.get(`${url}?page=${page}`, {
-			headers: {
-				Authorization: `Bearer ${token}`,
-			},
-		});
-		NProgress.done();
-		return res.data;
-	});
-
-	const fetchNextPage = async () => {
-		setPage((prevPage) => prevPage + 1);
-	};
-
-	const fetchPreviousPage = async () => {
-		setPage((prevPage) => prevPage - 1);
-	};
 
 	const openLightbox = (index) => {
 		setLightbox((prevState) => !prevState);
@@ -78,7 +54,7 @@ const TicketList = (props) => {
 			title: "You have taken this ticket",
 			description: `The ticket with ID ${selectedTicket.ticket_id} has been taken by you`,
 			position: "top",
-			status: "warning",
+			status: "success",
 			isClosable: true,
 			variant: "left-accent",
 		});
@@ -92,7 +68,7 @@ const TicketList = (props) => {
 				onClose={onClose}
 				onConfirm={confirmHandler}
 				ticket={selectedTicket}
-				page={page}
+				page={data?.page}
 			/>
 			<TableContainer
 				whiteSpace={"pre-wrap"}
@@ -111,10 +87,10 @@ const TicketList = (props) => {
 							<Th width="1">No.</Th>
 							<Th width={"1"}>Ticket</Th>
 							<Th>Product</Th>
-							<Th width={1}>Status</Th>
 							<Th>Event Location</Th>
 							<Th>Subject</Th>
 							<Th width={"28"}>Created at</Th>
+							<Th width={1}>Status</Th>
 							<Th>Severity</Th>
 							<Th>SLA</Th>
 							<Th width={1}>Attachment</Th>
@@ -161,6 +137,14 @@ const TicketList = (props) => {
 										</Link>
 									</Td>
 									<Td>{ticket.Product.product_name}</Td>
+									<Td>{ticket.location}</Td>
+									<Td>{ticket.CaseSubject.subject}</Td>
+									<Td>
+										{moment(ticket.created_date).format("YYYY-MM-DD HH:mm:ss")}
+									</Td>
+									<Td>
+										<SeverityBadge severity={ticket.CaseSubject.severity} />
+									</Td>
 									<Td>
 										<Badge
 											colorScheme={
@@ -173,14 +157,6 @@ const TicketList = (props) => {
 										>
 											{ticket.status}
 										</Badge>
-									</Td>
-									<Td>{ticket.location}</Td>
-									<Td>{ticket.CaseSubject.subject}</Td>
-									<Td>
-										{moment(ticket.created_date).format("YYYY-MM-DD HH:mm:ss")}
-									</Td>
-									<Td>
-										<SeverityBadge severity={ticket.CaseSubject.severity} />
 									</Td>
 									<Td>
 										{ticket.status !== "CLOSED" ? (
@@ -243,20 +219,22 @@ const TicketList = (props) => {
 														View
 													</Button>
 												</Link>
-												{ticket.status === "OPEN" && (
-													<Button
-														size="sm"
-														colorScheme="green"
-														onClick={() => {
-															onOpen();
-															setSelectedTicket(ticket);
-														}}
-														leftIcon={<BiUserCheck />}
-														w={"full"}
-													>
-														Take
-													</Button>
-												)}
+												{ticket.status === "OPEN" &&
+													privileges.includes("TICKET_ACTION") &&
+													ticket.created_by !== user.id && (
+														<Button
+															size="sm"
+															colorScheme="green"
+															onClick={() => {
+																onOpen();
+																setSelectedTicket(ticket);
+															}}
+															leftIcon={<BiUserCheck />}
+															w={"full"}
+														>
+															Take
+														</Button>
+													)}
 											</ButtonGroup>
 										</Td>
 									)}
@@ -271,7 +249,7 @@ const TicketList = (props) => {
 									size={"sm"}
 									ml={4}
 									disabled={!data?.previous}
-									onClick={fetchPreviousPage}
+									onClick={previous}
 								/>
 								<IconButton
 									icon={<FiChevronRight />}
@@ -279,7 +257,7 @@ const TicketList = (props) => {
 									size={"sm"}
 									ml={1}
 									disabled={!data?.next}
-									onClick={fetchNextPage}
+									onClick={next}
 								/>
 								<Text display={"inline"} fontWeight={"medium"}>
 									Showing {data?.total} of {data?.stats.total}

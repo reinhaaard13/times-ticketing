@@ -17,6 +17,7 @@ import {
 	List,
 	ListItem,
 	ListIcon,
+	useToast
 } from "@chakra-ui/react";
 
 import {
@@ -36,6 +37,7 @@ import SeverityBadge from "../UI/Badge";
 const ConfirmTicketModal = (props) => {
 	const { token } = useAuth();
 	const { mutate } = useSWRConfig();
+	const toast = useToast()
 
 	const confirmHandler = async () => {
 		try {
@@ -53,7 +55,16 @@ const ConfirmTicketModal = (props) => {
 			props.onConfirm()
 			props.onClose();
 		} catch (error) {
+			props.onClose()
 			console.log(error);
+			toast({
+				title: "An error occured",
+				description: `${error.response.data.error}`,
+				position: "top",
+				status: "error",
+				isClosable: true,
+				variant: "left-accent",
+			});
 		}
 	};
 

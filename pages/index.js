@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
+import useSWR from "swr";
+import NProgress from "nprogress";
+import { useAuth } from "../contexts/auth-context";
 
 import { Container, Box, Heading, Flex } from "@chakra-ui/react";
 
@@ -9,6 +12,28 @@ import SideBarLayout from "../components/UI/SideBarLayout";
 import DashboardWidgets from "../components/dashboard/DashboardWidgets";
 
 const DashboardPage = (props) => {
+	const [page, setPage] = useState(1);
+	const { token } = useAuth()
+
+	const { data } = useSWR(["/api/tickets", page], async (url) => {
+		NProgress.start();
+		const res = await axios.get(`${url}?page=${page}`, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		});
+		NProgress.done();
+		return res.data;
+	});
+
+	const fetchNextPage = async () => {
+		setPage((prevPage) => prevPage + 1);
+	};
+
+	const fetchPreviousPage = async () => {
+		setPage((prevPage) => prevPage - 1);
+	};
+
 	return (
 		<SideBarLayout>
 			<Box className="container" p={2}>
@@ -20,7 +45,7 @@ const DashboardPage = (props) => {
 				>
 					Dashboard
 				</Heading>
-				<DashboardWidgets />
+				<DashboardWidgets stats={data.stats} />
 				<Heading
 					size={"md"}
 					marginTop={4}
@@ -30,7 +55,11 @@ const DashboardPage = (props) => {
 				>
 					Ticket List
 				</Heading>
-				<TicketList {...props} />
+				<TicketList
+					data={data}
+					next={fetchNextPage}
+					previous={fetchPreviousPage}
+				/>
 			</Box>
 		</SideBarLayout>
 	);
