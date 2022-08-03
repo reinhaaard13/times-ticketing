@@ -16,25 +16,25 @@ const DashboardWidgets = ({stats}) => {
 			<DashboardWidgetItem
 				accentColor={"teal"}
 				title={"Tickets In Progress"}
-				amount={stats.progress}
+				amount={stats?.progress}
 				icon={<RiUserReceivedFill />}
 			/>
 			<DashboardWidgetItem
 				accentColor={"orange.500"}
 				title={"Tickets Open"}
-				amount={stats.open}
+				amount={stats?.open}
 				icon={<RiUserReceivedFill />}
 			/>
 			<DashboardWidgetItem
 				accentColor={"green.500"}
 				title={"Total Tickets"}
-				amount={stats.total}
+				amount={stats?.total}
 				icon={<RiUserReceivedFill />}
 			/>
 			<DashboardWidgetItem
 				accentColor={"red.500"}
 				title={"Tickets Closed"}
-				amount={stats.closed}
+				amount={stats?.closed}
 				icon={<RiUserReceivedFill />}
 			/>
 		</Grid>

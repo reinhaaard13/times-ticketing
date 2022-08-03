@@ -45,7 +45,7 @@ const DashboardPage = (props) => {
 				>
 					Dashboard
 				</Heading>
-				<DashboardWidgets stats={data.stats} />
+				<DashboardWidgets stats={data?.stats} />
 				<Heading
 					size={"md"}
 					marginTop={4}
