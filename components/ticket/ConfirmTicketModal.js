@@ -50,8 +50,8 @@ const ConfirmTicketModal = (props) => {
 					},
 				}
 			);
-			console.log(response.data);
-			mutate(["/api/tickets", props.page]);
+			// console.log(response.data);
+			// mutate(["/api/tickets", props.page]);
 			props.onConfirm()
 			props.onClose();
 		} catch (error) {
@@ -59,7 +59,7 @@ const ConfirmTicketModal = (props) => {
 			console.log(error);
 			toast({
 				title: "An error occured",
-				description: `${error.response.data.error}`,
+				description: `${error.response?.data.error}`,
 				position: "top",
 				status: "error",
 				isClosable: true,

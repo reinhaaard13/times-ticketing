@@ -35,23 +35,50 @@ import {
 	MdSubject,
 	MdLocalPhone,
 } from "react-icons/md";
+import { BiUserCheck } from "react-icons/bi";
 import { FaTicketAlt } from "react-icons/fa";
 
 import Badge from "../UI/Badge";
 import CloseTicketModal from "./CloseTicketModal";
+import ConfirmTicketModal from "./ConfirmTicketModal";
+import {useSWRConfig} from "swr";
 
 const TicketDescription = (props) => {
-	const { user } = useAuth();
-
+	const { user, privileges } = useAuth();
+	const { mutate } = useSWRConfig();
 	const { isOpen, onClose, onOpen } = useDisclosure();
+	const toast = useToast()
+
+	const confirmHandler = () => {
+		toast({
+			title: "You have taken this ticket",
+			description: `The ticket with ID ${props.ticket.ticket_id} has been taken by you`,
+			position: "top",
+			status: "success",
+			isClosable: true,
+			variant: "left-accent",
+		});
+		mutate(`/api/tickets/${props.ticket.ticket_id}`)
+	}
 
 	return (
 		<>
-			<CloseTicketModal
-				isOpen={isOpen}
-				onClose={onClose}
-				ticketId={props.ticket?.ticket_id}
-			/>
+			{props.ticket?.status === "PROGRESS" && (
+				<CloseTicketModal
+					isOpen={isOpen}
+					onClose={onClose}
+					ticketId={props.ticket?.ticket_id}
+				/>
+			)}
+
+			{props.ticket?.status === "OPEN" && (
+				<ConfirmTicketModal
+					isOpen={isOpen}
+					onClose={onClose}
+					onConfirm={confirmHandler}
+					ticket={props.ticket}
+				/>
+			)}
 
 			<Flex
 				w={["full", "full", "sm"]}
@@ -149,11 +176,26 @@ const TicketDescription = (props) => {
 						<Button
 							colorScheme={"red"}
 							size={"sm"}
-							w={"fit-content"}
-							alignSelf={"end"}
+							// w={"fit-content"}
+							// alignSelf={"end"}
 							onClick={onOpen}
 						>
 							Close Ticket
+						</Button>
+					)}
+				{props.ticket?.status === "OPEN" &&
+					props.ticket?.created_by !== user?.id &&
+					privileges?.includes("TICKET_ACTION") && (
+						<Button
+							size="sm"
+							colorScheme="green"
+							onClick={() => {
+								onOpen();
+							}}
+							leftIcon={<BiUserCheck />}
+							w={"full"}
+						>
+							Take
 						</Button>
 					)}
 			</Flex>

@@ -13,6 +13,7 @@ const NotificationPage = () => {
 		<SideBarLayout>
 			<Box
 				className="container"
+				maxW={'container.md'}
 				bg={"white"}
 				shadow={"lg"}
 				rounded={"lg"}

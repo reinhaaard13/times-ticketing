@@ -50,7 +50,7 @@ const NotificationItem = ({ notification, onClick }) => {
 		<>
 			<Link href={`/ticket/${notification.payload.ticket_id}`}>
 				<Flex
-					bg={notification.status === "UNREAD" ? "blackAlpha.100" : "white"}
+					bg={notification.status === "UNREAD" ? "blackAlpha.100" : "transparent"}
 					p={4}
 					borderLeft={notification.status === "UNREAD" ? "4px" : null}
 					borderColor={"limegreen"}

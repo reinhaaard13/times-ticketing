@@ -37,6 +37,7 @@ const TicketList = ({ data, next, previous }) => {
 	const [lightbox, setLightbox] = useState(false);
 	const [selectedImage, setSelectedImage] = useState(null);
 	const { user, privileges } = useAuth();
+	const { mutate } = useSWRConfig();
 
 	// for ticket description modal
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -58,6 +59,7 @@ const TicketList = ({ data, next, previous }) => {
 			isClosable: true,
 			variant: "left-accent",
 		});
+		mutate(["/api/tickets", data?.page]);
 	};
 
 	return (
