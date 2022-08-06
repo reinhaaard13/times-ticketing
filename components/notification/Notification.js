@@ -71,7 +71,7 @@ const Notification = () => {
 						top={20}
 						right={10}
 						textColor={"black"}
-						bg={"whiteAlpha.900"}
+						bg={"whiteAlpha.800"}
 						backdropFilter={'auto'}
 						backdropBlur={'lg'}
 						width={500}

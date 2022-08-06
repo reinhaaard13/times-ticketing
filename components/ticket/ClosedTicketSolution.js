@@ -1,9 +1,10 @@
 import React from "react";
+import moment from "moment";
 
 import { Flex, Text, Divider, Icon } from "@chakra-ui/react";
 import { MdDoneAll } from "react-icons/md";
 
-const ClosedTicketSolution = ({solution, pic}) => {
+const ClosedTicketSolution = ({solution, pic, closed_date}) => {
 	return (
 		<Flex
 			borderColor={"green.500"}
@@ -26,6 +27,7 @@ const ClosedTicketSolution = ({solution, pic}) => {
 				</>
 			)}
 			<Text fontSize={'sm'} textColor={'green.500'}>Handled by: {pic}</Text>
+			<Text fontSize={'sm'} textColor={'green.500'}>Closed at: {moment(closed_date).format('llll')}</Text>
 		</Flex>
 	);
 };

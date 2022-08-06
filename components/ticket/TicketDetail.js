@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { MdSubject, MdDateRange, MdLocationPin } from "react-icons/md";
 import {
 	Flex,
-	Heading,
 	Text,
 	Divider,
 	Skeleton,
 	SkeletonText,
-	Spacer,
+	Badge,
+	Box,
 } from "@chakra-ui/react";
 import useSWR from "swr";
 import axios from "axios";
@@ -54,51 +54,78 @@ const TicketDetail = (props) => {
 				direction={"column"}
 				p={4}
 			>
-				<Flex alignItems={"center"} gap={2}>
-					<MdSubject />
-					<Flex direction={"column"}>
-						<Text
-							letterSpacing={"wide"}
-							textTransform={"uppercase"}
-							textColor={"blackAlpha.500"}
-							fontSize={"sm"}
+				<Flex w={"full"} justifyContent={"space-between"}>
+					<Flex flexDir={"column"}>
+						<Flex alignItems={"center"} gap={2}>
+							<MdSubject />
+							<Flex direction={"column"}>
+								<Text
+									letterSpacing={"wide"}
+									textTransform={"uppercase"}
+									textColor={"blackAlpha.500"}
+									fontSize={"sm"}
+								>
+									Subject
+								</Text>
+								{props.ticket ? (
+									<Text
+										fontSize={"md"}
+										className={"text-lime-500"}
+										fontWeight={"semibold"}
+									>
+										{props.ticket.CaseSubject.subject}
+									</Text>
+								) : (
+									<Skeleton height={5} width={"xs"} />
+								)}
+							</Flex>
+						</Flex>
+						<Flex textColor={"GrayText"}>
+							<Flex alignItems={"center"}>
+								<MdDateRange />
+								{props.ticket ? (
+									<Text marginLeft={2} fontSize={"xs"}>
+										issued {moment(props.ticket.created_date).fromNow()}.
+									</Text>
+								) : (
+									<Skeleton ml={2} height={3} width={32} />
+								)}
+							</Flex>
+							<Flex ml={4} alignItems={"center"}>
+								<MdLocationPin />
+								{props.ticket ? (
+									<Text marginLeft={2} fontSize={"xs"}>
+										Event Location: {props.ticket.location}
+									</Text>
+								) : (
+									<Skeleton ml={2} height={3} width={32} />
+								)}
+							</Flex>
+						</Flex>
+					</Flex>
+					
+					{props.ticket ? (
+					<Flex flexDir="column" alignItems={"end"}>
+						<Badge
+							colorScheme={
+								props.ticket.status === "OPEN"
+									? "yellow"
+									: props.ticket.status === "PROGRESS"
+									? "green"
+									: "gray"
+							}
+							w={"fit-content"}
 						>
-							Subject
-						</Text>
-						{props.ticket ? (
-							<Text
-								fontSize={"md"}
-								className={"text-lime-500"}
-								fontWeight={"semibold"}
-							>
-								{props.ticket.CaseSubject.subject}
-							</Text>
-						) : (
-							<Skeleton height={5} width={"xs"} />
+							{props.ticket.status}
+						</Badge>
+						{props.ticket.pic && (
+							<Text fontSize={"xs"}>PIC: {props.ticket.pic.name}</Text>
 						)}
 					</Flex>
-				</Flex>
-				<Flex textColor={"GrayText"}>
-					<Flex alignItems={"center"}>
-						<MdDateRange />
-						{props.ticket ? (
-							<Text marginLeft={2} fontSize={"xs"}>
-								issued {moment(props.ticket.created_date).fromNow()}.
-							</Text>
-						) : (
-							<Skeleton ml={2} height={3} width={32} />
-						)}
-					</Flex>
-					<Flex ml={4} alignItems={"center"}>
-						<MdLocationPin />
-						{props.ticket ? (
-							<Text marginLeft={2} fontSize={"xs"}>
-								Event Location: {props.ticket.location}
-							</Text>
-						) : (
-							<Skeleton ml={2} height={3} width={32} />
-						)}
-					</Flex>
+					) : (
+						<Skeleton height={5} width={20} />
+					)}
+
 				</Flex>
 				<Divider my={4} />
 
@@ -106,6 +133,7 @@ const TicketDetail = (props) => {
 					<ClosedTicketSolution
 						solution={props.ticket.solution}
 						pic={props.ticket.pic.name}
+						closed_date={props.ticket.closed_date}
 					/>
 				)}
 

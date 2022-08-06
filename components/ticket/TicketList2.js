@@ -5,6 +5,7 @@ import { MdRemoveRedEye, MdDelete } from "react-icons/md";
 import { BiUserCheck } from "react-icons/bi";
 import Image from "next/image";
 import axios from "axios";
+import { useTable } from "react-table";
 
 import { useAuth } from "../../contexts/auth-context";
 import { useSWRConfig } from "swr";
@@ -83,53 +84,80 @@ const TicketList = ({ data, next, previous }) => {
 			.then((res) => setFilterParam(res.data));
 	}, []);
 
-	const columns = useMemo(() => [
-		{
-			Header: "No.",
-			accessor: (row, index) => index+1,
-			id: "no",
-		},
-		{
-			Header: "Ticket",
-			accessor: "ticket_id",
-		},
-		{
-			Header: "Product",
-			accessor: "Product.product_name",
-		},
-		{
-			Header: "Subject",
-			accessor: "CaseSubject.subject",
-		},
-		{
-			Header: "Created At",
-			accessor: "created_date",
-			Cell: ({value}) => {
-				{moment(value).format("YYYY-MM-DD HH:mm:ss")}
+	const columns = useMemo(
+		() => [
+			{
+				Header: "No.",
+				accessor: (row, index) => index + 1,
+				id: "no",
 			},
-		},
-		{
-			Header: "Severity",
-			accessor: "CaseSubject.ticket_id",
-		},
-		{
-			Header: "PIC",
-			accessor: "pic?.name",
-		},
-		{
-			Header: "Author",
-			accessor: "createdBy.name",
-		},
-		{
-			Header: "Status",
-			accessor: "status",
-		},
-		{
-			Header: "SLA",
-			accessor: "sla",
-		},
-		
-	], [])
+			{
+				Header: "Ticket",
+				accessor: "ticket_id",
+			},
+			{
+				Header: "Product",
+				accessor: "Product.product_name",
+			},
+			{
+				Header: "Subject",
+				accessor: "CaseSubject.subject",
+			},
+			{
+				Header: "Created At",
+				accessor: "created_date",
+				Cell: ({ value }) => {
+					return moment(value).format("YYYY-MM-DD HH:mm:ss");
+				},
+			},
+			{
+				Header: "Severity",
+				accessor: "CaseSubject.severity",
+				Cell: ({ value }) => {
+					return <SeverityBadge severity={value} />;
+				},
+			},
+			{
+				Header: "PIC",
+				accessor: "pic.name",
+			},
+			{
+				Header: "Author",
+				accessor: "createdBy.name",
+			},
+			{
+				Header: "Status",
+				accessor: "status",
+				Cell: ({ value }) => {
+					return (
+						<Badge
+							colorScheme={
+								value === "OPEN"
+									? "yellow"
+									: value === "PROGRESS"
+									? "green"
+									: "gray"
+							}
+						>
+							{value}
+						</Badge>
+					);
+				},
+			},
+			{
+				Header: "SLA",
+				accessor: "sla",
+			},
+			{
+				Header: "Action",
+				accessor: "action",
+			},
+		],
+		[]
+	);
+
+	const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+		useTable({ columns, data: data?.tickets || [] });
 
 	return (
 		<React.Fragment>
@@ -160,21 +188,17 @@ const TicketList = ({ data, next, previous }) => {
 					size="sm"
 				>
 					<Thead className="bg-slate-500/20">
-						<Tr>
-							<Th width="1">No.</Th>
-							<Th width={"1"}>Ticket</Th>
-							<Th>Product</Th>
-							<Th>Subject</Th>
-							<Th width={"32"}>Created at</Th>
-							<Th>Severity</Th>
-							<Th>PIC</Th>
-							<Th>Author</Th>
-							<Th width={1}>Status</Th>
-							<Th>SLA</Th>
-							{privileges.includes("TICKET_ACTION") && <Th>Action</Th>}
-						</Tr>
+						{headerGroups.map((headerGroup, idx) => (
+							<Tr key={idx} {...headerGroup.getHeaderGroupProps()}>
+								{headerGroup.headers.map((column, idx) => (
+									<Th key={idx} {...column.getHeaderProps()}>
+										{column.render("Header")}
+									</Th>
+								))}
+							</Tr>
+						))}
 					</Thead>
-					<Tbody>
+					<Tbody {...getTableBodyProps()}>
 						{/* Skeleton */}
 						{!data && (
 							<>
@@ -202,7 +226,7 @@ const TicketList = ({ data, next, previous }) => {
 								</Td>
 							</Tr>
 						)}
-						{data?.tickets.map((ticket, idx) => {
+						{/* {data?.tickets.map((ticket, idx) => {
 							return (
 								<Tr
 									key={ticket.ticket_id}
@@ -317,6 +341,21 @@ const TicketList = ({ data, next, previous }) => {
 											</ButtonGroup>
 										</Td>
 									)}
+								</Tr>
+							);
+						})} */}
+						{rows.map((row) => {
+							prepareRow(row);
+
+							return (
+								<Tr key={row.id} {...row.getRowProps()}>
+									{row.cells.map((cell) => {
+										return (
+											<Td key={cell.id} {...cell.getCellProps()}>
+												{cell.render("Cell")}
+											</Td>
+										);
+									})}
 								</Tr>
 							);
 						})}

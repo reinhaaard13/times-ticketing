@@ -2,7 +2,6 @@ import React from "react";
 import moment from "moment";
 import axios from "axios";
 import { useAuth } from "../../contexts/auth-context";
-import { useSWRConfig } from "swr";
 
 import {
 	Modal,
@@ -36,7 +35,6 @@ import SeverityBadge from "../UI/Badge";
 
 const ConfirmTicketModal = (props) => {
 	const { token } = useAuth();
-	const { mutate } = useSWRConfig();
 	const toast = useToast()
 
 	const confirmHandler = async () => {
@@ -50,8 +48,6 @@ const ConfirmTicketModal = (props) => {
 					},
 				}
 			);
-			// console.log(response.data);
-			// mutate(["/api/tickets", props.page]);
 			props.onConfirm()
 			props.onClose();
 		} catch (error) {

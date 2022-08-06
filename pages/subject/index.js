@@ -63,12 +63,11 @@ const SubjectListPage = (props) => {
 				cancelRef={cancelRef}
 			/>
 
-
 			{/* <Header /> */}
 			<div className="container px-1 text-slate-800 z-20 relative">
 				<div className="flex flex-col md:flex-row justify-between mt-6 mb-4">
 					<h1 className="font-semibold text-2xl text-lime-500">
-						Subject Case
+						Case Subject
 					</h1>
 				</div>
 				<SubjectList
@@ -81,7 +80,7 @@ const SubjectListPage = (props) => {
 };
 
 export async function getStaticProps() {
-	const response = await axios.get("/api/subjects");
+	const response = await axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/subjects`);
 
 	const subjects = await response.data;
 

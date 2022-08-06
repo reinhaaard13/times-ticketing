@@ -1,11 +1,10 @@
 import React from "react";
 import { useRouter } from "next/router";
 
-import sequelize from "../../../lib/dbConnect";
-import CaseSubject from "../../../models/CaseSubject";
 import Header from "../../../components/UI/Header";
 import SideBarLayout from "../../../components/UI/SideBarLayout";
 import SubjectForm from "../../../components/subjects/SubjectForm";
+import axios from "axios";
 
 const EditSubjectPage = (props) => {
 	// const router = useRouter();
@@ -13,36 +12,44 @@ const EditSubjectPage = (props) => {
 	return (
 		<SideBarLayout>
 			{/* <Header /> */}
-      <div className="container px-4 flex flex-col justify-center items-center">
-        <p className="font-semibold mt-8 mb-4 text-xl text-lime-500">Edit Existing Subject Case</p>
-        <SubjectForm existingData={props.caseSubject} />
-      </div>
+			<div className="container px-4 flex flex-col justify-center items-center">
+				<p className="font-semibold mt-8 mb-4 text-xl text-lime-500">
+					Edit Existing Subject Case
+				</p>
+				<SubjectForm
+					existingData={props.caseSubject}
+					subproducts={props.subproducts}
+				/>
+			</div>
 		</SideBarLayout>
 	);
 };
 
-export async function getServerSideProps (context) {
-	const csid = context.params.csid
-
+export async function getServerSideProps(context) {
+	const csid = context.params.csid;
 	try {
-		const caseSubject = await CaseSubject(sequelize);
-		const result = await caseSubject.findOne({
-			where: {
-				id: csid
-			}
-		});
+		const response = await axios.get(
+			`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/subjects/${csid}`
+		);
+		const caseSubject = await response.data;
+
+		const responseSubproduct = await axios.get(
+			`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/subproducts`
+		);
+		const subproducts = await responseSubproduct.data;
+
 		return {
 			props: {
-				caseSubject:JSON.parse(JSON.stringify(result.dataValues))
-			}
-		}
-	} catch (e) {
-		// console.log(e);
+				caseSubject,
+				subproducts,
+			},
+		};
+	} catch (err) {
 		return {
-			props: {
-				caseSubject: null
-			}
-		}
+			redirect: {
+				destination: "/subjects",
+			},
+		};
 	}
 }
 

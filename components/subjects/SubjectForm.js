@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import axios from "axios";
 import { useRouter } from "next/router";
 
-import { Box } from "@chakra-ui/react";
+import { Box, Select } from "@chakra-ui/react";
 
 import Input from "../UI/Input";
 import SeverityRadio from "./SeverityRadio";
@@ -15,9 +15,14 @@ const SubjectForm = (props) => {
 		initialValues: {
 			subject: props.existingData?.subject || "",
 			severity: props.existingData?.severity || null,
+			subproduct: props.existingData?.subproduct_id || null,
 		},
 		validate: (values) => {
 			const errors = {};
+			if (!values.subproduct) {
+				errors.subproduct = "Required";
+			}
+
 			if (!values.subject) {
 				errors.subject = "Required";
 			}
@@ -32,11 +37,13 @@ const SubjectForm = (props) => {
 			let response;
 			if (props.existingData) {
 				response = await axios.patch(`/api/subjects/${props.existingData.id}`, {
+					subproduct_id: values.subproduct,
 					subject: values.subject,
 					severity: values.severity,
 				});
 			} else {
 				response = await axios.post("/api/subjects/create", {
+					subproduct_id: values.subproduct,
 					subject: values.subject,
 					severity: values.severity,
 				});
@@ -67,6 +74,31 @@ const SubjectForm = (props) => {
 			backdropBlur={"md"}
 		>
 			<form onSubmit={formik.handleSubmit} className="flex flex-col">
+				<label
+					htmlFor="subproduct"
+					className="uppercase font-semibold text-slate-600 mb-2 text-sm"
+				>
+					Select Subproduct
+				</label>
+				<Select
+					placeholder="Subproduct of New Case Subject"
+					name="subproduct"
+					onChange={formik.handleChange}
+					onBlur={formik.handleBlur}
+					value={formik.values.subproduct}
+					mb={3}
+					id="subproduct"
+				>
+					{props.subproducts.map((subproduct) => (
+						<option
+							value={subproduct.subproduct_id}
+							key={subproduct.subproduct_id}
+						>
+							{subproduct.subproduct_name} - {subproduct.Product.product_name}
+						</option>
+					))}
+				</Select>
+
 				<Input
 					label="Subject Description"
 					id="desc"
@@ -79,7 +111,7 @@ const SubjectForm = (props) => {
 
 				<label
 					htmlFor=""
-					className="uppercase font-semibold text-slate-500 mb-2 text-sm"
+					className="uppercase font-semibold text-slate-600 mb-2 text-sm"
 				>
 					Select Severity
 				</label>

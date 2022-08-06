@@ -41,7 +41,9 @@ const SubjectList = (props) => {
 				<Thead className="bg-slate-500/20">
 					<Tr>
 						<Th width="2">No.</Th>
-						<Th>Subject Case Description</Th>
+						<Th>Case Subject Description</Th>
+						<Th>Product</Th>
+						<Th>Subproduct</Th>
 						<Th width="4">Severity</Th>
 						<Th width="16">Actions</Th>
 					</Tr>
@@ -51,6 +53,8 @@ const SubjectList = (props) => {
 						<Tr key={idx}>
 							<Td className="uppercase">{idx + 1}</Td>
 							<Td>{subject.subject}</Td>
+							<Td>{subject.Subproduct.Product.product_name}</Td>
+							<Td>{subject.Subproduct.subproduct_name}</Td>
 							<Td>
 								<Badge severity={subject.severity} />
 							</Td>

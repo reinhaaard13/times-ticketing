@@ -9,6 +9,7 @@ const FileUpload = (props) => {
 				onChange={props.onPickedImage}
         name={props.name}
         id={props.id}
+				multiple
 			/>
 		</React.Fragment>
 	);

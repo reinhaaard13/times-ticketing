@@ -45,7 +45,6 @@ const Header = () => {
 							</div>
 						</MenuButton>
 						<MenuList textColor={"gray.800"}>
-							<MenuItem>My Tickets</MenuItem>
 							<MenuItem color={"red.500"} onClick={logoutHandler}>
 								Logout
 							</MenuItem>

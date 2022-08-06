@@ -27,7 +27,8 @@ const SideBarLayout = (props) => {
 			<aside className={styles.sidebar}>
 				<ul>
 					<li>
-						<a href="#">
+						<Link href="/">
+						<a>
 							<div className="relative w-full h-full">
 								<Image
 									alt="times-logo"
@@ -37,6 +38,7 @@ const SideBarLayout = (props) => {
 								/>
 							</div>
 						</a>
+						</Link>
 					</li>
 					<li>
 						<Link href="/">

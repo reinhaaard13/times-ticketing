@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
 import useSWR from "swr";
 import NProgress from "nprogress";
@@ -6,14 +6,15 @@ import { useAuth } from "../contexts/auth-context";
 
 import { Container, Box, Heading, Flex } from "@chakra-ui/react";
 
-import ErrorFallback from "../components/UI/ErrorFallback";
-import TicketList from "../components/ticket/TicketList";
+import TicketList from "../components/ticket/TicketList2";
 import SideBarLayout from "../components/UI/SideBarLayout";
 import DashboardWidgets from "../components/dashboard/DashboardWidgets";
+import TicketFilter from "../components/ticket/TicketFilter";
 
 const DashboardPage = (props) => {
 	const [page, setPage] = useState(1);
-	const { token } = useAuth()
+	const containerRef = useRef(null);
+	const { token } = useAuth();
 
 	const { data } = useSWR(["/api/tickets", page], async (url) => {
 		NProgress.start();
@@ -46,15 +47,17 @@ const DashboardPage = (props) => {
 					Dashboard
 				</Heading>
 				<DashboardWidgets stats={data?.stats} />
-				<Heading
-					size={"md"}
-					marginTop={4}
-					marginBottom={4}
-					className="text-lime-500"
-					fontWeight={"semibold"}
-				>
-					Ticket List
-				</Heading>
+				<Flex marginTop={4} marginBottom={4} alignItems={'center'} justifyContent={'space-between'}>
+					<Heading
+						size={"md"}
+						className="text-lime-500"
+						fontWeight={"semibold"}
+					>
+						Ticket List
+					</Heading>
+					<TicketFilter ref={containerRef} />
+				</Flex>
+				<Box ref={containerRef}></Box>
 				<TicketList
 					data={data}
 					next={fetchNextPage}
