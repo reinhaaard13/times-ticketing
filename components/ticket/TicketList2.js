@@ -151,6 +151,58 @@ const TicketList = ({ data, next, previous }) => {
 			{
 				Header: "Action",
 				accessor: "action",
+				Cell: ({data}) => {
+					
+					return (
+						<ButtonGroup
+							isAttached
+							display={"flex"}
+							justifyContent={"center"}
+							alignItems={"center"}
+						>
+							<Link href={`/ticket/${data[0].ticket_id}`}>
+								<Button
+									size="sm"
+									colorScheme="blue"
+									leftIcon={<MdRemoveRedEye />}
+									w={"fit-content"}
+								>
+									View
+								</Button>
+							</Link>
+							{data[0].status === "OPEN" &&
+								privileges.includes("TICKET_ACTION") &&
+								data[0].created_by !== user.id && (
+									<Button
+										size="sm"
+										colorScheme="green"
+										onClick={() => {
+											onOpen();
+											setSelectedTicket(data[0]);
+										}}
+										leftIcon={<BiUserCheck />}
+										w={"fit-content"}
+									>
+										Take
+									</Button>
+								)}
+							{data[0].created_by === user.id && (
+								<Button
+									size="sm"
+									colorScheme="red"
+									onClick={() => {
+										onOpenDelete();
+										setSelectedTicket(data[0]);
+									}}
+									leftIcon={<MdDelete />}
+									w={"fit-content"}
+								>
+									Delete
+								</Button>
+							)}
+						</ButtonGroup>
+					);
+				},
 			},
 		],
 		[]

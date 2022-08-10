@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
 import { DateRangePicker } from "react-date-range";
 import moment from "moment";
@@ -7,6 +7,8 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 
 import { Text, Flex, Box, Button } from "@chakra-ui/react";
+
+import TicketFilter from "../ticket/TicketFilter";
 
 const GenerateReportForm = () => {
 	const [state, setState] = useState([
@@ -17,12 +19,14 @@ const GenerateReportForm = () => {
 		},
 	]);
 
+	const [filters, setFilters] = useState({})
+
 	const generateHandler = () => {
 		const start = moment(state[0].startDate).toISOString();
 		const end = moment(state[0].endDate).toISOString();
 
 		window.open(
-			`${process.env.NEXT_PUBLIC_STORAGE_URI}/api/tickets/report?start=${start}&end=${end}`,
+			`${process.env.NEXT_PUBLIC_STORAGE_URI}/api/tickets/report?start=${start}&end=${end}&filter=${encodeURI(JSON.stringify(filters))}`,
 			"_blank"
 		);
 	};
@@ -53,6 +57,8 @@ const GenerateReportForm = () => {
 				weekStartsOn={1}
 				rangeColors={["#319795"]}
 			/>
+
+			<TicketFilter setFilters={setFilters} />
 
 			<Button colorScheme={"teal"} onClick={generateHandler}>
 				Generate Report

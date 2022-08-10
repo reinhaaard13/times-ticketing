@@ -1,13 +1,15 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import moment from "moment";
+import NProgress from "nprogress";
 import { MdRemoveRedEye, MdDelete } from "react-icons/md";
 import { BiUserCheck } from "react-icons/bi";
 import Image from "next/image";
 import axios from "axios";
 
+import { useTicket } from "../../contexts/ticket-context";
 import { useAuth } from "../../contexts/auth-context";
-import { useSWRConfig } from "swr";
+import useSWR, { useSWRConfig } from "swr";
 
 import {
 	TableContainer,
@@ -25,9 +27,11 @@ import {
 	Skeleton,
 	ButtonGroup,
 	useToast,
+	Flex,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { TiArrowUnsorted, TiArrowSortedUp } from "react-icons/ti";
 
 import FsLightBox from "fslightbox-react";
 
@@ -35,11 +39,44 @@ import SeverityBadge from "../../components/UI/Badge";
 import ConfirmTicketModal from "./ConfirmTicketModal";
 import DeleteTicketModal from "./DeleteTicketModal";
 import ColumnFilter from "./ColumnFilter";
+import SortableHeader from "./TableHeader";
 
-const TicketList = ({ data, next, previous }) => {
-	const { user, privileges } = useAuth();
-	const { mutate } = useSWRConfig();
+const TicketList = ({ next, previous }) => {
+	const { user, privileges, token } = useAuth();
+	const {
+		page,
+		sortBy,
+		sortOrder,
+		filter,
+		fetchNextPage,
+		fetchPreviousPage,
+		changeSort,
+		addFilter,
+	} = useTicket();
+	// const { mutate } = useSWRConfig();
 	const [filterParam, setFilterParam] = useState([]);
+
+	console.log("render");
+
+	const { data, mutate } = useSWR(
+		["/api/tickets", page, sortBy, sortOrder, filter],
+		async (url, page, sortBy, sortOrder, filter) => {
+			NProgress.start();
+			const res = await axios.get(`${url}`, {
+				params: {
+					page: page,
+					sortBy: sortBy,
+					sortOrder: sortOrder,
+					filter: filter,
+				},
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			});
+			NProgress.done();
+			return res.data;
+		}
+	);
 
 	// for ticket description modal
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -52,7 +89,7 @@ const TicketList = ({ data, next, previous }) => {
 
 	const toast = useToast();
 
-	const confirmHandler = () => {
+	const confirmHandler = async () => {
 		toast({
 			title: "You have taken this ticket",
 			description: `The ticket with ID ${selectedTicket.ticket_id} has been taken by you`,
@@ -61,10 +98,11 @@ const TicketList = ({ data, next, previous }) => {
 			isClosable: true,
 			variant: "left-accent",
 		});
-		mutate(["/api/tickets", data?.page]);
+		// mutate(["/api/tickets", page, sortBy, sortOrder, filter]);
+		mutate();
 	};
 
-	const deleteHandler = () => {
+	const deleteHandler = async () => {
 		toast({
 			title: "You have deleted the ticket",
 			description: `The ticket with ID ${selectedTicket.ticket_id} has been deleted by you`,
@@ -72,64 +110,18 @@ const TicketList = ({ data, next, previous }) => {
 			status: "error",
 			isClosable: true,
 			variant: "left-accent",
-			// icon: <MdDelete />,
 		});
-		mutate(["/api/tickets", data?.page]);
+		// mutate(["/api/tickets", page, sortBy, sortOrder, filter]);
+		mutate();
 	};
 
 	useEffect(() => {
-		axios
-			.get("/api/tickets/filterParam")
-			.then((res) => setFilterParam(res.data));
+		axios.get("/api/tickets/filters").then((res) => setFilterParam(res.data));
 	}, []);
 
-	const columns = useMemo(() => [
-		{
-			Header: "No.",
-			accessor: (row, index) => index+1,
-			id: "no",
-		},
-		{
-			Header: "Ticket",
-			accessor: "ticket_id",
-		},
-		{
-			Header: "Product",
-			accessor: "Product.product_name",
-		},
-		{
-			Header: "Subject",
-			accessor: "CaseSubject.subject",
-		},
-		{
-			Header: "Created At",
-			accessor: "created_date",
-			Cell: ({value}) => {
-				{moment(value).format("YYYY-MM-DD HH:mm:ss")}
-			},
-		},
-		{
-			Header: "Severity",
-			accessor: "CaseSubject.ticket_id",
-		},
-		{
-			Header: "PIC",
-			accessor: "pic?.name",
-		},
-		{
-			Header: "Author",
-			accessor: "createdBy.name",
-		},
-		{
-			Header: "Status",
-			accessor: "status",
-		},
-		{
-			Header: "SLA",
-			accessor: "sla",
-		},
-		
-	], [])
+	const changeFilterHandler = (event) => {
+		addFilter(event.target.name, event.target.value);
+	};
 
 	return (
 		<React.Fragment>
@@ -138,14 +130,12 @@ const TicketList = ({ data, next, previous }) => {
 				onClose={onClose}
 				onConfirm={confirmHandler}
 				ticket={selectedTicket}
-				page={data?.page}
 			/>
 			<DeleteTicketModal
 				isOpen={isOpenDelete}
 				onClose={onCloseDelete}
 				onDelete={deleteHandler}
 				ticket={selectedTicket}
-				page={data?.page}
 			/>
 			<TableContainer
 				whiteSpace={"pre-wrap"}
@@ -160,18 +150,124 @@ const TicketList = ({ data, next, previous }) => {
 					size="sm"
 				>
 					<Thead className="bg-slate-500/20">
-						<Tr>
+						<Tr height={"10"}>
 							<Th width="1">No.</Th>
 							<Th width={"1"}>Ticket</Th>
-							<Th>Product</Th>
-							<Th>Subject</Th>
-							<Th width={"32"}>Created at</Th>
-							<Th>Severity</Th>
-							<Th>PIC</Th>
-							<Th>Author</Th>
-							<Th width={1}>Status</Th>
-							<Th>SLA</Th>
-							{privileges.includes("TICKET_ACTION") && <Th>Action</Th>}
+							<SortableHeader
+								sortBy={sortBy}
+								sortOrder={sortOrder}
+								onSort={changeSort}
+								column={"product"}
+							>
+								Product
+							</SortableHeader>
+							<SortableHeader
+								sortBy={sortBy}
+								sortOrder={sortOrder}
+								onSort={changeSort}
+								column={"subject"}
+							>
+								Subject
+							</SortableHeader>
+							<SortableHeader
+								sortBy={sortBy}
+								sortOrder={sortOrder}
+								onSort={changeSort}
+								column={"created_date"}
+								width={"32"}
+							>
+								Created At
+							</SortableHeader>
+							<SortableHeader
+								sortBy={sortBy}
+								sortOrder={sortOrder}
+								onSort={changeSort}
+								column={"severity"}
+							>
+								Severity
+							</SortableHeader>
+							<SortableHeader
+								sortBy={sortBy}
+								sortOrder={sortOrder}
+								onSort={changeSort}
+								column={"pic"}
+							>
+								PIC
+							</SortableHeader>
+							<SortableHeader
+								sortBy={sortBy}
+								sortOrder={sortOrder}
+								onSort={changeSort}
+								column={"created_by"}
+							>
+								Author
+							</SortableHeader>
+							<SortableHeader
+								width={1}
+								sortBy={sortBy}
+								sortOrder={sortOrder}
+								onSort={changeSort}
+								column={"status"}
+							>
+								Status
+							</SortableHeader>
+							<SortableHeader
+								sortBy={sortBy}
+								sortOrder={sortOrder}
+								onSort={changeSort}
+								column={"sla"}
+							>
+								SLA
+							</SortableHeader>
+							<Th>Action</Th>
+						</Tr>
+						<Tr>
+							<Th></Th>
+							<Th></Th>
+							<ColumnFilter
+								options={filterParam.products}
+								onChange={changeFilterHandler}
+								name={"product"}
+							/>
+							<ColumnFilter
+								options={filterParam.casesubjects}
+								onChange={changeFilterHandler}
+								name={"subject"}
+							/>
+							<Th></Th>
+							<ColumnFilter
+								options={[
+									{ option_value: "LOW", option_name: "Low" },
+									{ option_value: "MEDIUM", option_name: "Medium" },
+									{ option_value: "HIGH", option_name: "High" },
+									{ option_value: "CRITICAL", option_name: "Critical" },
+								]}
+								onChange={changeFilterHandler}
+								name={"severity"}
+							/>
+							<Th></Th>
+							<Th></Th>
+							<ColumnFilter
+								options={[
+									{ option_value: "OPEN", option_name: "Open" },
+									{ option_value: "PROGRESS", option_name: "Progress" },
+									{ option_value: "CLOSED", option_name: "Closed" },
+								]}
+								onChange={changeFilterHandler}
+								name={"status"}
+							/>
+							<ColumnFilter
+								options={[
+									{ option_value: "10", option_name: "in 10 days" },
+									{ option_value: "5", option_name: "in 5 days" },
+									{ option_value: "3", option_name: "in 3 days" },
+									{ option_value: "1", option_name: "in 1 day" },
+									{ option_value: "OVERDUE", option_name: "Overdue" },
+								]}
+								onChange={changeFilterHandler}
+								name={"sla"}
+							/>
+							<Th></Th>
 						</Tr>
 					</Thead>
 					<Tbody>
@@ -266,57 +362,55 @@ const TicketList = ({ data, next, previous }) => {
 											<Badge>Closed</Badge>
 										)}
 									</Td>
-									{privileges.includes("TICKET_ACTION") && (
-										<Td>
-											<ButtonGroup
-												isAttached
-												display={"flex"}
-												justifyContent={"center"}
-												alignItems={"center"}
-											>
-												<Link href={`/ticket/${ticket.ticket_id}`}>
+									<Td>
+										<ButtonGroup
+											isAttached
+											display={"flex"}
+											justifyContent={"center"}
+											alignItems={"center"}
+										>
+											<Link href={`/ticket/${ticket.ticket_id}`}>
+												<Button
+													size="sm"
+													colorScheme="blue"
+													leftIcon={<MdRemoveRedEye />}
+													w={"fit-content"}
+												>
+													View
+												</Button>
+											</Link>
+											{ticket.status === "OPEN" &&
+												privileges.includes("TICKET_ACTION") &&
+												ticket.created_by !== user.id && (
 													<Button
 														size="sm"
-														colorScheme="blue"
-														leftIcon={<MdRemoveRedEye />}
-														w={"fit-content"}
-													>
-														View
-													</Button>
-												</Link>
-												{ticket.status === "OPEN" &&
-													privileges.includes("TICKET_ACTION") &&
-													ticket.created_by !== user.id && (
-														<Button
-															size="sm"
-															colorScheme="green"
-															onClick={() => {
-																onOpen();
-																setSelectedTicket(ticket);
-															}}
-															leftIcon={<BiUserCheck />}
-															w={"fit-content"}
-														>
-															Take
-														</Button>
-													)}
-												{ticket.created_by === user.id && (
-													<Button
-														size="sm"
-														colorScheme="red"
+														colorScheme="green"
 														onClick={() => {
-															onOpenDelete();
+															onOpen();
 															setSelectedTicket(ticket);
 														}}
-														leftIcon={<MdDelete />}
+														leftIcon={<BiUserCheck />}
 														w={"fit-content"}
 													>
-														Delete
+														Take
 													</Button>
 												)}
-											</ButtonGroup>
-										</Td>
-									)}
+											{ticket.created_by === user?.id && (
+												<Button
+													size="sm"
+													colorScheme="red"
+													onClick={() => {
+														onOpenDelete();
+														setSelectedTicket(ticket);
+													}}
+													leftIcon={<MdDelete />}
+													w={"fit-content"}
+												>
+													Delete
+												</Button>
+											)}
+										</ButtonGroup>
+									</Td>
 								</Tr>
 							);
 						})}
@@ -328,7 +422,7 @@ const TicketList = ({ data, next, previous }) => {
 									size={"sm"}
 									ml={4}
 									disabled={!data?.previous}
-									onClick={previous}
+									onClick={fetchPreviousPage}
 								/>
 								<IconButton
 									icon={<FiChevronRight />}
@@ -336,7 +430,7 @@ const TicketList = ({ data, next, previous }) => {
 									size={"sm"}
 									ml={1}
 									disabled={!data?.next}
-									onClick={next}
+									onClick={fetchNextPage}
 								/>
 								<Text display={"inline"} fontWeight={"medium"}>
 									Showing {data?.total} of {data?.stats.total}

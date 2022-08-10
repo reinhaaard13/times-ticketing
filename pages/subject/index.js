@@ -64,7 +64,7 @@ const SubjectListPage = (props) => {
 			/>
 
 			{/* <Header /> */}
-			<div className="container px-1 text-slate-800 z-20 relative">
+			<div className="container px-1 text-slate-800 relative">
 				<div className="flex flex-col md:flex-row justify-between mt-6 mb-4">
 					<h1 className="font-semibold text-2xl text-lime-500">
 						Case Subject

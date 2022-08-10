@@ -2,6 +2,7 @@ import React from "react";
 import moment from "moment";
 import axios from "axios";
 import { useAuth } from "../../contexts/auth-context";
+import { useTicket } from "../../contexts/ticket-context";
 
 import {
 	Modal,
