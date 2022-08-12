@@ -1,4 +1,5 @@
 import React from "react";
+import Head from "next/head";
 import Image from "next/image";
 
 import LoginForm from "../../components/auth/LoginForm";
@@ -6,6 +7,10 @@ import LoginForm from "../../components/auth/LoginForm";
 const AuthPage = () => {
 	// const [isLoginMode, setIsLoginMode] = use
 	return (
+		<>
+		<Head>
+			<title>TIMES Login</title>
+		</Head>
 		<div className="flex md:flex-row flex-col h-full min-h-screen p-2 w-full md:justify-evenly items-center bg-gradient-to-tl from-[#485563] to-[#29323c]">
 			{/* Logo */}
 			<div className="flex flex-col justify-center items-center my-4">
@@ -18,6 +23,7 @@ const AuthPage = () => {
 			</div>
 				<LoginForm />
 		</div>
+		</>
 	);
 };
 

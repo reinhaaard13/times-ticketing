@@ -47,12 +47,12 @@ const NewSubProductForm = (props) => {
 		validate,
 		onSubmit: async (values) => {
 			formik.setSubmitting(true);
-			console.log(values);
+			// console.log(values);
 			const response = await axios.post(
 				"/api/subproducts",
 				values
 			);
-			console.log(response);
+			// console.log(response);
 
 			if (response.status === 201) {
 				formik.resetForm();

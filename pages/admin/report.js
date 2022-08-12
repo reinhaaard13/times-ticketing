@@ -1,4 +1,5 @@
 import React from "react";
+import Head from "next/head";
 
 import { Container, Box, Heading, Flex } from "@chakra-ui/react";
 
@@ -7,6 +8,10 @@ import GenerateReportForm from "../../components/report/GenerateReportForm";
 
 const ReportPage = (props) => {
 	return (
+		<>
+		<Head>
+			<title>Generate TIMES Report</title>
+		</Head>
 		<SideBarLayout>
 			<Flex
 				flexDir={"column"}
@@ -26,6 +31,7 @@ const ReportPage = (props) => {
 				<GenerateReportForm />
 			</Flex>
 		</SideBarLayout>
+		</>
 	);
 };
 

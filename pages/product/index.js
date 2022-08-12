@@ -1,16 +1,19 @@
 import React from "react";
+import Head from "next/head";
 import axios from "axios";
 
 import { Text } from "@chakra-ui/react";
 
 import SideBarLayout from "../../components/UI/SideBarLayout";
-import Header from "../../components/UI/Header";
 import ProductList from "../../components/product/ProductList";
 
 const ProductListPage = (props) => {
 	return (
+		<>
+		<Head>
+			<title>Products List</title>
+		</Head>
 		<SideBarLayout>
-			{/* <Header /> */}
 			<div className="container px-1">
 				<Text
 					fontSize={"2xl"}
@@ -24,6 +27,7 @@ const ProductListPage = (props) => {
 				<ProductList products={props.products} />
 			</div>
 		</SideBarLayout>
+		</>
 	);
 };
 

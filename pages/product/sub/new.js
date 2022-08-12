@@ -1,12 +1,16 @@
 import React from 'react';
+import Head from 'next/head';
 import axios from 'axios';
 
-import Header from '../../../components/UI/Header';
 import SideBarLayout from '../../../components/UI/SideBarLayout';
 import NewSubProductForm from '../../../components/product/NewSubProductForm';
 
 const NewSubProductPage = (props) => {
   return (
+    <>
+		<Head>
+			<title>Create New Subproduct</title>
+		</Head>
     <SideBarLayout>
       {/* <Header /> */}
       <div className="px-4 w-full flex flex-col items-center">
@@ -14,6 +18,7 @@ const NewSubProductPage = (props) => {
         <NewSubProductForm products={props.products} />
       </div>
     </SideBarLayout>
+    </>
   );
 }
 

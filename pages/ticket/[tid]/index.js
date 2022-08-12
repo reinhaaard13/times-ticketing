@@ -1,4 +1,5 @@
 import React from "react";
+import Head from "next/head";
 import useSWR from "swr";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -19,11 +20,16 @@ const TicketDetailPage = (props) => {
 		fetcher
 	)
 	return (
+		<>
+		<Head>
+			<title>Ticket {query.tid} Detail</title>
+		</Head>
 		<SideBarLayout>
 			<div className="flex flex-col container px-2 mt-4">
 				<TicketDetail ticket={data?.ticket} />
 			</div>
 		</SideBarLayout>
+		</>
 	);
 };
 

@@ -56,8 +56,6 @@ const TicketList = ({ next, previous }) => {
 	// const { mutate } = useSWRConfig();
 	const [filterParam, setFilterParam] = useState([]);
 
-	console.log("render");
-
 	const { data, mutate } = useSWR(
 		["/api/tickets", page, sortBy, sortOrder, filter],
 		async (url, page, sortBy, sortOrder, filter) => {
@@ -98,7 +96,6 @@ const TicketList = ({ next, previous }) => {
 			isClosable: true,
 			variant: "left-accent",
 		});
-		// mutate(["/api/tickets", page, sortBy, sortOrder, filter]);
 		mutate();
 	};
 
@@ -111,7 +108,6 @@ const TicketList = ({ next, previous }) => {
 			isClosable: true,
 			variant: "left-accent",
 		});
-		// mutate(["/api/tickets", page, sortBy, sortOrder, filter]);
 		mutate();
 	};
 
@@ -395,20 +391,21 @@ const TicketList = ({ next, previous }) => {
 														Take
 													</Button>
 												)}
-											{ticket.created_by === user?.id && (
-												<Button
-													size="sm"
-													colorScheme="red"
-													onClick={() => {
-														onOpenDelete();
-														setSelectedTicket(ticket);
-													}}
-													leftIcon={<MdDelete />}
-													w={"fit-content"}
-												>
-													Delete
-												</Button>
-											)}
+											{ticket.created_by === user?.id &&
+												ticket.status === "OPEN" && (
+													<Button
+														size="sm"
+														colorScheme="red"
+														onClick={() => {
+															onOpenDelete();
+															setSelectedTicket(ticket);
+														}}
+														leftIcon={<MdDelete />}
+														w={"fit-content"}
+													>
+														Delete
+													</Button>
+												)}
 										</ButtonGroup>
 									</Td>
 								</Tr>

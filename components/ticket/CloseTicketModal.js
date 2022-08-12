@@ -24,7 +24,7 @@ const CloseTicketModal = ({ isOpen, onClose, ticketId }) => {
 	const toast = useToast();
 
 	const submitHandler = async () => {
-		console.log(solutionInputRef.current.value);
+		// console.log(solutionInputRef.current.value);
 
 		const response = await axios.patch(
 			`/api/tickets/${ticketId}/status`,
@@ -38,7 +38,7 @@ const CloseTicketModal = ({ isOpen, onClose, ticketId }) => {
 				},
 			}
 		);
-		console.log(response);
+		// console.log(response);
 		toast({
 			title: "Ticket Closed",
 			description: `The ticket with ID ${ticketId} has been closed`,

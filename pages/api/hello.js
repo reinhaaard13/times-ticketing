@@ -1,6 +1,3 @@
-import dbConnect from "../../lib/dbConnect"
-
-import CaseSubject from "../../models/CaseSubject"
 
 export default async function handler(req, res) {
 

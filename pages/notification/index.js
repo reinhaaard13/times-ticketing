@@ -1,4 +1,5 @@
 import React from "react";
+import Head from "next/head";
 import useSWR from "swr";
 import { useAuth } from "../../contexts/auth-context";
 
@@ -10,6 +11,10 @@ import SideBarLayout from "../../components/UI/SideBarLayout";
 const NotificationPage = () => {
 	const { data } = useSWR("/api/users/notification");
 	return (
+		<>
+		<Head>
+			<title>My Notifications</title>
+		</Head>
 		<SideBarLayout>
 			<Box
 				className="container"
@@ -89,6 +94,7 @@ const NotificationPage = () => {
 				)}
 			</Box>
 		</SideBarLayout>
+		</>
 	);
 };
 

@@ -1,10 +1,7 @@
-import React, { useState, useRef } from "react";
-import axios from "axios";
-import useSWR from "swr";
-import NProgress from "nprogress";
-import { useAuth } from "../contexts/auth-context";
+import React from "react";
+import Head from "next/head";
 
-import { Container, Box, Heading, Flex } from "@chakra-ui/react";
+import { Box, Heading, Flex } from "@chakra-ui/react";
 
 import TicketContextProvider from "../contexts/ticket-context";
 import TicketList from "../components/ticket/TicketList";
@@ -12,9 +9,11 @@ import SideBarLayout from "../components/UI/SideBarLayout";
 import DashboardWidgets from "../components/dashboard/DashboardWidgets";
 
 const DashboardPage = (props) => {
-	const containerRef = useRef(null);
-
 	return (
+		<>
+		<Head>
+			<title>TIMES Dashboard</title>
+		</Head>
 		<SideBarLayout>
 			<Box className="container" p={2}>
 				<Heading
@@ -45,6 +44,7 @@ const DashboardPage = (props) => {
 				</TicketContextProvider>
 			</Box>
 		</SideBarLayout>
+		</>
 	);
 };
 

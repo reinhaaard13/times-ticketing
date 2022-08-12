@@ -1,11 +1,15 @@
 import React from 'react';
+import Head from 'next/head';
 
-import Header from '../../components/UI/Header';
 import SideBarLayout from '../../components/UI/SideBarLayout';
 import NewProductForm from '../../components/product/NewProductForm';
 
 const NewProductPage = () => {
   return (
+    <>
+		<Head>
+			<title>Create New Product</title>
+		</Head>
     <SideBarLayout>
       {/* <Header /> */}
       <div className="px-4 w-full flex flex-col items-center">
@@ -13,6 +17,7 @@ const NewProductPage = () => {
         <NewProductForm />
       </div>
     </SideBarLayout>
+    </>
   );
 }
  

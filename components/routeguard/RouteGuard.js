@@ -14,19 +14,21 @@ const RouteGuard = (props) => {
 	// console.log(router);
 
 	useEffect(() => {
-		if (!isLoggedIn && !PUBLIC_PATH.includes(router.pathname)) {
-			setAuthorized(false)
+		if (!isLoggedIn && !PUBLIC_PATH.includes(router.asPath)) {
+			setAuthorized(false);
 			setLastPath(router.asPath);
 			router.push("/auth");
 		} else {
-      setAuthorized(true)
-    }
-
-		if (isLoggedIn && PUBLIC_PATH.includes(router.pathname)) {
-			router.push(lastPath ? lastPath : "/");
-			// router.push("/");
+			setAuthorized(true);
 		}
-	}, [isLoggedIn, lastPath, router]);
+
+		if (
+			isLoggedIn &&
+			PUBLIC_PATH.includes(router.asPath)
+		) {
+			router.push(lastPath ? lastPath : "/");
+		}
+	}, [isLoggedIn, lastPath, router, role]);
 
 	return authorized && props.children;
 };

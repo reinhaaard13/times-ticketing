@@ -24,6 +24,13 @@ const TicketFilter = ({ setFilters }) => {
 	}, []);
 
 	const handleFilter = (e) => {
+		if (e.target.value === "") {
+			setFilters(prevFilters => {
+				delete prevFilters[e.target.name];
+				return prevFilters;
+			});
+			return
+		}
 		setFilters((prevFilters) => ({
 			...prevFilters,
 			[e.target.name]: e.target.value,

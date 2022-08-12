@@ -1,12 +1,16 @@
 import React from "react";
+import Head from "next/head";
 import axios from "axios";
 
 import SideBarLayout from "../../components/UI/SideBarLayout";
-import Header from "../../components/UI/Header";
 import SubjectForm from "../../components/subjects/SubjectForm";
 
 const NewSubjectPage = (props) => {
 	return (
+		<>
+		<Head>
+			<title>Create New Subject</title>
+		</Head>
 		<SideBarLayout>
 			{/* <Header /> */}
 			<div className="container px-4 flex flex-col justify-center items-center">
@@ -14,6 +18,7 @@ const NewSubjectPage = (props) => {
         <SubjectForm subproducts={props.subproducts} />
       </div>
 		</SideBarLayout>
+		</>
 	);
 };
 

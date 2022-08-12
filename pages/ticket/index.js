@@ -1,4 +1,5 @@
 import React from "react";
+import Head from "next/head";
 
 import { Text } from "@chakra-ui/react";
 
@@ -9,8 +10,11 @@ import axios from "axios";
 
 const TicketsPage = (props) => {
 	return (
+		<>
+		<Head>
+			<title>All Tickets</title>
+		</Head>
 		<SideBarLayout>
-			{/* <Header /> */}
 			<div className="container px-1">
 				<Text
 					mt={5}
@@ -24,6 +28,7 @@ const TicketsPage = (props) => {
 				<TicketList />
 			</div>
 		</SideBarLayout>
+		</>
 	);
 };
 

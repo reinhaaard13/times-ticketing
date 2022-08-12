@@ -1,15 +1,16 @@
 import React from "react";
-import { useRouter } from "next/router";
+import Head from "next/head";
 
-import Header from "../../../components/UI/Header";
 import SideBarLayout from "../../../components/UI/SideBarLayout";
 import SubjectForm from "../../../components/subjects/SubjectForm";
 import axios from "axios";
 
 const EditSubjectPage = (props) => {
-	// const router = useRouter();
-
 	return (
+		<>
+		<Head>
+			<title>Edit Subject</title>
+		</Head>
 		<SideBarLayout>
 			{/* <Header /> */}
 			<div className="container px-4 flex flex-col justify-center items-center">
@@ -22,6 +23,7 @@ const EditSubjectPage = (props) => {
 				/>
 			</div>
 		</SideBarLayout>
+		</>
 	);
 };
 

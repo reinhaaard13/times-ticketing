@@ -1,12 +1,16 @@
 import React from "react";
+import Head from "next/head";
 import axios from "axios";
 
 import SideBarLayout from "../../components/UI/SideBarLayout";
 import TicketForm from "../../components/ticket/TicketForm";
-import Header from "../../components/UI/Header";
 
 const NewTicketPage = (props) => {
 	return (
+		<>
+		<Head>
+			<title>Create New Ticket</title>
+		</Head>
 		<SideBarLayout>
 			{/* <Header /> */}
 			<div className="px-4 w-full flex flex-col items-center">
@@ -14,6 +18,7 @@ const NewTicketPage = (props) => {
 				<TicketForm products={props.products} />
 			</div>
 		</SideBarLayout>
+		</>
 	);
 };
 

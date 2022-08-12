@@ -217,11 +217,17 @@ const TicketDescription = (props) => {
 						Attachments
 					</Text>
 
-					<VStack>
-						{props.ticket?.Attachments.map((attachment, idx) => (
-							<AttachmentItem key={idx} attachment={attachment} />
-						))}
-					</VStack>
+					{props.ticket?.Attachments.length > 0 ? (
+						<VStack>
+							{props.ticket?.Attachments.map((attachment, idx) => (
+								<AttachmentItem key={idx} attachment={attachment} />
+							))}
+						</VStack>
+					) : (
+						<Text textAlign={"center"} padding={2} textColor={"gray.600"}>
+							No attachment
+						</Text>
+					)}
 				</Flex>
 			</Flex>
 		</>

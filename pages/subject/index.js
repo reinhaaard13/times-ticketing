@@ -1,11 +1,9 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
-import Link from "next/link";
-import { HiPlus } from "react-icons/hi";
+import Head from "next/head";
 import { useToast } from "@chakra-ui/react";
 
 import Prompt from "../../components/UI/Prompt";
-import Header from "../../components/UI/Header";
 import SideBarLayout from "../../components/UI/SideBarLayout";
 import SubjectList from "../../components/subjects/SubjectList";
 
@@ -28,7 +26,7 @@ const SubjectListPage = (props) => {
 
 	const confirmDeleteHandler = async () => {
 		const response = await axios.delete(`/api/subjects/${selected}`);
-		console.log(response);
+		// console.log(response);
 		setIsOpenModal(false);
 		if (response.status !== 200) {
 			alert("Failed to delete subject");
@@ -51,6 +49,10 @@ const SubjectListPage = (props) => {
 	};
 
 	return (
+		<>
+		<Head>
+			<title>All Subjects</title>
+		</Head>
 		<SideBarLayout>
 			<Prompt
 				show={isOpenModal}
@@ -76,6 +78,7 @@ const SubjectListPage = (props) => {
 				/>
 			</div>
 		</SideBarLayout>
+		</>
 	);
 };
 

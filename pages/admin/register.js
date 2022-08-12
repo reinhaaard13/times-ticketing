@@ -1,4 +1,5 @@
 import React from "react";
+import Head from "next/head";
 import axios from "axios";
 
 import { Flex } from "@chakra-ui/react";
@@ -8,6 +9,10 @@ import SideBarLayout from "../../components/UI/SideBarLayout";
 
 const RegisterUserPage = (props) => {
 	return (
+		<>
+		<Head>
+			<title>Register New User</title>
+		</Head>
 		<SideBarLayout>
 			<Flex
 				className="container"
@@ -23,6 +28,7 @@ const RegisterUserPage = (props) => {
 				<RegisterUserForm roles={props.roles} />
 			</Flex>
 		</SideBarLayout>
+		</>
 	);
 };
 

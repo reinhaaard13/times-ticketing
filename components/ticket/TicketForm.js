@@ -110,7 +110,7 @@ const TicketForm = ({ products }) => {
 				formData.append("attachment", file);
 			})
 			formData.append("created_by", "admin");
-			console.log(formData);
+			// console.log(formData);
 			
 			try {
 				const response = await axios.post("/api/tickets", formData, {
@@ -127,7 +127,7 @@ const TicketForm = ({ products }) => {
 	});
 
 	const pickImageHandler = (e) => {
-		console.log(e.target.files);
+		// console.log(e.target.files);
 		const files = e.target.files;
 		if (files?.size > 10000000) {
 			formik.setErrors({ attachment: "Attachment size is too large" });
@@ -137,7 +137,7 @@ const TicketForm = ({ products }) => {
 			formik.setFieldValue("attachment", files);
 		}
 	};
-	console.log(formik.values);
+	// console.log(formik.values);
 
 	return (
 		<React.Fragment>

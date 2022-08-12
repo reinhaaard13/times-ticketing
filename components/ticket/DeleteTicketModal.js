@@ -32,7 +32,7 @@ const DeleteTicketModal = (props) => {
 					},
 				}
 			);
-      console.log(response);
+      // console.log(response);
 			props.onDelete();
 			props.onClose();
 		} catch (error) {
