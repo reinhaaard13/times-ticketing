@@ -28,7 +28,7 @@ const RouteGuard = (props) => {
 		) {
 			router.push(lastPath ? lastPath : "/");
 		}
-	}, [isLoggedIn, lastPath, router, role]);
+	}, [isLoggedIn, lastPath, router]);
 
 	return authorized && props.children;
 };

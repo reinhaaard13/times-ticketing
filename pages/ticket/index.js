@@ -3,10 +3,9 @@ import Head from "next/head";
 
 import { Text } from "@chakra-ui/react";
 
-import Header from "../../components/UI/Header";
+import TicketContextProvider from "../../contexts/ticket-context";
 import SideBarLayout from "../../components/UI/SideBarLayout";
 import TicketList from "../../components/ticket/TicketList";
-import axios from "axios";
 
 const TicketsPage = (props) => {
 	return (
@@ -25,7 +24,9 @@ const TicketsPage = (props) => {
 				>
 					Tickets
 				</Text>
+				<TicketContextProvider>
 				<TicketList />
+				</TicketContextProvider>
 			</div>
 		</SideBarLayout>
 		</>
