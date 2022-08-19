@@ -15,6 +15,8 @@ const AuthContext = createContext({
 	logout: () => {},
 });
 
+let logoutTimer
+
 const AuthContextProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
 	const [token, setToken] = useState(null);
@@ -45,7 +47,6 @@ const AuthContextProvider = ({ children }) => {
 	}, []);
 
 	const logout = useCallback(() => {
-
 		setUser(null);
 		setToken(null);
 		setRole(null);
@@ -69,9 +70,29 @@ const AuthContextProvider = ({ children }) => {
 		}
 	}, [login]);
 
+	useEffect(() => {
+		if (tokenExpiration) {
+			logoutTimer = setTimeout(() => {
+				logout()
+			},
+			new Date(tokenExpiration).getTime() - new Date().getTime());
+		}
+		return () => {
+			clearTimeout(logoutTimer);
+		}
+	}, [tokenExpiration, logout]);
+
 	return (
 		<AuthContext.Provider
-			value={{ user, login, logout, role, privileges, token, isLoggedIn: !!token }}
+			value={{
+				user,
+				login,
+				logout,
+				role,
+				privileges,
+				token,
+				isLoggedIn: !!token,
+			}}
 		>
 			{children}
 		</AuthContext.Provider>

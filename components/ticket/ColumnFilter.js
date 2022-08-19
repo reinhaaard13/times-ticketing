@@ -13,7 +13,7 @@ const TableHead = ({ options, ...props }) => {
 				name={props.name}
 			>
 				{options?.map((item) => (
-					<option key={item.option_id} value={item.option_value}>
+					<option key={item.option_value} value={item.option_value}>
 						{item.option_name}
 					</option>
 				))}

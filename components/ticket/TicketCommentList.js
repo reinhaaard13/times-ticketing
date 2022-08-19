@@ -10,7 +10,7 @@ const TicketCommentList = (props) => {
 		<Flex direction={"column"}>
 			<Text
 				fontSize={"md"}
-				mb={6}
+				mb={3}
 				fontWeight={"semibold"}
 				className={"text-lime-500"}
 			>

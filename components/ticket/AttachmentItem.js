@@ -46,7 +46,7 @@ const AttachmentItem = ({ attachment }) => {
 				rounded={"lg"}
 				transition="all 0.2s ease-in-out"
 				overflow={"clip"}
-        transform={'translateY(0)'}
+				transform={"translateY(0)"}
 				_hover={{
 					backgroundColor: "gray.100",
 					shadow: "md",
@@ -57,7 +57,7 @@ const AttachmentItem = ({ attachment }) => {
 				<Icon
 					as={icon[attachment.attachment_url.split(".").pop()]}
 					fontSize={"7xl"}
-					opacity={0.5}
+					opacity={0.4}
 					position={"absolute"}
 					right={0}
 					top={-2}
