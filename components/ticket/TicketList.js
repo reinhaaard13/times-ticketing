@@ -4,7 +4,6 @@ import moment from "moment";
 import NProgress from "nprogress";
 import { MdRemoveRedEye, MdDelete } from "react-icons/md";
 import { BiUserCheck } from "react-icons/bi";
-import Image from "next/image";
 import axios from "axios";
 
 import { useTicket } from "../../contexts/ticket-context";
@@ -28,6 +27,7 @@ import {
 	ButtonGroup,
 	useToast,
 	Flex,
+	Tooltip,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
@@ -147,7 +147,7 @@ const TicketList = ({ next, previous }) => {
 				>
 					<Thead className="bg-slate-500/20">
 						<Tr height={"10"}>
-							<Th width="1">No.</Th>
+							<Th width={1}>No.</Th>
 							<Th width={"1"}>Ticket</Th>
 							<SortableHeader
 								sortBy={sortBy}
@@ -365,46 +365,50 @@ const TicketList = ({ next, previous }) => {
 											justifyContent={"center"}
 											alignItems={"center"}
 										>
-											<Link href={`/ticket/${ticket.ticket_id}`}>
-												<Button
+											<Link href={`/ticket/${ticket.ticket_id}`} passHref>
+												<IconButton
 													size="sm"
 													colorScheme="blue"
-													leftIcon={<MdRemoveRedEye />}
-													w={"fit-content"}
+													icon={<MdRemoveRedEye />}
+													w={"full"}
 												>
 													View
-												</Button>
+												</IconButton>
 											</Link>
 											{ticket.status === "OPEN" &&
 												privileges.includes("TICKET_ACTION") &&
 												ticket.created_by !== user.id && (
-													<Button
-														size="sm"
-														colorScheme="green"
-														onClick={() => {
-															onOpen();
-															setSelectedTicket(ticket);
-														}}
-														leftIcon={<BiUserCheck />}
-														w={"fit-content"}
-													>
-														Take
-													</Button>
+													<Tooltip hasArrow label={"Take Ticket"} color={'green.50'} bgColor={'green.500'}>
+														<IconButton
+															size="sm"
+															colorScheme="green"
+															onClick={() => {
+																onOpen();
+																setSelectedTicket(ticket);
+															}}
+															icon={<BiUserCheck />}
+															w={"full"}
+														>
+															Take
+														</IconButton>
+													</Tooltip>
 												)}
 											{ticket.created_by === user?.id &&
 												ticket.status === "OPEN" && (
-													<Button
-														size="sm"
-														colorScheme="red"
-														onClick={() => {
-															onOpenDelete();
-															setSelectedTicket(ticket);
-														}}
-														leftIcon={<MdDelete />}
-														w={"fit-content"}
-													>
-														Delete
-													</Button>
+													<Tooltip hasArrow label={"Delete Ticket"} color={'red.50'} bgColor={'red.500'}>
+														<IconButton
+															size="sm"
+															colorScheme="red"
+															onClick={() => {
+																onOpenDelete();
+																setSelectedTicket(ticket);
+															}}
+															icon={<MdDelete />}
+															w={"full"}
+														>
+															Delete
+														</IconButton>
+													</Tooltip>
 												)}
 										</ButtonGroup>
 									</Td>

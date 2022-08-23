@@ -11,8 +11,10 @@ import RouteGuard from "../components/routeguard/RouteGuard";
 import { AuthContextProvider } from "../contexts/auth-context";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import AuthService from "../services/auth.service";
 
 Axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_ENDPOINT
+
 Router.events.on("routeChangeStart", () => NProgress.start());
 Router.events.on("routeChangeComplete", () => NProgress.done());
 Router.events.on("routeChangeError", () => NProgress.done());

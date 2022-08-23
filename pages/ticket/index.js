@@ -10,25 +10,25 @@ import TicketList from "../../components/ticket/TicketList";
 const TicketsPage = (props) => {
 	return (
 		<>
-		<Head>
-			<title>All Tickets</title>
-		</Head>
-		<SideBarLayout>
-			<div className="container px-1">
-				<Text
-					mt={5}
-					mb={4}
-					className="text-lime-500"
-					fontSize={"2xl"}
-					fontWeight={"semibold"}
-				>
-					Tickets
-				</Text>
-				<TicketContextProvider>
-				<TicketList />
-				</TicketContextProvider>
-			</div>
-		</SideBarLayout>
+			<Head>
+				<title>All Tickets</title>
+			</Head>
+			<SideBarLayout>
+				<div className="container px-1">
+					<Text
+						mt={5}
+						mb={4}
+						className="text-lime-500"
+						fontSize={"2xl"}
+						fontWeight={"semibold"}
+					>
+						Tickets
+					</Text>
+					<TicketContextProvider>
+						<TicketList />
+					</TicketContextProvider>
+				</div>
+			</SideBarLayout>
 		</>
 	);
 };

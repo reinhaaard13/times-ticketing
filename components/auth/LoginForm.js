@@ -4,9 +4,11 @@ import * as Yup from "yup";
 import axios from 'axios';
 import { useAuth } from "../../contexts/auth-context";
 
+
 import { Button } from "@chakra-ui/react";
 
 import Input from "../UI/Input";
+import AuthService from "../../services/auth.service";
 
 const SignupSchema = Yup.object().shape({
 	user: Yup.string()
@@ -29,9 +31,9 @@ const LoginForm = (props) => {
 		onSubmit: async (values) => {
 			formik.setSubmitting(true);
 			try {
-				const response = await axios.post('/api/users/login', values)
-				const {user, token, role, privileges} = response.data
-				login(user, token, role, privileges)
+				const response = await AuthService.login(values.user, values.password);
+				const {user, token, refreshToken, role, privileges} = response.data
+				login(user, token, refreshToken, role, privileges)
 			} catch (error) {
 				console.log(error);
 				if (error.response.data.message.endsWith("password")) {

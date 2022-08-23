@@ -64,7 +64,7 @@ const Notification = () => {
 						onClick={onClose}
 					></Box>
 				)}
-				<Fade in={isOpen} offsetY={"20px"} unmountOnExit>
+				<Fade in={isOpen} unmountOnExit>
 					<Flex
 						flexDir="column"
 						position={"absolute"}
