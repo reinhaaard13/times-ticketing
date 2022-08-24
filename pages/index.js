@@ -24,7 +24,7 @@ const DashboardPage = (props) => {
 				>
 					Dashboard
 				</Heading>
-				<TicketContextProvider>
+				<TicketContextProvider initialPage={props.page}>
 					<DashboardWidgets />
 					<Flex
 						marginTop={4}
@@ -49,3 +49,9 @@ const DashboardPage = (props) => {
 };
 
 export default DashboardPage;
+
+DashboardPage.getInitialProps = async (ctx) => {
+	return {
+		page: +ctx.query.page,
+	}
+}

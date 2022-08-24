@@ -5,6 +5,7 @@ import NProgress from "nprogress";
 import { MdRemoveRedEye, MdDelete } from "react-icons/md";
 import { BiUserCheck } from "react-icons/bi";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 import { useTicket } from "../../contexts/ticket-context";
 import { useAuth } from "../../contexts/auth-context";
@@ -41,7 +42,8 @@ import DeleteTicketModal from "./DeleteTicketModal";
 import ColumnFilter from "./ColumnFilter";
 import SortableHeader from "./TableHeader";
 
-const TicketList = ({ next, previous }) => {
+const TicketList = ({ initialPage }) => {
+	const router = useRouter();
 	const { user, privileges, token } = useAuth();
 	const {
 		page,
@@ -75,6 +77,8 @@ const TicketList = ({ next, previous }) => {
 			return res.data;
 		}
 	);
+
+	console.log("render");
 
 	// for ticket description modal
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -378,7 +382,12 @@ const TicketList = ({ next, previous }) => {
 											{ticket.status === "OPEN" &&
 												privileges.includes("TICKET_ACTION") &&
 												ticket.created_by !== user.id && (
-													<Tooltip hasArrow label={"Take Ticket"} color={'green.50'} bgColor={'green.500'}>
+													<Tooltip
+														hasArrow
+														label={"Take Ticket"}
+														color={"green.50"}
+														bgColor={"green.500"}
+													>
 														<IconButton
 															size="sm"
 															colorScheme="green"
@@ -395,7 +404,12 @@ const TicketList = ({ next, previous }) => {
 												)}
 											{ticket.created_by === user?.id &&
 												ticket.status === "OPEN" && (
-													<Tooltip hasArrow label={"Delete Ticket"} color={'red.50'} bgColor={'red.500'}>
+													<Tooltip
+														hasArrow
+														label={"Delete Ticket"}
+														color={"red.50"}
+														bgColor={"red.500"}
+													>
 														<IconButton
 															size="sm"
 															colorScheme="red"

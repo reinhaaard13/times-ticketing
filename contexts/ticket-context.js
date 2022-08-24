@@ -1,12 +1,15 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { useRouter } from "next/router";
 
 const TicketContext = React.createContext();
 
-const TicketContextProvider = ({ children }) => {
-	const [page, setPage] = useState(1);
+const TicketContextProvider = ({ children, initialPage }) => {
+	const [page, setPage] = useState(initialPage || 1);
 	const [sortBy, setSortBy] = useState("created_date");
 	const [sortOrder, setSortOrder] = useState("desc");
 	const [filter, setFilter] = useState({});
+
+	const router = useRouter();
 
 	const fetchNextPage = () => {
 		setPage((prevPage) => prevPage + 1);
@@ -15,6 +18,12 @@ const TicketContextProvider = ({ children }) => {
 	const fetchPreviousPage = () => {
 		setPage((prevPage) => prevPage - 1);
 	};
+
+	// for persistent pagination on back button
+	useEffect(() => {
+		router.push(`/?page=${page}`, undefined, { shallow: true });
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [page]);
 
 	const changeSort = (toSortBy, toSortOrder) => {
 		if (sortBy === toSortBy && !toSortOrder) {
@@ -26,17 +35,19 @@ const TicketContextProvider = ({ children }) => {
 		if (toSortOrder) {
 			setSortOrder(toSortOrder);
 		}
+		setPage(1);
 	};
 
 	const addFilter = (field, value) => {
 		if (value.trim().length === 0) {
 			setFilter((prevFilter) => {
-        const { [field]: _, ...newFilter } = prevFilter;
-        return newFilter;
+				const { [field]: _, ...newFilter } = prevFilter;
+				return newFilter;
 			});
 		} else {
-      setFilter((prevFilter) => ({ ...prevFilter, [field]: value }));
-    }
+			setFilter((prevFilter) => ({ ...prevFilter, [field]: value }));
+		}
+		setPage(1);
 	};
 
 	return (
@@ -50,6 +61,7 @@ const TicketContextProvider = ({ children }) => {
 				fetchPreviousPage,
 				changeSort,
 				addFilter,
+				setPage,
 			}}
 		>
 			{children}
