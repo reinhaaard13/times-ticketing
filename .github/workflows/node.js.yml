@@ -3,6 +3,10 @@
 
 name: Node.js CI
 
+env:
+  NEXT_PUBLIC_API_ENDPOINT: ${{secrets.NEXT_PUBLIC_API_ENDPOINT}}
+  NEXT_PUBLIC_STORAGE_URI: ${{secrets.NEXT_PUBLIC_STORAGE_URI}}
+
 on:
   push:
     branches: [ "main" ]
