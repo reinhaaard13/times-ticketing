@@ -5,10 +5,8 @@ import "../styles/nprogress.css";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import Axios from "axios";
 
-
 import RouteGuard from "../components/routeguard/RouteGuard";
 
-// import useAuth from "../hooks/auth-hook";
 import { AuthContextProvider } from "../contexts/auth-context";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
