@@ -26,3 +26,4 @@ jobs:
     - run: git pull
     - run: npm install
     - run: npm run build --if-present
+    - run: pm2 restart times-ticketing
