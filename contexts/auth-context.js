@@ -57,6 +57,7 @@ const AuthContextProvider = ({ children }) => {
 	const logout = useCallback(() => {
 		setUser(null);
 		setToken(null);
+		setRefreshToken(null);
 		setRole(null);
 		setPrivileges([]);
 		// setTokenExpiration(null);
