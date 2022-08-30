@@ -27,32 +27,32 @@ const EditSubjectPage = (props) => {
 	);
 };
 
-export async function getServerSideProps(context) {
-	const csid = context.params.csid;
-	try {
-		const response = await axios.get(
-			`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/subjects/${csid}`
-		);
-		const caseSubject = await response.data;
+// export async function getServerSideProps(context) {
+// 	const csid = context.params.csid;
+// 	try {
+// 		const response = await axios.get(
+// 			`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/subjects/${csid}`
+// 		);
+// 		const caseSubject = await response.data;
 
-		const responseSubproduct = await axios.get(
-			`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/subproducts`
-		);
-		const subproducts = await responseSubproduct.data;
+// 		const responseSubproduct = await axios.get(
+// 			`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/subproducts`
+// 		);
+// 		const subproducts = await responseSubproduct.data;
 
-		return {
-			props: {
-				caseSubject,
-				subproducts,
-			},
-		};
-	} catch (err) {
-		return {
-			redirect: {
-				destination: "/subjects",
-			},
-		};
-	}
-}
+// 		return {
+// 			props: {
+// 				caseSubject,
+// 				subproducts,
+// 			},
+// 		};
+// 	} catch (err) {
+// 		return {
+// 			redirect: {
+// 				destination: "/subjects",
+// 			},
+// 		};
+// 	}
+// }
 
 export default EditSubjectPage;

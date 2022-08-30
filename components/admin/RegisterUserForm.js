@@ -138,7 +138,7 @@ const RegisterUserForm = (props) => {
 						value={formik.values.role}
 						name="role"
 					>
-						{props.roles.map((role) => (
+						{props.roles?.map((role) => (
 							<option key={role.role_id} value={role.role_id}>
 								{role.role_name}
 							</option>

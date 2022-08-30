@@ -9,10 +9,10 @@ const DashboardPage = (props) => {
 
 export default DashboardPage;
 
-export async function getServerSideProps () {
-	return {
-		redirect: {
-			destination: "/"
-		}
-	}
-}
+// export async function getServerSideProps () {
+// 	return {
+// 		redirect: {
+// 			destination: "/"
+// 		}
+// 	}
+// }

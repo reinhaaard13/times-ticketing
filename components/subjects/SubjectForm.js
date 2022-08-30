@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -10,12 +10,16 @@ import SeverityRadio from "./SeverityRadio";
 
 const SubjectForm = (props) => {
 	const router = useRouter();
+	const [existingData, setExistingData] = useState({})
+	const [subproducts, setSubproducts] = useState([])
+
+	const csid = router.query.csid;
 
 	const formik = useFormik({
 		initialValues: {
-			subject: props.existingData?.subject || "",
-			severity: props.existingData?.severity || null,
-			subproduct: props.existingData?.subproduct_id || null,
+			subject: existingData?.subject || "",
+			severity: existingData?.severity || null,
+			subproduct: existingData?.subproduct_id || null,
 		},
 		validate: (values) => {
 			const errors = {};
@@ -35,8 +39,8 @@ const SubjectForm = (props) => {
 		onSubmit: async (values) => {
 			formik.setSubmitting(true);
 			let response;
-			if (props.existingData) {
-				response = await axios.patch(`/api/subjects/${props.existingData.id}`, {
+			if (existingData) {
+				response = await axios.patch(`/api/subjects/${existingData.id}`, {
 					subproduct_id: values.subproduct,
 					subject: values.subject,
 					severity: values.severity,
@@ -55,6 +59,28 @@ const SubjectForm = (props) => {
 			formik.setSubmitting(false);
 		},
 	});
+
+	useEffect(() => {
+		const fetchProps = async () => {
+			const response = await axios.get(
+				`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/subjects/${csid}`
+			);
+			const caseSubject = await response.data;
+	
+			const responseSubproduct = await axios.get(
+				`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/subproducts`
+			);
+			const subproducts = await responseSubproduct.data;
+	
+			setExistingData(caseSubject);
+			formik.setFieldValue("subject", caseSubject.subject);
+			formik.setFieldValue("severity", caseSubject.severity);
+			formik.setFieldValue("subproduct", caseSubject.subproduct_id);
+			setSubproducts(subproducts);
+		}
+
+		fetchProps();
+	}, [csid, formik]);
 
 	const changeSeverityHandler = (e) => {
 		// console.log(e);
@@ -89,7 +115,7 @@ const SubjectForm = (props) => {
 					mb={3}
 					id="subproduct"
 				>
-					{props.subproducts.map((subproduct) => (
+					{subproducts.map((subproduct) => (
 						<option
 							value={subproduct.subproduct_id}
 							key={subproduct.subproduct_id}
@@ -124,7 +150,7 @@ const SubjectForm = (props) => {
 					disabled={!formik.isValid || formik.isSubmitting}
 					className="px-4 py-2 font-semibold text-sm uppercase mt-4 hover:shadow-md hover:bg-lime-600 outline-lime-600 text-white w-fit self-center bg-lime-500 rounded-full disabled:bg-opacity-25 transition-all duration-300"
 				>
-					{props.existingData ? "Apply Changes" : "Create New Subject Case"}
+					{existingData ? "Apply Changes" : "Create New Subject Case"}
 				</button>
 			</form>
 		</Box>
