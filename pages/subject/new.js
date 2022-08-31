@@ -22,17 +22,17 @@ const NewSubjectPage = (props) => {
 	);
 };
 
-export async function getStaticProps() {
-	const response = await axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/subproducts`)
+// export async function getStaticProps() {
+// 	const response = await axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/subproducts`)
 
-	const subproducts = await response.data
+// 	const subproducts = await response.data
 
-	return {
-		props: {
-			subproducts,
-		},
-		revalidate: 60,
-	}
-}
+// 	return {
+// 		props: {
+// 			subproducts,
+// 		},
+// 		revalidate: 60,
+// 	}
+// }
 
 export default NewSubjectPage;

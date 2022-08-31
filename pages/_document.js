@@ -1,10 +1,12 @@
 // _document.js
-import { Html, Head, Main, NextScript } from 'next/document'
+import { Html, Head, Main, NextScript } from 'next/document';
 
 export default function Document() {
   return (
     <Html>
-      <Head />
+      <Head>
+        <link rel="icon" href="/times/favicon.ico" />
+      </Head>
       <body>
         <Main />
         <NextScript />

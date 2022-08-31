@@ -22,16 +22,16 @@ const NewTicketPage = (props) => {
 	);
 };
 
-export async function getStaticProps() {
-	const productsResponse = await axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/products`)
-	const products = productsResponse.data
+// export async function getStaticProps() {
+// 	const productsResponse = await axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/products`)
+// 	const products = productsResponse.data
 	
-	return {
-		props: {
-			products
-		},
-    revalidate: 1
-	};
-}
+// 	return {
+// 		props: {
+// 			products
+// 		},
+//     revalidate: 1
+// 	};
+// }
 
 export default NewTicketPage;

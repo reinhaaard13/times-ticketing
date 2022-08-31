@@ -22,16 +22,16 @@ const NewSubProductPage = (props) => {
   );
 }
 
-export async function getStaticProps() {
-  const response = await axios.get('/api/products');
-  const products = response.data
+// export async function getStaticProps() {
+//   const response = await axios.get('/api/products');
+//   const products = response.data
   
-  return {
-    props: {
-      products
-    },
-    revalidate: 1
-  }
-}
+//   return {
+//     props: {
+//       products
+//     },
+//     revalidate: 1
+//   }
+// }
  
 export default NewSubProductPage;

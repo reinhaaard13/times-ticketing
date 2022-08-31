@@ -3,6 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 
 import LoginForm from "../../components/auth/LoginForm";
+import image from "../../public/logo.png";
 
 const AuthPage = () => {
 	// const [isLoginMode, setIsLoginMode] = use
@@ -15,7 +16,7 @@ const AuthPage = () => {
 			{/* Logo */}
 			<div className="flex flex-col justify-center items-center my-4">
 				<div className="relative">
-					<Image src="/logo.png" alt="logo" width={200} height={200} />
+					<Image src={image} alt="logo" width={200} height={200} />
 				</div>
 				<h1 className="font-bold text-xl md:text-3xl md:mt-4 text-white logo">
 					TIMES <span className="font-normal">Ticketing</span>

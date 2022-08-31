@@ -73,7 +73,7 @@ const SubjectListPage = (props) => {
 					</h1>
 				</div>
 				<SubjectList
-					subjects={subjects}
+					// subjects={subjects}
 					onDelete={deleteSubjectHandler}
 				/>
 			</div>
@@ -82,17 +82,17 @@ const SubjectListPage = (props) => {
 	);
 };
 
-export async function getStaticProps() {
-	const response = await axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/subjects`);
+// export async function getStaticProps() {
+// 	const response = await axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/subjects`);
 
-	const subjects = await response.data;
+// 	const subjects = await response.data;
 
-	return {
-		props: {
-			subjects,
-		},
-		revalidate: 60,
-	};
-}
+// 	return {
+// 		props: {
+// 			subjects,
+// 		},
+// 		revalidate: 60,
+// 	};
+// }
 
 export default SubjectListPage;

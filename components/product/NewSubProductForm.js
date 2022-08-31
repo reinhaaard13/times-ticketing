@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import axios from "axios";
 import { useRouter } from "next/router";
+
+import ProductService from "../../services/product.service";
 
 import {
 	FormControl,
@@ -36,6 +38,16 @@ const validate = (values) => {
 
 const NewSubProductForm = (props) => {
 	const router = useRouter();
+	const [products, setProducts] = useState([])
+
+	useEffect(() => {
+		async function fetchProducts() {
+			const products = await ProductService.getAllProducts();
+
+			setProducts(products);
+		}
+		fetchProducts();
+	}, [])
 
 	// console.log(props);
 	const formik = useFormik({
@@ -89,7 +101,7 @@ const NewSubProductForm = (props) => {
 						onChange={formik.handleChange}
 						onBlur={formik.handleBlur}
 					>
-						{props.products.map((product) => (
+						{products.map((product) => (
 							<option key={product.product_id} value={product.product_id}>
 								{product.product_name}
 							</option>

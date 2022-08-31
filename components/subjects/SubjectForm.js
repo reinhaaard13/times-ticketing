@@ -10,8 +10,8 @@ import SeverityRadio from "./SeverityRadio";
 
 const SubjectForm = (props) => {
 	const router = useRouter();
-	const [existingData, setExistingData] = useState({})
-	const [subproducts, setSubproducts] = useState([])
+	const [existingData, setExistingData] = useState({});
+	const [subproducts, setSubproducts] = useState([]);
 
 	const csid = router.query.csid;
 
@@ -62,25 +62,28 @@ const SubjectForm = (props) => {
 
 	useEffect(() => {
 		const fetchProps = async () => {
-			const response = await axios.get(
-				`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/subjects/${csid}`
-			);
-			const caseSubject = await response.data;
+			if (csid) {
+				const response = await axios.get(
+					`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/subjects/${csid}`
+				);
+				const caseSubject = await response.data;
 	
+				setExistingData(caseSubject);
+				formik.setFieldValue("subject", caseSubject.subject);
+				formik.setFieldValue("severity", caseSubject.severity);
+				formik.setFieldValue("subproduct", caseSubject.subproduct_id);
+			}
+
 			const responseSubproduct = await axios.get(
 				`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/subproducts`
 			);
 			const subproducts = await responseSubproduct.data;
-	
-			setExistingData(caseSubject);
-			formik.setFieldValue("subject", caseSubject.subject);
-			formik.setFieldValue("severity", caseSubject.severity);
-			formik.setFieldValue("subproduct", caseSubject.subproduct_id);
 			setSubproducts(subproducts);
-		}
+		};
 
 		fetchProps();
-	}, [csid, formik]);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const changeSeverityHandler = (e) => {
 		// console.log(e);

@@ -24,21 +24,21 @@ const ProductListPage = (props) => {
 				>
 					Products List
 				</Text>
-				<ProductList products={props.products} />
+				<ProductList />
 			</div>
 		</SideBarLayout>
 		</>
 	);
 };
 
-export async function getStaticProps() {
-	const products = await axios.get("/api/products");
-	return {
-		props: {
-			products: products.data,
-		},
-		revalidate: 1,
-	};
-}
+// export async function getStaticProps() {
+// 	const products = await axios.get("/api/products");
+// 	return {
+// 		props: {
+// 			products: products.data,
+// 		},
+// 		revalidate: 1,
+// 	};
+// }
 
 export default ProductListPage;

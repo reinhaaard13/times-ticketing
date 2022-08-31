@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
+import axios from "axios";
 import Link from "next/link";
 import { FiPlus } from "react-icons/fi";
 
@@ -15,8 +16,20 @@ import {
 	Badge,
 	Button,
 } from "@chakra-ui/react";
+import ProductService from "../../services/product.service";
 
 const ProductList = (props) => {
+	const [products, setProducts] = useState([]);
+
+	useEffect(() => {
+		async function fetchProducts() {
+			const products = await ProductService.getAllProducts();
+
+			setProducts(products);
+		}
+		fetchProducts();
+	}, [])
+
 	return (
 		<TableContainer
 			shadow={"lg"}
@@ -37,7 +50,7 @@ const ProductList = (props) => {
 					</Tr>
 				</Thead>
 				<Tbody>
-					{props.products.map((product, idx) => (
+					{products.map((product, idx) => (
 						<Tr key={idx}>
 							<Td className="uppercase">{idx + 1}</Td>
 							<Td>

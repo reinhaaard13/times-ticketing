@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import { useAuth } from "../../contexts/auth-context";
@@ -73,11 +73,23 @@ const validateForm = (values) => {
 	return errors;
 };
 
-const TicketForm = ({ products }) => {
+const TicketForm = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [ticket, setTicket] = useState({});
 	const router = useRouter();
 	const { token } = useAuth();
+	const [products, setProducts] = useState([])
+
+	useEffect(() => {
+		async function fetchProducts() {
+			const products = await axios.get(`/api/products`);
+
+			setProducts(products.data);
+		}
+
+		fetchProducts();
+	}, [])
+	
 
 	const formik = useFormik({
 		initialValues: {
