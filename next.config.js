@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  basePath: '/times',
   reactStrictMode: false,
   basePath: "/times",
   images: {
