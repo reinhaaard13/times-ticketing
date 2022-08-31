@@ -12,10 +12,10 @@ import AuthService from "../../services/auth.service";
 
 const SignupSchema = Yup.object().shape({
 	user: Yup.string()
-		.min(6, "Must be at least 6 characters")
+		.min(3, "Must be at least 3 characters")
 		.required("Required"),
 	password: Yup.string()
-		.min(8, "Must be at least 8 characters")
+		.min(3, "Must be at least 3 characters")
 		.required("Required"),
 });
 
