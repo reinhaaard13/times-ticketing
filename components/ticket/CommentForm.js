@@ -33,9 +33,9 @@ const CommentForm = (props) => {
 		},
 		onSubmit: async (values) => {
 			formik.setSubmitting(true);
-      const formData = new FormData();
-      formData.append("comment_body", values.comment);
-      formData.append("attachment", values.attachment);
+			const formData = new FormData();
+			formData.append("comment_body", values.comment);
+			formData.append("attachment", values.attachment);
 
 			try {
 				const response = await axios.post(
@@ -48,13 +48,15 @@ const CommentForm = (props) => {
 					}
 				);
 				mutate(`/api/tickets/${props.ticketId}/comments`);
+				formik.resetForm();
 			} catch (err) {
 				console.log(err);
 			}
 
-      fileInputRef.current.value = "";
+			fileInputRef.current.value = "";
 			formik.setSubmitting(false);
 			formik.resetForm();
+			// formik.setFieldValue("comment", "");
 		},
 	});
 
@@ -74,10 +76,10 @@ const CommentForm = (props) => {
 		}
 	};
 
-  const removeFileHandler = (e) => {
-    formik.setFieldValue("attachment", null);
-    fileInputRef.current.value = "";
-  }
+	const removeFileHandler = (e) => {
+		formik.setFieldValue("attachment", null);
+		fileInputRef.current.value = "";
+	};
 
 	return (
 		<form onSubmit={formik.handleSubmit}>
@@ -90,32 +92,27 @@ const CommentForm = (props) => {
 					onChange={formik.handleChange}
 					onBlur={formik.handleBlur}
 				/>
-          {formik.values.attachment && (
-            <Flex
-              px={2}
-              py={2}
-              height={"fit-content"}
-              background={"teal"}
-              rounded={5}
-              alignItems={"center"}
-              justifyContent={"space-between"}
-            >
-              <Text
-                fontSize={"sm"}
-                fontWeight={"medium"}
-                color={"white"}
-                mr={2}
-              >
-                {formik.values.attachment.name}
-              </Text>
-              <IconButton
-                icon={<RiCloseLine />}
-                size={"xs"}
-                colorScheme={"blackAlpha"}
-                onClick={removeFileHandler}
-              />
-            </Flex>
-          )}
+				{formik.values.attachment && (
+					<Flex
+						px={2}
+						py={2}
+						height={"fit-content"}
+						background={"teal"}
+						rounded={5}
+						alignItems={"center"}
+						justifyContent={"space-between"}
+					>
+						<Text fontSize={"sm"} fontWeight={"medium"} color={"white"} mr={2}>
+							{formik.values.attachment.name}
+						</Text>
+						<IconButton
+							icon={<RiCloseLine />}
+							size={"xs"}
+							colorScheme={"blackAlpha"}
+							onClick={removeFileHandler}
+						/>
+					</Flex>
+				)}
 				<Flex alignSelf={"flex-end"} w={"full"} alignItems="center">
 					<Input
 						type="file"
@@ -131,7 +128,7 @@ const CommentForm = (props) => {
 					<Button
 						colorScheme={"teal"}
 						type={"submit"}
-						disabled={!formik.isValid}
+						disabled={!formik.isValid || !formik.dirty}
 						isLoading={formik.isSubmitting}
 						width={64}
 					>
