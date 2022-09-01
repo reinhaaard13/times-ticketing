@@ -11,7 +11,6 @@ const RouteGuard = (props) => {
 	const { isLoggedIn, user, token, role } = useAuth();
 	const [authorized, setAuthorized] = useState(false);
 	const [lastPath, setLastPath] = useState("");
-	// console.log(router);
 
 	useEffect(() => {
 		if (!isLoggedIn && !PUBLIC_PATH.includes(router.asPath)) {
@@ -22,11 +21,9 @@ const RouteGuard = (props) => {
 			setAuthorized(true);
 		}
 
-		if (
-			isLoggedIn &&
-			PUBLIC_PATH.includes(router.asPath)
-		) {
-			router.push(lastPath ? lastPath : "/");
+		if (isLoggedIn && PUBLIC_PATH.includes(router.asPath)) {
+	
+			router.push("/");
 		}
 	}, [isLoggedIn, lastPath, router]);
 

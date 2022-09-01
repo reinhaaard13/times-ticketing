@@ -77,9 +77,7 @@ const TicketList = ({ initialPage }) => {
 			return res.data;
 		}
 	);
-
-	console.log("render");
-
+	
 	// for ticket description modal
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const {
