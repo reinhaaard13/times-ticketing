@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import axios from 'axios'
+import axios from 'axios';
+import { useRouter } from "next/router";
 
 import {
 	Flex,
@@ -30,6 +31,8 @@ const RegisterUserSchema = Yup.object().shape({
 });
 
 const RegisterUserForm = (props) => {
+	const [userExist, setUserExist] = useState(false)
+	const router = useRouter()
 
 	const formik = useFormik({
 		initialValues: {
@@ -49,8 +52,12 @@ const RegisterUserForm = (props) => {
 					values
 				)
 				formik.resetForm();
+				setUserExist(false)
+				router.push("/")
 			} catch (e) {
-				console.log(e);
+				if (e.response.status === 403) {
+					setUserExist(true)
+				}
 			}
 			formik.setSubmitting(false);
 		},
@@ -58,9 +65,10 @@ const RegisterUserForm = (props) => {
 
 	return (
 		<React.Fragment>
-			<h1 className="text-2xl font-bold mb-4">Register new user</h1>
+			<h1 className="text-2xl font-bold ">Register new user</h1>
+			{ userExist && <p className="text-red-500">User already exist</p> }
 			<form
-				className="flex flex-col md:grid md:grid-cols-2 gap-4"
+				className="flex flex-col md:grid md:grid-cols-2 gap-4 mt-4"
 				onSubmit={formik.handleSubmit}
 			>
 				<Input

@@ -24,16 +24,6 @@ import SubjectService from "../../services/subject.service";
 
 const SubjectList = (props) => {
 	const router = useRouter();
-	const [subjects, setSubjects] = useState([])
-
-	useEffect(() => {
-		async function fetchSubjects() {
-			const subjects = await SubjectService.getAllSubjects();
-
-			setSubjects(subjects);
-		}
-		fetchSubjects();
-	}, [])
 
 	const editHandler = (id) => {
 		router.push(`/subject/edit/${id}`);
@@ -59,7 +49,8 @@ const SubjectList = (props) => {
 					</Tr>
 				</Thead>
 				<Tbody>
-					{subjects.map((subject, idx) => (
+					{!props.subjects && <Tr><Td colSpan={6}>No subjects found</Td></Tr>}
+					{props.subjects?.map((subject, idx) => (
 						<Tr key={idx}>
 							<Td className="uppercase">{idx + 1}</Td>
 							<Td>{subject.subject}</Td>
