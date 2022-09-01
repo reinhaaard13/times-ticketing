@@ -39,7 +39,7 @@ const SubjectForm = (props) => {
 		onSubmit: async (values) => {
 			formik.setSubmitting(true);
 			let response;
-			if (existingData) {
+			if (existingData.id) {
 				response = await axios.patch(`/api/subjects/${existingData.id}`, {
 					subproduct_id: values.subproduct,
 					subject: values.subject,
