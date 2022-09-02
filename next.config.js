@@ -3,7 +3,7 @@ const nextConfig = {
   // basePath: '/times',
   reactStrictMode: false,
   images: {
-    domains: ["localhost", "rei-aws.s3.ap-southeast-1.amazonaws.com", "04ef-103-52-46-164.ap.ngrok.io"],
+    domains: ["localhost"],
     unoptimized: true
   },
   experimental: {
@@ -11,7 +11,8 @@ const nextConfig = {
       unoptimized: true
     }
   },
-  output: "standalone"
+  output: "standalone",
+  // trailingSlash: true,
 }
 
 module.exports = nextConfig
